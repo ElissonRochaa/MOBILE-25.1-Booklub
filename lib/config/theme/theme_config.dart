@@ -44,7 +44,7 @@ abstract final class ThemeConfig {
 
 }
 
-extension ThemeDataExtension on ThemeData {
+extension ColorSchemeExtensions on ColorScheme {
 
   Color get black => CustomColors.black;
 

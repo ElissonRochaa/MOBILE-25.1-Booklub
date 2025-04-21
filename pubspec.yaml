@@ -22,3 +22,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Navicula
+      fonts:
+        - asset: assets/fonts/Navicula.ttf
+  assets:
+    - assets/
+    - assets/images/

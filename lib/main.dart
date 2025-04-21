@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
     final router = context.read<GoRouter>();
 
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'Booklub',
       theme: themeContext.activeTheme.themeData,
       routerConfig: router,
