@@ -1,5 +1,6 @@
 import 'package:booklub/config/theme/app_theme.dart';
-import 'package:booklub/utils/custom_colors.dart';
+import 'package:booklub/config/theme/theme_context.dart';
+import 'package:booklub/utils/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 abstract final class ThemeConfig {
@@ -34,6 +35,11 @@ abstract final class ThemeConfig {
         onSurface: CustomColors.white,
       )
     ),
+  );
+
+  static ThemeContext get themeContext => ThemeContext(
+    lightTheme: lightTheme,
+    darkTheme: darkTheme,
   );
 
 }

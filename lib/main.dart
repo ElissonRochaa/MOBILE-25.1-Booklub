@@ -1,8 +1,22 @@
+import 'package:booklub/config/theme/theme_context.dart';
 import 'package:flutter/material.dart';
 import 'package:booklub/config/routing/routing_config.dart';
+import 'package:go_router/go_router.dart' show GoRouter;
+import 'package:provider/provider.dart';
+import 'config/theme/theme_config.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<ThemeContext>.value(
+          value: ThemeConfig.themeContext
+      ),
+      Provider<GoRouter>.value(
+        value: RoutingConfig.router,
+      )
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -10,12 +24,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeContext = context.watch<ThemeContext>();
+    final router = context.read<GoRouter>();
+
     return MaterialApp.router(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      routerConfig: RoutingConfig.router,
+      title: 'Booklub',
+      theme: themeContext.activeTheme.themeData,
+      routerConfig: router,
     );
   }
 }
