@@ -1,6 +1,7 @@
 import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/ui/core/widgets/navigation_icon_widget.dart';
+import 'package:booklub/utils/routing/routing_utils.dart';
 import 'package:flutter/material.dart';
 
 class BaseLayout extends StatelessWidget {
@@ -34,6 +35,7 @@ class BaseLayout extends StatelessWidget {
         child: child,
       ),
       bottomNavigationBar: _buildBottomBar(
+        context: context,
         colorScheme: colorScheme,
         bottomBarHeight: bottomBarHeight,
       ),
@@ -96,9 +98,12 @@ class BaseLayout extends StatelessWidget {
   );
 
   Widget _buildBottomBar({
+    required BuildContext context,
     required ColorScheme colorScheme,
     required double bottomBarHeight
   }) {
+    final currentRoute = RoutingUtils.getRoute(context);
+
     Widget buildNavIcon({
       required IconData icon,
       required bool selected,
@@ -115,14 +120,14 @@ class BaseLayout extends StatelessWidget {
     final navigationIcons = [
       buildNavIcon(
         icon: Icons.group,
-        selected: true,
-        destination: Routes.home
+        selected: currentRoute == Routes.groups,
+        destination: Routes.groups
       ),
       Spacer(flex: 1),
       buildNavIcon(
         icon: Icons.person,
-        selected: false,
-        destination: Routes.home
+        selected: currentRoute == Routes.profile,
+        destination: Routes.profile
       )
     ];
 

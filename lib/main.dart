@@ -13,7 +13,7 @@ void main() {
       ),
       Provider<GoRouter>.value(
         value: RoutingConfig.router,
-      )
+      ),
     ],
     child: const MyApp(),
   ));
