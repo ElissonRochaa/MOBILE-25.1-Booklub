@@ -2,7 +2,7 @@ import 'dart:ui';
 
 abstract final class CustomColors {
 
-  static const Color darkViolet = Color.fromARGB(255, 29, 32, 124)
+  static const Color darkViolet = Color.fromARGB(255, 29, 32, 124);
 
   static const Color violet = Color.fromARGB(255, 47, 52, 145);
 
