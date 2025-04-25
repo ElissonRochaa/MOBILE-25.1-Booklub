@@ -53,39 +53,36 @@ class NamedSectionWidget extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Row(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Text(
             name,
             style: textTheme.titleLarge!.copyWith(
               fontFamily: 'Navicula',
               color: colorScheme.primary
             ),
           ),
-        ),
-        Expanded(
-          child: Divider(
-            thickness: 4,
-            color: colorScheme.primary,
-          )
-        ),
-        if (showSeeMore) _getSeeMore(colorScheme),
-      ],
+          Expanded(
+            child: Divider(
+              thickness: 4,
+              color: colorScheme.primary,
+            )
+          ),
+          if (showSeeMore) _getSeeMore(colorScheme),
+        ],
+      ),
     );
   }
 
   Widget _getSeeMore(ColorScheme colorScheme) => InkWell(
-      onTap: onSeeMorePressed?? () {},
-      child: Padding(
-          padding: const EdgeInsets.only(left: 4, right: 4),
-          child: Icon(
-            Icons.add_circle_rounded,
-            color: colorScheme.primary,
-            size: 32,
-          )
-      ),
-    );
+    onTap: onSeeMorePressed?? () {},
+    child: Icon(
+      Icons.add_circle_rounded,
+      color: colorScheme.primary,
+      size: 32,
+    )
+  );
 
 }
