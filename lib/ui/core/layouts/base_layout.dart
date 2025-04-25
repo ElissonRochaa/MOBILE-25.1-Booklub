@@ -1,7 +1,7 @@
-import 'package:booklub/ui/core/layouts/_base_app_bar.dart';
+import 'package:booklub/ui/core/widgets/app_bars/base_app_bar.dart';
+import 'package:booklub/ui/core/widgets/floating_action_buttons/base_floating_action_button.dart';
 import 'package:flutter/material.dart';
-import '_base_bottom_bar.dart';
-import '_base_floating_action_button.dart';
+import '../widgets/bottom_bars/base_bottom_bar.dart';
 
 class BaseLayout extends StatelessWidget {
 
@@ -18,45 +18,33 @@ class BaseLayout extends StatelessWidget {
       - appBarHeight) * 0.08;
     final systemNavBarHeight = MediaQuery.of(context).padding.bottom;
 
+    final body = Stack(
+      children: [
+        Positioned.fill(
+          child: Image.asset(
+            'assets/images/light-background.png',
+            fit: BoxFit.cover,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+              top: statusBarHeight + appBarHeight,
+              bottom: systemNavBarHeight + bottomBarHeight
+          ),
+          child: child,
+        )
+      ],
+    );
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
       appBar: BaseAppBar(height: appBarHeight),
-      body: _buildBody(
-        statusBarHeight: statusBarHeight,
-        appBarHeight: appBarHeight,
-        systemNavBarHeight: systemNavBarHeight,
-        bottomBarHeight: bottomBarHeight,
-        child: child,
-      ),
+      body: body,
       bottomNavigationBar: BaseBottomBar(height: bottomBarHeight),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: BaseFloatingActionButton(),
     );
   }
-
-  Widget _buildBody({
-    required double statusBarHeight,
-    required double appBarHeight,
-    required double systemNavBarHeight,
-    required double bottomBarHeight,
-    required Widget child
-  }) => Stack(
-    children: [
-      Positioned.fill(
-        child: Image.asset(
-          'assets/images/light-background.png',
-          fit: BoxFit.cover,
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.only(
-          top: statusBarHeight + appBarHeight,
-          bottom: systemNavBarHeight + bottomBarHeight
-        ),
-        child: child,
-      )
-    ],
-  );
 
 }

@@ -1,7 +1,7 @@
-import 'package:booklub/ui/core/layouts/_base_sliver_app_bar.dart';
+import 'package:booklub/ui/core/widgets/app_bars/base_app_bar.dart';
+import 'package:booklub/ui/core/widgets/floating_action_buttons/base_floating_action_button.dart';
 import 'package:flutter/material.dart';
-import '_base_bottom_bar.dart';
-import '_base_floating_action_button.dart';
+import '../widgets/bottom_bars/base_bottom_bar.dart';
 
 class ScrollBaseLayout extends StatelessWidget {
 
@@ -27,48 +27,37 @@ class ScrollBaseLayout extends StatelessWidget {
         .padding
         .bottom;
 
+    final body = Stack(
+      children: [
+        Positioned.fill(
+          child: Image.asset(
+            'assets/images/light-background.png',
+            fit: BoxFit.cover,
+          ),
+        ),
+        CustomScrollView(
+          slivers: [
+            BaseAppBar.sliver(),
+            SliverPadding(
+                padding: EdgeInsets.only(
+                    bottom: systemNavBarHeight + bottomBarHeight
+                ),
+                sliver: sliver
+            ),
+          ],
+        ),
+      ],
+    );
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
-      body: _buildBody(
-        statusBarHeight: statusBarHeight,
-        appBarHeight: appBarHeight,
-        systemNavBarHeight: systemNavBarHeight,
-        bottomBarHeight: bottomBarHeight,
-        sliver: sliver,
-      ),
+      body: body,
       bottomNavigationBar: BaseBottomBar(height: bottomBarHeight),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: BaseFloatingActionButton(),
     );
   }
 
-  Widget _buildBody({
-    required double statusBarHeight,
-    required double appBarHeight,
-    required double systemNavBarHeight,
-    required double bottomBarHeight,
-    required Widget sliver
-  }) => Stack(
-    children: [
-      Positioned.fill(
-        child: Image.asset(
-          'assets/images/light-background.png',
-          fit: BoxFit.cover,
-        ),
-      ),
-      CustomScrollView(
-        slivers: [
-          BaseSliverAppBar(),
-          SliverPadding(
-            padding: EdgeInsets.only(
-              bottom: systemNavBarHeight + bottomBarHeight
-            ),
-            sliver: sliver
-          ),
-        ],
-      ),
-    ],
-  );
-
 }
+

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../../../config/routing/routes.dart';
-import '../../../utils/routing/routing_utils.dart';
-import '../widgets/navigation_icon_widget.dart';
+import '../../../../config/routing/routes.dart';
+import '../../../../utils/routing/routing_utils.dart';
+import '../navigation_icon_widget.dart';
 
 class BaseBottomBar extends StatelessWidget {
   final double height;

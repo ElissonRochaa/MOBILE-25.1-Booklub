@@ -11,12 +11,15 @@ abstract final class RoutingConfig {
   static GoRouter get router => GoRouter(
     initialLocation: Routes.groups,
       routes: [
-        GoRoute(
-          name: 'Groups',
-          path: Routes.groups,
-          builder: (context, state) => ScrollBaseLayout(
-              sliver: GroupsPage(title: 'Groups')
-          ),
+        ShellRoute(
+
+          routes: [
+            GoRoute(
+              name: 'Groups',
+              path: Routes.groups,
+              builder: (context, state) => ScrollBaseLayout(sliver: GroupsPage(title: 'Clubes')),
+            ),
+          ]
         ),
         ShellRoute(
           builder: (context, state, child) => BaseLayout(child: child),
