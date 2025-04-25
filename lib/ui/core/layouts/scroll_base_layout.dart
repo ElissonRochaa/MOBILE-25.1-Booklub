@@ -1,33 +1,41 @@
-import 'package:booklub/ui/core/layouts/_base_app_bar.dart';
+import 'package:booklub/ui/core/layouts/_base_sliver_app_bar.dart';
 import 'package:flutter/material.dart';
 import '_base_bottom_bar.dart';
 import '_base_floating_action_button.dart';
 
-class BaseLayout extends StatelessWidget {
+class ScrollBaseLayout extends StatelessWidget {
 
-  final Widget child;
+  final Widget sliver;
 
-  const BaseLayout({super.key, required this.child});
+  const ScrollBaseLayout({super.key, required this.sliver});
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final statusBarHeight = MediaQuery.of(context).padding.top;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final statusBarHeight = MediaQuery
+        .of(context)
+        .padding
+        .top;
     final appBarHeight = screenHeight * 0.064;
     final bottomBarHeight = (screenHeight - statusBarHeight
-      - appBarHeight) * 0.08;
-    final systemNavBarHeight = MediaQuery.of(context).padding.bottom;
+        - appBarHeight) * 0.08;
+    final systemNavBarHeight = MediaQuery
+        .of(context)
+        .padding
+        .bottom;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
-      appBar: BaseAppBar(height: appBarHeight),
       body: _buildBody(
         statusBarHeight: statusBarHeight,
         appBarHeight: appBarHeight,
         systemNavBarHeight: systemNavBarHeight,
         bottomBarHeight: bottomBarHeight,
-        child: child,
+        sliver: sliver,
       ),
       bottomNavigationBar: BaseBottomBar(height: bottomBarHeight),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -40,7 +48,7 @@ class BaseLayout extends StatelessWidget {
     required double appBarHeight,
     required double systemNavBarHeight,
     required double bottomBarHeight,
-    required Widget child
+    required Widget sliver
   }) => Stack(
     children: [
       Positioned.fill(
@@ -49,13 +57,17 @@ class BaseLayout extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
-      Padding(
-        padding: EdgeInsets.only(
-          top: statusBarHeight + appBarHeight,
-          bottom: systemNavBarHeight + bottomBarHeight
-        ),
-        child: child,
-      )
+      CustomScrollView(
+        slivers: [
+          BaseSliverAppBar(),
+          SliverPadding(
+            padding: EdgeInsets.only(
+              bottom: systemNavBarHeight + bottomBarHeight
+            ),
+            sliver: sliver
+          ),
+        ],
+      ),
     ],
   );
 

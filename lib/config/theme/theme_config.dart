@@ -5,6 +5,17 @@ import 'package:flutter/material.dart';
 
 abstract final class ThemeConfig {
 
+  static TextTheme get _textTheme => TextTheme(
+    titleLarge: TextStyle(
+      fontWeight: FontWeight.w600,
+      fontSize: 32,
+    ),
+    titleMedium: TextStyle(
+      fontWeight: FontWeight.w600,
+      fontSize: 24,
+    ),
+  );
+
   static AppTheme get lightTheme => AppTheme(
     themeData: ThemeData(
       colorScheme: ColorScheme(
@@ -17,7 +28,8 @@ abstract final class ThemeConfig {
         onError: CustomColors.white,
         surface: CustomColors.white,
         onSurface: CustomColors.black,
-      )
+      ),
+      textTheme: _textTheme
     ),
   );
 
@@ -33,7 +45,8 @@ abstract final class ThemeConfig {
         onError: CustomColors.white,
         surface: CustomColors.lightBlack,
         onSurface: CustomColors.white,
-      )
+      ),
+      textTheme: _textTheme
     ),
   );
 
