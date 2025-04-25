@@ -1,3 +1,4 @@
+import 'package:booklub/ui/core/widgets/buttons/purple_rounded_button.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -7,6 +8,7 @@ class LoginPage extends StatelessWidget {
             body: Column(
                   children: [
                         Text("Tteste"),
+                        PurpleRoundedButton("Entrar")
                   ],
             )
             
