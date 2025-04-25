@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class NamedSectionWidget extends StatelessWidget {
 
@@ -8,29 +9,49 @@ class NamedSectionWidget extends StatelessWidget {
 
   final VoidCallback? onSeeMorePressed;
 
+  final Widget child;
+
+  final bool isSliver;
+
   const NamedSectionWidget({
     super.key,
     required this.name,
     this.showSeeMore = false,
-    this.onSeeMorePressed
-  });
+    this.onSeeMorePressed,
+    required this.child
+  }): isSliver=false;
+
+  const NamedSectionWidget.sliver({
+    super.key,
+    required this.name,
+    this.showSeeMore = false,
+    this.onSeeMorePressed,
+    required Widget sliver,
+  }): isSliver=true, child=sliver;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => isSliver
+    ? Builder(builder: _buildSliverNamedSectionWidget)
+    : Builder(builder: _buildNamedSectionWidget);
+
+
+  Widget _buildNamedSectionWidget(BuildContext context) => Column(
+    children: [
+      Builder(builder: _buildHeader),
+      child
+    ]
+  );
+
+  Widget _buildSliverNamedSectionWidget(BuildContext context) => MultiSliver(
+    children: [
+      Builder(builder: _buildHeader),
+      child
+    ],
+  );
+
+  Widget _buildHeader(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-
-    final seeMore = InkWell(
-      onTap: onSeeMorePressed?? () {},
-      child: Padding(
-        padding: const EdgeInsets.only(left: 4, right: 4),
-        child: Icon(
-          Icons.add_circle_rounded,
-          color: colorScheme.primary,
-          size: 32,
-        )
-      ),
-    );
 
     return Row(
       children: [
@@ -50,9 +71,21 @@ class NamedSectionWidget extends StatelessWidget {
             color: colorScheme.primary,
           )
         ),
-        if (showSeeMore) seeMore,
+        if (showSeeMore) _getSeeMore(colorScheme),
       ],
     );
   }
+
+  Widget _getSeeMore(ColorScheme colorScheme) => InkWell(
+      onTap: onSeeMorePressed?? () {},
+      child: Padding(
+          padding: const EdgeInsets.only(left: 4, right: 4),
+          child: Icon(
+            Icons.add_circle_rounded,
+            color: colorScheme.primary,
+            size: 32,
+          )
+      ),
+    );
 
 }

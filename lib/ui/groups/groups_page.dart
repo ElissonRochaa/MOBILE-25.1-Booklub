@@ -19,17 +19,12 @@ class _GroupsPageState extends State<GroupsPage> {
       child: Text('Card $i'),
     ));
 
-    return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      sliver: MultiSliver(
-        children: [
-          SliverToBoxAdapter(
-            child: NamedSectionWidget(
-              name: 'Meus Clubes',
-              showSeeMore: true,
-            ),
-          ),
-          SliverGrid(
+    return MultiSliver(
+      children: [
+        NamedSectionWidget.sliver(
+          name: 'Meus Clubes',
+          showSeeMore: true,
+          sliver: SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2
             ),
@@ -38,8 +33,8 @@ class _GroupsPageState extends State<GroupsPage> {
               childCount: cards.length,
             ),
           ),
-        ],
-      )
+        ),
+      ],
     );
   }
 
