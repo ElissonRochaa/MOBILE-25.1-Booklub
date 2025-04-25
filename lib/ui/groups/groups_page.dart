@@ -24,13 +24,16 @@ class _GroupsPageState extends State<GroupsPage> {
         NamedSectionWidget.sliver(
           name: 'Meus Clubes',
           showSeeMore: true,
-          sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2
-            ),
-            delegate: SliverChildBuilderDelegate(
-                  (context, index) => cards[index],
-              childCount: cards.length,
+          sliver: SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2
+              ),
+              delegate: SliverChildBuilderDelegate(
+                    (context, index) => cards[index],
+                childCount: cards.length,
+              ),
             ),
           ),
         ),

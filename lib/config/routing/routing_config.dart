@@ -12,7 +12,7 @@ abstract final class RoutingConfig {
     initialLocation: Routes.groups,
       routes: [
         ShellRoute(
-
+          builder: (context, state, child) => child,
           routes: [
             GoRoute(
               name: 'Groups',
