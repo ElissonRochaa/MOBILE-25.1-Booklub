@@ -10,7 +10,6 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background image
           Positioned.fill(
             child: Opacity(
               opacity: 0.5,
@@ -20,7 +19,6 @@ class LoginPage extends StatelessWidget {
               ),
             ),
           ),
-          // Main content
           Center(
             child: FractionallySizedBox(
               widthFactor: 0.7,

@@ -22,7 +22,7 @@ class CadastrarClickableText extends StatelessWidget {
             recognizer:
                 TapGestureRecognizer()
                   ..onTap = () {
-                    context.go('/'); //Aqui eu vou fazer quando adicionar a página de registrar
+                    context.go('/register'); //Aqui eu vou fazer quando adicionar a página de registrar
                   },
           ),
         ],
