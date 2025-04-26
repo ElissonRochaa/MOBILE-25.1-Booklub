@@ -13,40 +13,47 @@ class _TextFieldPasswordState extends State<TextFieldPassword> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
 
-    return Stack(
-      children: [
-        TextFormField(
-          obscureText: hidePassword,
-          decoration: InputDecoration(
-            labelText: 'Senha',
-            labelStyle: TextStyle(color: theme.colorScheme.onSurface),
-            filled: true,
-            fillColor: theme.colorScheme.surface,
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.transparent),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            suffixIcon: IconButton(
-              icon: Icon(
-                hidePassword
-                    ? Icons.visibility_off_outlined
-                    : Icons.visibility_outlined,
-                color: theme.colorScheme.secondary,
+    return SizedBox(
+      height: 45,
+      child: Stack(
+        children: [
+          TextFormField(
+            obscureText: hidePassword,
+            decoration: InputDecoration(
+              labelText: 'Senha',
+              labelStyle: TextStyle(color: theme.colorScheme.onSurface),
+              filled: true,
+              fillColor: theme.colorScheme.surface,
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(8),
               ),
-              onPressed: () {
-                setState(() {
-                  hidePassword = !hidePassword;
-                });
-              },
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 10,
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  hidePassword
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  color: theme.colorScheme.secondary,
+                ),
+                onPressed: () {
+                  setState(() {
+                    hidePassword = !hidePassword;
+                  });
+                },
+              ),
             ),
           ),
-        ),
-        TopInnerShadow(),
-      ],
+          TopInnerShadow(),
+        ],
+      ),
     );
   }
 }
