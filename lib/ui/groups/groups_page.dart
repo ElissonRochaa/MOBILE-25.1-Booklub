@@ -1,4 +1,4 @@
-import 'package:booklub/ui/core/widgets/named_section_widget.dart';
+import 'package:booklub/ui/core/widgets/carousel/named_section_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -21,21 +21,12 @@ class _GroupsPageState extends State<GroupsPage> {
 
     return MultiSliver(
       children: [
-        NamedSectionWidget.sliver(
+        NamedSectionCarousel.sliver(
           name: 'Meus Clubes',
+          height: 200,
           showSeeMore: true,
-          sliver: SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2
-              ),
-              delegate: SliverChildBuilderDelegate(
-                    (context, index) => cards[index],
-                childCount: cards.length,
-              ),
-            ),
-          ),
+          itemBuilder: (context, index) => cards[index],
+          itemCount: cards.length,
         ),
       ],
     );
