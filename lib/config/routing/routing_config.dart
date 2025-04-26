@@ -3,6 +3,7 @@ import 'package:booklub/ui/core/layouts/base_layout.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
 import 'package:booklub/ui/groups/groups_page.dart';
 import 'package:booklub/ui/login/login_page.dart';
+import 'package:booklub/ui/register/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
@@ -36,6 +37,11 @@ abstract final class RoutingConfig {
             name: 'Login',
             path: Routes.login,
             builder: (context, state) => LoginPage(),
+        ),
+        GoRoute(
+            name: 'Register',
+            path: Routes.register,
+            builder: (context, state) => RegisterPage(),
         ),
       ]
   );
