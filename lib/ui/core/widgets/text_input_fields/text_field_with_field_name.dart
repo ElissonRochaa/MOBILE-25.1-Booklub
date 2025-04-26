@@ -1,11 +1,17 @@
 import 'package:booklub/ui/core/widgets/top_inner_shadow.dart/top_inner_shadow.dart';
 import 'package:flutter/material.dart';
 
-class TextFieldWithFieldName extends StatelessWidget {
+class TextFieldWithFieldName extends StatefulWidget {
   final String text;
+  final String? Function(String?) validator;
 
-  TextFieldWithFieldName(this.text, {super.key});
+  const TextFieldWithFieldName(this.text, this.validator, {super.key});
 
+  @override
+  State<StatefulWidget> createState() => _TextFieldWithFieldNameState();
+}
+
+class _TextFieldWithFieldNameState extends State<TextFieldWithFieldName> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -18,8 +24,9 @@ class TextFieldWithFieldName extends StatelessWidget {
 
   Widget _buildTextField(ThemeData theme) {
     return TextFormField(
+      validator: (value) => widget.validator(value),
       decoration: InputDecoration(
-        labelText: text,
+        labelText: widget.text,
         labelStyle: TextStyle(color: theme.colorScheme.onSurface),
         filled: true,
         fillColor: theme.colorScheme.surface,

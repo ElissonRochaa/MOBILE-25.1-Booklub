@@ -1,4 +1,5 @@
 import 'package:booklub/ui/core/widgets/top_inner_shadow.dart/top_inner_shadow.dart';
+import 'package:booklub/ui/core/view_models/input_field_validation.dart';
 import 'package:flutter/material.dart';
 
 class TextFieldPassword extends StatefulWidget {
@@ -10,6 +11,8 @@ class TextFieldPassword extends StatefulWidget {
 
 class _TextFieldPasswordState extends State<TextFieldPassword> {
   bool _hidePassword = true;
+
+  InputFieldValidation viewModel = InputFieldValidation();
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -35,6 +38,7 @@ class _TextFieldPasswordState extends State<TextFieldPassword> {
   Widget _buildPasswordField(ThemeData theme) {
     return TextFormField(
       obscureText: _hidePassword,
+      validator: (value) => viewModel.validatePassword(value!),
       decoration: InputDecoration(
         labelText: 'Senha',
         labelStyle: TextStyle(color: theme.colorScheme.onSurface),
