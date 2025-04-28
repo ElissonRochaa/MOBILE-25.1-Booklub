@@ -33,7 +33,28 @@ abstract final class ThemeConfig {
         surface: CustomColors.white,
         onSurface: CustomColors.black,
       ),
-      textTheme: _textTheme
+      textTheme: _textTheme,
+      appBarTheme: AppBarTheme(
+        backgroundColor: CustomColors.white,
+        elevation: 2,
+        titleTextStyle: TextStyle(
+          fontFamily: 'Navicula',
+          color: CustomColors.violet,
+          fontSize: 32,
+          fontWeight: FontWeight.w400,
+          shadows: [
+            Shadow(
+              color: CustomColors.black,
+              blurRadius: 4,
+              offset: Offset(-1, 1)
+            ),
+          ],
+        ),
+        iconTheme: IconThemeData(
+          color: CustomColors.violet,
+        ),
+        shadowColor: CustomColors.black
+      ),
     ),
   );
 
@@ -50,7 +71,28 @@ abstract final class ThemeConfig {
         surface: CustomColors.lightBlack,
         onSurface: CustomColors.white,
       ),
-      textTheme: _textTheme
+      textTheme: _textTheme,
+      appBarTheme: AppBarTheme(
+        backgroundColor: CustomColors.black,
+        elevation: 2,
+        titleTextStyle: TextStyle(
+          fontFamily: 'Navicula',
+          color: CustomColors.lightVioletBlue,
+          fontSize: 32,
+          fontWeight: FontWeight.w400,
+          shadows: [
+            Shadow(
+                color: CustomColors.black,
+                blurRadius: 4,
+                offset: Offset(-1, 1)
+            ),
+          ],
+        ),
+        iconTheme: IconThemeData(
+          color: CustomColors.violet,
+        ),
+        shadowColor: CustomColors.black
+      ),
     ),
   );
 

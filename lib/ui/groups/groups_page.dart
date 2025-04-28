@@ -16,7 +16,6 @@ class _GroupsPageState extends State<GroupsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     final cardHeight = MediaQuery.of(context).size.height * 0.2;
     final cardAspectRatio = 3/4;
 

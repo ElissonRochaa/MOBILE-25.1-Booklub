@@ -1,4 +1,3 @@
-import 'package:booklub/config/theme/theme_config.dart';
 import 'package:flutter/material.dart';
 
 class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -22,70 +21,31 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
       ? Builder(builder: _buildSliverAppBar)
       : Builder(builder: _buidAppBar);
 
-  Widget _buidAppBar(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buidAppBar(BuildContext context) => PreferredSize(
+    preferredSize: Size.fromHeight(height),
+    child: AppBar(
+      title: Text('Booklub'),
+      actions: _getActions(),
+    ),
+  );
 
-    return PreferredSize(
-      preferredSize: Size.fromHeight(height),
-      child: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          'Booklub',
-          style: _getTextStyle(colorScheme),
-        ),
-        actions: _getActions(colorScheme),
-      ),
-    );
-  }
+  Widget _buildSliverAppBar(BuildContext context) => SliverAppBar(
+    floating: true,
+    title: Text('Booklub'),
+    actions: _getActions(),
+  );
 
-  Widget _buildSliverAppBar(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return SliverAppBar(
-      floating: true,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      title: Text(
-        'Booklub',
-        style: _getTextStyle(colorScheme),
-      ),
-      actions: _getActions(colorScheme),
-    );
-  }
-
-  TextStyle _getTextStyle(ColorScheme colorScheme) {
-    final shadows = <Shadow>[
-      Shadow(
-          color: colorScheme.black,
-          blurRadius: 4,
-          offset: Offset(-1, 1)
-      )
-    ];
-
-    return TextStyle(
-      fontFamily: 'Navicula',
-      color: colorScheme.primary,
-      fontSize: 32,
-      fontWeight: FontWeight.w400,
-      shadows: shadows,
-    );
-  }
-
-  List<Widget> _getActions(ColorScheme colorScheme) => [
+  List<Widget> _getActions() => [
     IconButton(
       icon: Icon(Icons.search),
-      color: colorScheme.primary,
       onPressed: () {},
     ),
     IconButton(
       icon: Icon(Icons.add_alert),
-      color: colorScheme.primary,
       onPressed: () {},
     ),
     IconButton(
       icon: Icon(Icons.more_vert),
-      color: colorScheme.primary,
       onPressed: () {},
     ),
   ];
