@@ -1,4 +1,5 @@
 import 'package:booklub/ui/core/widgets/carousel/named_section_carousel.dart';
+import 'package:booklub/ui/core/widgets/grids/named_section_grid_widget.dart';
 import 'package:booklub/ui/core/widgets/vertical_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -57,24 +58,17 @@ class _GroupsPageState extends State<GroupsPage> {
         SliverPadding(
           padding: const EdgeInsets.all(16),
         ),
-        NamedSectionCarousel.sliver(
-          name: 'Não sei',
-          height: cardHeight,
-          aspectRatio: cardAspectRatio,
+        NamedSectionGridWidget.sliver(
+          name: 'Explorar',
           showSeeMore: true,
-          itemBuilder: (context, index) => cards[index],
-          itemCount: cards.length,
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.all(16),
-        ),
-        NamedSectionCarousel.sliver(
-          name: 'Não sei 2',
-          height: cardHeight,
-          aspectRatio: cardAspectRatio,
-          showSeeMore: true,
-          itemBuilder: (context, index) => cards[index],
-          itemCount: cards.length,
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: cardHeight * cardAspectRatio,
+            mainAxisExtent: cardHeight
+          ),
+          childrenDelegate: SliverChildBuilderDelegate(
+            (context, index) => cards[index],
+            childCount: cards.length
+          ),
         ),
       ],
     );
