@@ -1,7 +1,7 @@
 import 'package:booklub/config/routing/routes.dart';
+import 'package:booklub/ui/clubs/groups_page.dart';
 import 'package:booklub/ui/core/layouts/base_layout.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
-import 'package:booklub/ui/groups/groups_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';

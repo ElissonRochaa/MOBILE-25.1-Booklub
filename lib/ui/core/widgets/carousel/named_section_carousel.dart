@@ -17,7 +17,7 @@ class NamedSectionCarousel extends StatelessWidget {
 
   final Widget Function(BuildContext, int) itemBuilder;
 
-  final int itemCount;
+  final int? itemCount;
 
   const NamedSectionCarousel({
     super.key,
@@ -27,7 +27,7 @@ class NamedSectionCarousel extends StatelessWidget {
     this.showSeeMore = false,
     this.onSeeMorePressed,
     required this.itemBuilder,
-    required this.itemCount
+    this.itemCount
   }): isSliver=false;
 
   const NamedSectionCarousel.sliver({
@@ -38,7 +38,7 @@ class NamedSectionCarousel extends StatelessWidget {
     this.showSeeMore = false,
     this.onSeeMorePressed,
     required this.itemBuilder,
-    required this.itemCount
+    this.itemCount
   }): isSliver=true;
 
   @override
@@ -81,8 +81,8 @@ class NamedSectionCarousel extends StatelessWidget {
         controller: controller,
         itemBuilder: itemBuilder,
         scrollDirection: Axis.horizontal,
-        itemCount: itemCount,
         physics: ClampingScrollPhysics(),
+        itemCount: itemCount,
       ),
     );
   }

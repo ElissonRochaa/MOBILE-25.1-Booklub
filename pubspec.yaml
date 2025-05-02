@@ -15,11 +15,14 @@ dependencies:
   go_router: ^14.8.1
   provider: ^6.1.4
   sliver_tools: ^0.2.12
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  json_serializable: ^6.9.5
+  build_runner: ^2.4.15
 
 flutter:
   uses-material-design: true
@@ -30,3 +33,6 @@ flutter:
   assets:
     - assets/
     - assets/images/
+
+json_serializable:
+  generic_argument_factories: true
