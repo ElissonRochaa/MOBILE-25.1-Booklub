@@ -1,7 +1,7 @@
 import 'package:booklub/ui/core/widgets/named_section_widget.dart';
 import 'package:flutter/material.dart';
 
-class NamedSectionCarousel extends StatelessWidget {
+class NamedSectionCarouselWidget extends StatelessWidget {
 
   final String name;
 
@@ -19,7 +19,7 @@ class NamedSectionCarousel extends StatelessWidget {
 
   final int? itemCount;
 
-  const NamedSectionCarousel({
+  const NamedSectionCarouselWidget({
     super.key,
     required this.name,
     required this.height,
@@ -30,7 +30,7 @@ class NamedSectionCarousel extends StatelessWidget {
     this.itemCount
   }): isSliver=false;
 
-  const NamedSectionCarousel.sliver({
+  const NamedSectionCarouselWidget.sliver({
     super.key,
     required this.name,
     required this.height,

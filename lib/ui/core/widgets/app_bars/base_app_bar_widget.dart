@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
+class BaseAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   final double height;
 
   final bool sliver;
 
-  const BaseAppBar({
+  const BaseAppBarWidget({
     super.key,
     this.height=kToolbarHeight
   }): sliver=false;
 
-  const BaseAppBar.sliver({
+  const BaseAppBarWidget.sliver({
     super.key,
     this.height=kToolbarHeight
   }): sliver=true;

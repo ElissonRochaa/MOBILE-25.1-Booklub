@@ -3,10 +3,10 @@ import '../../../../config/routing/routes.dart';
 import '../../../../utils/routing/routing_utils.dart';
 import '../navigation_icon_widget.dart';
 
-class BaseBottomBar extends StatelessWidget {
+class BaseBottomBarWidget extends StatelessWidget {
   final double height;
 
-  const BaseBottomBar({super.key, this.height=kBottomNavigationBarHeight});
+  const BaseBottomBarWidget({super.key, this.height=kBottomNavigationBarHeight});
 
   @override
   Widget build(BuildContext context) {

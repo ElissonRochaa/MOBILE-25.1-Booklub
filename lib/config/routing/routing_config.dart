@@ -1,5 +1,5 @@
 import 'package:booklub/config/routing/routes.dart';
-import 'package:booklub/ui/clubs/groups_page.dart';
+import 'package:booklub/ui/clubs/clubs_page.dart';
 import 'package:booklub/ui/core/layouts/base_layout.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
 import 'package:flutter/material.dart';

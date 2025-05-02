@@ -1,6 +1,6 @@
 import 'package:booklub/ui/clubs/view_models/clubs_view_model.dart';
 import 'package:booklub/ui/clubs/widgets/club_vertical_card_widget.dart';
-import 'package:booklub/ui/core/widgets/carousel/named_section_carousel.dart';
+import 'package:booklub/ui/core/widgets/carousel/named_section_carousel_widget.dart';
 import 'package:booklub/ui/core/widgets/grids/named_section_grid_widget.dart';
 import 'package:booklub/ui/core/widgets/vertical_card_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
@@ -44,7 +44,7 @@ class _GroupsPageState extends State<GroupsPage> {
         SliverPadding(
             padding: const EdgeInsets.all(16),
         ),
-        NamedSectionCarousel.sliver(
+        NamedSectionCarouselWidget.sliver(
           name: 'Recentes',
           height: cardHeight,
           aspectRatio: cardAspectRatio,
@@ -83,7 +83,7 @@ class _GroupsPageState extends State<GroupsPage> {
 
     final myClubs = clubsViewModel.myClubs;
 
-    return NamedSectionCarousel.sliver(
+    return NamedSectionCarouselWidget.sliver(
       name: 'Meus Clubes',
       height: cardHeight,
       aspectRatio: cardAspectRatio,

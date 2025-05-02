@@ -20,7 +20,7 @@ class ClubRepository {
   }
 
   Future<List<Club>> findClubsByUserId(String userId) async {
-    Future.delayed(const Duration(seconds: 1));
+    Future.delayed(const Duration(seconds: 5));
     return List.generate(10, (index) => _dummy(userId: userId));
   }
 

@@ -1,7 +1,7 @@
-import 'package:booklub/ui/core/widgets/app_bars/base_app_bar.dart';
-import 'package:booklub/ui/core/widgets/floating_action_buttons/base_floating_action_button.dart';
+import 'package:booklub/ui/core/widgets/app_bars/base_app_bar_widget.dart';
+import 'package:booklub/ui/core/widgets/floating_action_buttons/base_floating_action_button_widget.dart';
 import 'package:flutter/material.dart';
-import '../widgets/bottom_bars/base_bottom_bar.dart';
+import '../widgets/bottom_bars/base_bottom_bar_widget.dart';
 
 class BaseLayout extends StatelessWidget {
 
@@ -39,11 +39,11 @@ class BaseLayout extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
-      appBar: BaseAppBar(height: appBarHeight),
+      appBar: BaseAppBarWidget(height: appBarHeight),
       body: body,
-      bottomNavigationBar: BaseBottomBar(height: bottomBarHeight),
+      bottomNavigationBar: BaseBottomBarWidget(height: bottomBarHeight),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: BaseFloatingActionButton(),
+      floatingActionButton: BaseFloatingActionButtonWidget(),
     );
   }
 
