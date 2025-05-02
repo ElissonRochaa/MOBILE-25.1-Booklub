@@ -29,8 +29,8 @@ class BaseBottomBarWidget extends StatelessWidget {
     final navigationIcons = [
       buildNavIcon(
           icon: Icons.group,
-          selected: currentRoute == Routes.groups,
-          destination: Routes.groups
+          selected: currentRoute == Routes.clubs,
+          destination: Routes.clubs
       ),
       Spacer(flex: 1),
       buildNavIcon(

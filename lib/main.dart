@@ -1,5 +1,6 @@
 import 'package:booklub/config/theme/theme_context.dart';
 import 'package:booklub/infra/clubs/club_repository.dart';
+import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:booklub/config/routing/routing_config.dart';
 import 'package:go_router/go_router.dart' show GoRouter;
@@ -24,6 +25,11 @@ void main() {
           clubRepository: context.read(),
         ),
       ),
+      ChangeNotifierProvider(
+        create: (context) => ClubProfileViewModel(
+          clubRepository: context.read(),
+        ),
+      )
     ],
     child: const MyApp(),
   ));

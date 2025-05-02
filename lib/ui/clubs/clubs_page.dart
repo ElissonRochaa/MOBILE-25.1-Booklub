@@ -8,16 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-class GroupsPage extends StatefulWidget {
-  const GroupsPage({super.key, required this.title});
+class ClubsPage extends StatefulWidget {
+  const ClubsPage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<GroupsPage> createState() => _GroupsPageState();
+  State<ClubsPage> createState() => _ClubsPageState();
 }
 
-class _GroupsPageState extends State<GroupsPage> {
+class _ClubsPageState extends State<ClubsPage> {
 
   @override
   Widget build(BuildContext context) {
