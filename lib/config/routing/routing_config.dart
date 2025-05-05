@@ -8,11 +8,15 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import '../../ui/login/login_page.dart';
 import '../../ui/register/register_page.dart';
+import 'package:booklub/ui/book/individual_book_page.dart';
+
 
 abstract final class RoutingConfig {
 
   static GoRouter get router => GoRouter(
-    initialLocation: Routes.clubs,
+    //MUDAR LINHA ABAIXO ANTES DE COMITTAR
+    // initialLocation: Routes.clubs,
+    initialLocation: Routes.individualBook(bookId: 'mock-book'),
       routes: [
         GoRoute(
           name: 'Clubs',
@@ -50,6 +54,14 @@ abstract final class RoutingConfig {
             name: 'Register',
             path: Routes.register,
             builder: (context, state) => RegisterPage(),
+        ),
+        GoRoute(
+          name: 'Individual Book',
+          path: Routes.individualBook(),
+          builder: (context, state) {
+            final bookId = state.pathParameters['id'];
+            return IndividualBookPage(bookId: bookId!);
+          },
         ),
       ]
   );

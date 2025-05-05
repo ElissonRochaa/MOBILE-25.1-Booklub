@@ -9,4 +9,8 @@ abstract final class Routes {
   static const String login = '/login';
 
   static const String register = '/register';
+
+  static const String book = '/book';
+  
+  static String individualBook({String? bookId = ':id'}) => '$book/$bookId';
 }

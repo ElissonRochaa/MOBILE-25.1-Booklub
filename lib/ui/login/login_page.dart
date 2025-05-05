@@ -6,6 +6,8 @@ import 'package:booklub/ui/login/widgets/cadastrar_clickable_text.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   State<StatefulWidget> createState() => _LoginPageState();
 }
