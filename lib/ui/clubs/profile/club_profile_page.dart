@@ -1,10 +1,10 @@
 import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
-import 'package:booklub/ui/core/widgets/grids/base_grid_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class ClubProfilePage extends StatelessWidget {
 
@@ -12,6 +12,7 @@ class ClubProfilePage extends StatelessWidget {
 
   late final Club club;
 
+  // ignore: prefer_const_constructors_in_immutables
   ClubProfilePage({
     super.key,
     required this.clubId,
@@ -22,34 +23,32 @@ class ClubProfilePage extends StatelessWidget {
     final viewModel = context.watch<ClubProfileViewModel>();
     final futureClub = viewModel.findClubById(clubId);
 
-    return SliverToBoxAdapter(
-      child: AsyncBuilder(
-        future: futureClub,
-        onRetrieved: (club) {
-          this.club = club;
-          return Builder(builder: _buildPage);
-        },
-        onLoading: () => Builder(builder: _buildLoading),
-        onError: (_, _) => Builder(builder: _buildError),
-      ),
+    return AsyncBuilder(
+      future: futureClub,
+      onRetrieved: (club) {
+        this.club = club;
+        return Builder(builder: _buildPage);
+      },
+      onLoading: () => Builder(builder: _buildLoading),
+      onError: (_, _) => Builder(builder: _buildError),
     );
   }
 
   Widget _buildPage(BuildContext context) {
-    return Column(
+    return MultiSliver(
       children: [
         Builder(builder: _buildHeading),
+        ProfileExploreSection()
       ]
     );
   }
 
   Widget _buildHeading(BuildContext context) {
-    return Column(
+    return MultiSliver(
       children: [
         Builder(builder: _buildClubImage),
         Builder(builder: _buildClubLabel),
         Builder(builder: _buildProfileInfo),
-        ProfileExploreSection()
       ]
     );
   }
@@ -154,28 +153,33 @@ class ClubProfilePage extends StatelessWidget {
   }
 
   Widget _buildLoading(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        CircularProgressIndicator()
-      ]
-    );
-  }
-
-  Widget _buildError(BuildContext context) {
-    return Center(
+    return SliverToBoxAdapter(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('Club with id "$clubId" not found! =(')
+          CircularProgressIndicator()
         ]
       ),
     );
   }
 
+  Widget _buildError(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('Club with id "$clubId" not found! =(')
+          ]
+        ),
+      ),
+    );
+  }
+
 }
+
 
 class ProfileExploreSection extends StatefulWidget {
   const ProfileExploreSection({super.key});
@@ -220,10 +224,11 @@ class _ProfileExploreSectionState extends State<ProfileExploreSection> {
       );
     }
 
-    return Column(
+    return MultiSliver(
       children: [
-        Container(
-          decoration: BoxDecoration(
+        SliverToBoxAdapter(
+          child: Container(
+            decoration: BoxDecoration(
               color: Colors.transparent,
               boxShadow: [
                 BoxShadow(
@@ -242,18 +247,19 @@ class _ProfileExploreSectionState extends State<ProfileExploreSection> {
                   topLeft: Radius.circular(100),
                   bottomLeft: Radius.circular(100)
               )
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                sessionWidget('Recentes'),
-                sessionWidget('Livros'),
-                sessionWidget('Encontros'),
-                addButton()
-              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  sessionWidget('Recentes'),
+                  sessionWidget('Livros'),
+                  sessionWidget('Encontros'),
+                  addButton()
+                ],
+              ),
             ),
           ),
         ),
