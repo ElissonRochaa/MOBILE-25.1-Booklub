@@ -1,9 +1,10 @@
+import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
+import 'package:booklub/ui/core/widgets/grids/base_grid_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 class ClubProfilePage extends StatelessWidget {
 
@@ -43,28 +44,112 @@ class ClubProfilePage extends StatelessWidget {
   }
 
   Widget _buildHeading(BuildContext context) {
+    return Column(
+      children: [
+        Builder(builder: _buildClubImage),
+        Builder(builder: _buildClubLabel),
+        Builder(builder: _buildProfileInfo),
+        ProfileExploreSection()
+      ]
+    );
+  }
+
+  Widget _buildClubImage(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final circleDiameter = screenWidth * 0.4;
 
+    return Container(
+      height: circleDiameter,
+      width: circleDiameter,
+      constraints: BoxConstraints(
+          maxWidth: 120,
+          maxHeight: 120
+      ),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+        image: DecorationImage(
+            image: NetworkImage(club.imageUrl),
+            fit: BoxFit.cover
+        ),
+      ),
+    );
+  }
+
+  Widget _buildClubLabel(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Column(
       children: [
-        Container(
-          height: circleDiameter,
-          width: circleDiameter,
-          constraints: BoxConstraints(
-            maxWidth: 120,
-            maxHeight: 120
+        Text(
+          'Clube',
+          style: textTheme.titleMedium!.copyWith(
+              color: colorScheme.secondary,
+              fontFamily: 'Navicula',
+              fontWeight: FontWeight.w700
           ),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
-            image: DecorationImage(
-              image: NetworkImage(club.imageUrl),
-              fit: BoxFit.cover
-            ),
+        ),
+        Text(
+          club.name,
+          style: textTheme.titleLarge!.copyWith(
+            color: colorScheme.primary,
+            fontFamily: 'Navicula',
+            fontWeight: FontWeight.w700,
           ),
         )
-      ]
+      ],
+    );
+  }
+
+  Widget _buildProfileInfo(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    Widget profileInfoCard(String section, int value) => Expanded(
+      child: InkWell(
+        onTap: () {},
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          decoration: BoxDecoration(
+              color: colorScheme.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [BoxShadow(
+                color: Colors.black,
+                offset: Offset(1, 0.5),
+                blurRadius: 2,
+              )]
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 2),
+            child: Column(
+              children: [
+                Text(
+                  value.toString(),
+                  style: textTheme.labelLarge!.copyWith(
+                    color: colorScheme.primary,
+                  ),
+                ),
+                Text(section)
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        spacing: 8,
+        children: [
+          profileInfoCard('Membros', 8),
+          profileInfoCard('Leituras', 3),
+          profileInfoCard('Badges', 1),
+          profileInfoCard('Solicitações', 4),
+        ],
+      ),
     );
   }
 
@@ -90,5 +175,90 @@ class ClubProfilePage extends StatelessWidget {
     );
   }
 
-
 }
+
+class ProfileExploreSection extends StatefulWidget {
+  const ProfileExploreSection({super.key});
+
+  @override
+  State<ProfileExploreSection> createState() => _ProfileExploreSectionState();
+}
+
+class _ProfileExploreSectionState extends State<ProfileExploreSection> {
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    Widget addButton() => Container(
+      decoration: BoxDecoration(
+          color: colorScheme.primary,
+          shape: BoxShape.circle
+      ),
+      child: IconButton(
+          color: colorScheme.onPrimary,
+          onPressed: () {},
+          icon: Icon(Icons.add_rounded)
+      ),
+    );
+
+    Widget sessionWidget(String nome) {
+      return Container(
+        decoration: BoxDecoration(
+            color: colorScheme.darkWhite,
+            borderRadius: BorderRadius.circular(24)
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            nome,
+            style: textTheme.labelMedium!.copyWith(
+                color: colorScheme.primary
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              color: Colors.transparent,
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 0,
+                    spreadRadius: -1
+                ),
+                BoxShadow(
+                    color: Colors.white,
+                    blurRadius: 6.4,
+                    blurStyle: BlurStyle.inner
+                ),
+              ],
+              border: Border.all(color: Colors.black26),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(100),
+                  bottomLeft: Radius.circular(100)
+              )
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                sessionWidget('Recentes'),
+                sessionWidget('Livros'),
+                sessionWidget('Encontros'),
+                addButton()
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+

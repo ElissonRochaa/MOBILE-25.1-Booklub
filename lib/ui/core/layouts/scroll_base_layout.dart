@@ -39,10 +39,10 @@ class ScrollBaseLayout extends StatelessWidget {
           slivers: [
             BaseAppBarWidget.sliver(),
             SliverPadding(
-                padding: EdgeInsets.only(
-                    bottom: systemNavBarHeight + bottomBarHeight
-                ),
-                sliver: sliver
+              padding: EdgeInsets.only(
+                  bottom: systemNavBarHeight + bottomBarHeight
+              ),
+              sliver: sliver
             ),
           ],
         ),
