@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 class StarRating extends StatelessWidget {
   final double rating;
   final double iconSize;
+  final bool showNumber;
 
-  const StarRating({super.key, required this.rating, this.iconSize = 40});
+  const StarRating({
+    super.key,
+    required this.rating,
+    this.iconSize = 40,
+    this.showNumber = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +30,18 @@ class StarRating extends StatelessWidget {
             color: theme.colorScheme.primary,
             size: iconSize,
           ),
-        const SizedBox(width: 8),
-        Padding(
-          padding: EdgeInsets.only(bottom: iconSize * 0.05),
-          child: Text(
-            rating.toStringAsFixed(1),
-            style: theme.textTheme.bodyMedium?.copyWith(
-              fontSize: iconSize * 0.45,
+        if (showNumber) ...[
+          const SizedBox(width: 8),
+          Padding(
+            padding: EdgeInsets.only(bottom: iconSize * 0.05),
+            child: Text(
+              rating.toStringAsFixed(2),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontSize: iconSize * 0.45,
+              ),
             ),
           ),
-        ),
+        ],
       ],
     );
   }

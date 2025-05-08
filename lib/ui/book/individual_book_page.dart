@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:booklub/ui/book/widgets/review_card_widget.dart';
-import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/ui/book/widgets/star_rating_widget.dart';
+import 'package:booklub/ui/book/widgets/stats_card_widget.dart';
 
 class IndividualBookPage extends StatelessWidget {
   const IndividualBookPage({super.key, required this.bookId});
@@ -87,47 +87,18 @@ class IndividualBookPage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildStatCard(colorScheme, number: '15', label: 'clubes já leram'),
+        StatsCard(
+          number: '45',
+          label: 'clubes já leram',
+          colorScheme: colorScheme,
+        ),
         const SizedBox(width: 20),
-        _buildStatCard(colorScheme, number: '4', label: 'clubes estão lendo'),
+        StatsCard(
+          number: '13',
+          label: 'clubes estão lendo',
+          colorScheme: colorScheme,
+        ),
       ],
-    );
-  }
-
-  Widget _buildStatCard(
-    ColorScheme colorScheme, {
-    required String number,
-    required String label,
-  }) {
-    return Container(
-      width: 150,
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        color: colorScheme.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            number,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 14),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
     );
   }
 
@@ -154,7 +125,13 @@ class IndividualBookPage extends StatelessWidget {
           3,
           (index) => const Padding(
             padding: EdgeInsets.only(bottom: 12),
-            child: ReviewCard(),
+            child: ReviewCard(
+              profileImageUrl: 'assets/images/mrbeast_profile_picture.jpg',
+              displayName: 'Michael Albuquerque',
+              username: 'michael_reads',
+              rating: 4.5,
+              review: 'Ameiii muito o livro',
+            ),
           ),
         ),
       ],
