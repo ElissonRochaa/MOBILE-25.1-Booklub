@@ -3,6 +3,7 @@ import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:booklub/ui/book/widgets/review_card_widget.dart';
 import 'package:booklub/config/theme/theme_config.dart';
+import 'package:booklub/ui/book/widgets/star_rating_widget.dart';
 
 class IndividualBookPage extends StatelessWidget {
   const IndividualBookPage({super.key, required this.bookId});
@@ -124,20 +125,16 @@ class IndividualBookPage extends StatelessWidget {
   }
 
   Widget _buildRatingSection() {
-    return Row(
-      children: const [
-        Icon(Icons.star, color: Colors.amber),
-        SizedBox(width: 4),
-        Text("4.5"),
-      ],
-    );
+    const double rating = 4.38;
+
+    return const Center(child: StarRating(rating: rating));
   }
 
   Widget _buildReviewSection(TextTheme textTheme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Reviews", style: textTheme.titleMedium),
+        Text("Resenhas", style: textTheme.titleMedium),
         const SizedBox(height: 12),
         ...List.generate(
           3,
