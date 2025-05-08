@@ -23,93 +23,95 @@ class IndividualBookPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Capa, título e autor centralizados
-                  Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // Capa do livro
-                        Container(
-                          height: 229,
-                          width: 153,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(
-                                'assets/images/misery_capa.jpg',
-                              ),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-
-                        // Título
-                        Text(
-                          "Misery",
-                          style: textTheme.titleLarge?.copyWith(
-                            color: colorScheme.primary,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 8),
-
-                        // Autor
-                        Text(
-                          "Stephen King",
-                          style: textTheme.titleSmall?.copyWith(
-                            color: colorScheme.secondary,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-
+                  _buildCoverAndTitleSection(textTheme, colorScheme),
                   const SizedBox(height: 16),
-
-                  // Quantos clubes leram/estão lendo o livro
-                  Row(
-                    children: [
-                      Icon(Icons.group, color: colorScheme.primary),
-                      const SizedBox(width: 8),
-                      const Text("Read by 15 clubs"),
-                      const SizedBox(width: 16),
-                      Icon(Icons.play_arrow, color: colorScheme.primary),
-                      const SizedBox(width: 8),
-                      const Text("Currently read by 4 clubs"),
-                    ],
-                  ),
-
+                  _buildClubStatsSection(colorScheme),
                   const SizedBox(height: 16),
-
-                  // Estrelas
-                  Row(
-                    children: const [
-                      Icon(Icons.star, color: Colors.amber),
-                      SizedBox(width: 4),
-                      Text("4.5"),
-                    ],
-                  ),
-
+                  _buildRatingSection(),
                   const SizedBox(height: 24),
-
-                  // Resenhas
-                  Text("Reviews", style: textTheme.titleMedium),
-                  const SizedBox(height: 12),
-
-                  ...List.generate(
-                    3,
-                    (index) => const Padding(
-                      padding: EdgeInsets.only(bottom: 12),
-                      child: ReviewCard(),
-                    ),
-                  ),
+                  _buildReviewSection(textTheme),
                 ],
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildCoverAndTitleSection(
+    TextTheme textTheme,
+    ColorScheme colorScheme,
+  ) {
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            height: 229,
+            width: 153,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/misery_capa.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            "Misery",
+            style: textTheme.titleLarge?.copyWith(color: colorScheme.primary),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            "Stephen King",
+            style: textTheme.titleSmall?.copyWith(color: colorScheme.secondary),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildClubStatsSection(ColorScheme colorScheme) {
+    return Row(
+      children: [
+        Icon(Icons.group, color: colorScheme.primary),
+        const SizedBox(width: 8),
+        const Text("Read by 15 clubs"),
+        const SizedBox(width: 16),
+        Icon(Icons.play_arrow, color: colorScheme.primary),
+        const SizedBox(width: 8),
+        const Text("Currently read by 4 clubs"),
+      ],
+    );
+  }
+
+  Widget _buildRatingSection() {
+    return Row(
+      children: const [
+        Icon(Icons.star, color: Colors.amber),
+        SizedBox(width: 4),
+        Text("4.5"),
+      ],
+    );
+  }
+
+  Widget _buildReviewSection(TextTheme textTheme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Reviews", style: textTheme.titleMedium),
+        const SizedBox(height: 12),
+        ...List.generate(
+          3,
+          (index) => const Padding(
+            padding: EdgeInsets.only(bottom: 12),
+            child: ReviewCard(),
+          ),
+        ),
+      ],
     );
   }
 }
