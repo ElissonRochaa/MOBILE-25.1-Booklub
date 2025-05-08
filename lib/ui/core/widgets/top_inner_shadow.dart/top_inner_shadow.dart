@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TopInnerShadow extends StatelessWidget {
+  const TopInnerShadow({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Positioned(

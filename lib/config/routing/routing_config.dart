@@ -1,10 +1,7 @@
 import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/ui/clubs/clubs_page.dart';
 import 'package:booklub/ui/clubs/profile/club_profile_page.dart';
-import 'package:booklub/ui/core/layouts/base_layout.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import '../../ui/login/login_page.dart';
 import '../../ui/register/register_page.dart';
@@ -29,37 +26,21 @@ abstract final class RoutingConfig {
           return ScrollBaseLayout(sliver: ClubProfilePage(clubId: clubId!));
         },
       ),
-      ShellRoute(
-        builder: (context, state, child) => BaseLayout(child: child),
-        routes: [
-          GoRoute(
-            name: 'Profile',
-            path: Routes.profile,
-            builder: (context, state) => const Placeholder(),
-          ),
-        ],
-      ),
-      ShellRoute(
-        builder: (context, state, child) => BaseLayout(child: child),
-        routes: [
-          GoRoute(
-            name: 'User Profile',
-            path: Routes.user,
-            builder: (context, state) {
-              final userIdFromRoute = state.pathParameters['id'];
+      GoRoute(
+        name: 'User Profile',
+        path: Routes.userProfile(),
+        builder: (context, state) {
+          final userIdFromRoute = state.pathParameters['id'];
+          const currentUserId = 'abc123'; // TODO: Trocar por lógica real
+          final isMyOwnProfile = (userIdFromRoute == currentUserId);
 
-              // Simulação de onde você pegaria o ID do usuário logado
-              // Você deve adaptar isso com seu AuthViewModel, Provider, etc.
-              const currentUserId = 'abc123'; // TODO: Trocar por lógica real
-              final isMyOwnProfile = (userIdFromRoute == currentUserId);
-
-              return ProfilePage(
-                userId: userIdFromRoute!,
-                isMyOwnUserProfile: isMyOwnProfile,
-              );
-            },
-          ),
-        ],
+          return ScrollBaseLayout(
+            sliver: ProfilePage(
+              userId: userIdFromRoute!,
+              isMyOwnUserProfile: isMyOwnProfile,
+            ),
+          );
+        },
       ),
       GoRoute(
         name: 'Login',
