@@ -31,7 +31,7 @@ class IndividualBookPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   _buildRatingSection(),
                   const SizedBox(height: 24),
-                  _buildReviewSection(textTheme),
+                  _buildReviewSection(context, textTheme),
                 ],
               ),
             ),
@@ -62,13 +62,20 @@ class IndividualBookPage extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             "Misery",
-            style: textTheme.titleLarge?.copyWith(color: colorScheme.primary),
+            style: textTheme.titleLarge?.copyWith(
+              color: colorScheme.primary,
+              fontFamily: 'Navicula',
+              fontSize: 42,
+            ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
           Text(
             "Stephen King",
-            style: textTheme.titleSmall?.copyWith(color: colorScheme.secondary),
+            style: textTheme.titleSmall?.copyWith(
+              color: colorScheme.secondary,
+              fontFamily: 'Navicula',
+              fontSize: 28,
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -130,11 +137,18 @@ class IndividualBookPage extends StatelessWidget {
     return const Center(child: StarRating(rating: rating));
   }
 
-  Widget _buildReviewSection(TextTheme textTheme) {
+  Widget _buildReviewSection(BuildContext context, TextTheme textTheme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Resenhas", style: textTheme.titleMedium),
+        Text(
+          "Resenhas",
+          style: textTheme.titleMedium?.copyWith(
+            fontFamily: 'Navicula',
+            color: Theme.of(context).colorScheme.secondary,
+            fontSize: 28,
+          ),
+        ),
         const SizedBox(height: 12),
         ...List.generate(
           3,
