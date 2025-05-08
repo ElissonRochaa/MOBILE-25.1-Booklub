@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import 'package:booklub/ui/book/widgets/review_card_widget.dart';
+import 'package:booklub/config/theme/theme_config.dart';
 
 class IndividualBookPage extends StatelessWidget {
   const IndividualBookPage({super.key, required this.bookId});
@@ -76,15 +77,49 @@ class IndividualBookPage extends StatelessWidget {
 
   Widget _buildClubStatsSection(ColorScheme colorScheme) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.group, color: colorScheme.primary),
-        const SizedBox(width: 8),
-        const Text("Read by 15 clubs"),
-        const SizedBox(width: 16),
-        Icon(Icons.play_arrow, color: colorScheme.primary),
-        const SizedBox(width: 8),
-        const Text("Currently read by 4 clubs"),
+        _buildStatCard(colorScheme, number: '15', label: 'clubes já leram'),
+        const SizedBox(width: 20),
+        _buildStatCard(colorScheme, number: '4', label: 'clubes estão lendo'),
       ],
+    );
+  }
+
+  Widget _buildStatCard(
+    ColorScheme colorScheme, {
+    required String number,
+    required String label,
+  }) {
+    return Container(
+      width: 150,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: colorScheme.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.black.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            number,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 14),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 
