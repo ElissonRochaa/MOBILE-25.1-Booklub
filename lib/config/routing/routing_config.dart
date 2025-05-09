@@ -2,12 +2,12 @@ import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/ui/clubs/clubs_page.dart';
 import 'package:booklub/ui/clubs/profile/club_profile_page.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../ui/login/login_page.dart';
 import '../../ui/register/register_page.dart';
 import 'package:booklub/ui/book/individual_book_page.dart';
 import 'package:booklub/ui/user/profile_page.dart';
-
 
 abstract final class RoutingConfig {
   static GoRouter get router => GoRouter(
@@ -29,22 +29,12 @@ abstract final class RoutingConfig {
         },
       ),
 
-      ShellRoute(
-        builder: (context, state, child) => BaseLayout(child: child),
-        routes: [
-          GoRoute(
-            name: 'Profile',
-            path: Routes.profile,
-            builder: (context, state) => const Placeholder(),
-          ),
-        ],
-        
       GoRoute(
         name: 'User Profile',
         path: Routes.userProfile(),
         builder: (context, state) {
           final userIdFromRoute = state.pathParameters['id'];
-          const currentUserId = 'abc123'; // TODO: Trocar por lógica real
+          final currentUserId = 'abc123';
           final isMyOwnProfile = (userIdFromRoute == currentUserId);
 
           return ScrollBaseLayout(
@@ -54,7 +44,6 @@ abstract final class RoutingConfig {
             ),
           );
         },
-
       ),
       GoRoute(
         name: 'Login',
@@ -66,7 +55,6 @@ abstract final class RoutingConfig {
         path: Routes.register,
         builder: (context, state) => RegisterPage(),
       ),
-
       GoRoute(
         name: 'Individual Book',
         path: Routes.individualBook(),
@@ -75,7 +63,11 @@ abstract final class RoutingConfig {
           return IndividualBookPage(bookId: bookId!);
         },
       ),
-
     ],
   );
+}
+
+// Added missing Routes.profile definition
+extension RoutesExtension on Routes {
+  static String get profile => '/profile';
 }
