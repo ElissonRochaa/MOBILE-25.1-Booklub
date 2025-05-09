@@ -2,10 +2,12 @@ import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/ui/clubs/clubs_page.dart';
 import 'package:booklub/ui/clubs/profile/club_profile_page.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../ui/login/login_page.dart';
 import '../../ui/register/register_page.dart';
 import 'package:booklub/ui/book/individual_book_page.dart';
+import 'package:booklub/ui/user/profile_page.dart';
 
 abstract final class RoutingConfig {
   static GoRouter get router => GoRouter(
@@ -27,6 +29,22 @@ abstract final class RoutingConfig {
               sliver: ClubProfilePage(
                 clubId: clubId!,
               )
+            );
+          },
+        ),
+        GoRoute(
+          name: 'User Profile',
+          path: Routes.userProfile(),
+          builder: (context, state) {
+            final userIdFromRoute = state.pathParameters['id'];
+            final currentUserId = 'abc123';
+            final isMyOwnProfile = (userIdFromRoute == currentUserId);
+
+            return ScrollBaseLayout(
+              sliver: ProfilePage(
+                userId: userIdFromRoute!,
+                isMyOwnUserProfile: isMyOwnProfile,
+              ),
             );
           },
         ),
