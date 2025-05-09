@@ -2,6 +2,8 @@ import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/ui/clubs/clubs_page.dart';
 import 'package:booklub/ui/clubs/profile/club_profile_page.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
+import 'package:booklub/ui/explore/explore_page.dart';
+import 'package:booklub/ui/explore/layout/explore_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../ui/login/login_page.dart';
@@ -65,6 +67,13 @@ abstract final class RoutingConfig {
             final bookId = state.pathParameters['id'];
             return IndividualBookPage(bookId: bookId!);
           },
+        ),
+        GoRoute(
+          name: 'Explore',
+          path: Routes.explore,
+          builder: (context, state) => ExploreLayout(
+            sliver: ExplorePage()
+          ),
         ),
       ]
   );

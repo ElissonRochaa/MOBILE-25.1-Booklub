@@ -1,4 +1,6 @@
+import 'package:booklub/config/routing/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class BaseAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
@@ -25,20 +27,20 @@ class BaseAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     preferredSize: Size.fromHeight(height),
     child: AppBar(
       title: Text('Booklub'),
-      actions: _getActions(),
+      actions: _getActions(context),
     ),
   );
 
   Widget _buildSliverAppBar(BuildContext context) => SliverAppBar(
     floating: true,
     title: Text('Booklub'),
-    actions: _getActions(),
+    actions: _getActions(context),
   );
 
-  List<Widget> _getActions() => [
+  List<Widget> _getActions(BuildContext context) => [
     IconButton(
       icon: Icon(Icons.search),
-      onPressed: () {},
+      onPressed: () => context.push(Routes.explore),
     ),
     IconButton(
       icon: Icon(Icons.add_alert),

@@ -1,6 +1,9 @@
 import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
 import 'package:booklub/ui/clubs/profile/widgets/activity_card.dart';
+import 'package:booklub/ui/core/widgets/buttons/selectable_button.dart';
+import 'package:booklub/ui/core/widgets/buttons/selectable_button.dart';
+import 'package:booklub/ui/core/widgets/buttons/selectable_button.dart';
 import 'package:booklub/ui/core/widgets/grids/infinite_grid_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
 import 'package:booklub/utils/pagination/paginator.dart';
@@ -96,22 +99,22 @@ class _ClubActivitiesListWidgetState extends State<ClubActivitiesListWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _buildSessionSelectorButton(
-                name: 'Recentes',
+              SelectableButton(
+                label: 'Recentes',
                 selected: activity == ClubActivity.recentes,
                 onPressed: () => setState(() {
                   activity = ClubActivity.recentes;
                 }),
               ),
-              _buildSessionSelectorButton(
-                name: 'Leituras',
+              SelectableButton(
+                label: 'Leituras',
                 selected: activity == ClubActivity.leituras,
                 onPressed: () => setState(() {
                   activity = ClubActivity.leituras;
                 }),
               ),
-              _buildSessionSelectorButton(
-                name: 'Encontros',
+              SelectableButton(
+                label: 'Encontros',
                 selected: activity == ClubActivity.encontros,
                 onPressed: () => setState(() {
                   activity = ClubActivity.encontros;
@@ -127,34 +130,6 @@ class _ClubActivitiesListWidgetState extends State<ClubActivitiesListWidget> {
     return SliverPadding(
       padding: EdgeInsets.symmetric(vertical: 16),
       sliver: sessionSelector,
-    );
-  }
-
-  Widget _buildSessionSelectorButton({
-    required String name,
-    required bool selected,
-    required VoidCallback onPressed,
-  }) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-
-    return InkWell(
-      onTap: onPressed,
-      child: Container(
-        decoration: BoxDecoration(
-            color: selected ? colorScheme.primary : colorScheme.darkWhite,
-            borderRadius: BorderRadius.circular(24)
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            name,
-            style: textTheme.labelMedium!.copyWith(
-                color: selected ? colorScheme.white : colorScheme.primary
-            ),
-          ),
-        ),
-      ),
     );
   }
 
