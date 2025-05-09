@@ -1,4 +1,6 @@
 import 'package:booklub/domain/entities/clubs/club.dart';
+import 'package:booklub/utils/pagination/page.dart';
+import 'package:booklub/utils/pagination/paginator.dart';
 
 class ClubRepository {
 
@@ -14,9 +16,36 @@ class ClubRepository {
     ownerId: ownerId
   );
 
-  Future<List<Club>> findClubs() async {
+  Page<Club> _dummyPage({
+    required int page,
+    required int pageSize,
+    String userId = '1',
+    String ownerId = '1',
+  }) {
+    return Page(
+      content: List.generate(pageSize, (index) => _dummy(
+        userId: userId,
+        ownerId: ownerId
+      )),
+      pageInfo: PageInfo(
+        size: pageSize,
+        number: page,
+        totalElements: pageSize * 4,
+        totalPages: 4
+      ),
+    );
+  }
+
+  Future<Paginator<Club>> findClubs(int pageSize) async {
     Future.delayed(const Duration(seconds: 1));
-    return List.generate(10, (index) => _dummy());
+
+    return Paginator.create(pageSize, (page, pageSize) async {
+      await Future.delayed(const Duration(seconds: 1));
+      return _dummyPage(
+        page: page,
+        pageSize: pageSize,
+      );
+    });
   }
 
   Future<Club> findClubById(String clubId) async {
@@ -24,9 +53,17 @@ class ClubRepository {
     return _dummy();
   }
 
-  Future<List<Club>> findClubsByUserId(String userId) async {
+  Future<Paginator<Club>> findClubsByUserId(int pageSize, String userId) async {
     Future.delayed(const Duration(seconds: 5));
-    return List.generate(10, (index) => _dummy(userId: userId));
+    return Paginator.create(pageSize, (page, pageSize) async {
+      await Future.delayed(const Duration(seconds: 1));
+      return _dummyPage(
+        page: page,
+        pageSize: pageSize,
+        userId: userId,
+        ownerId: userId,
+      );
+    });
   }
 
 }

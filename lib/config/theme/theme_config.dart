@@ -18,6 +18,14 @@ abstract final class ThemeConfig {
       fontWeight: FontWeight.w600,
       fontSize: 16,
     ),
+    labelLarge: TextStyle(
+      fontWeight: FontWeight.w600,
+      fontSize: 20
+    ),
+    labelMedium: TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 16
+    )
   );
 
   static AppTheme get lightTheme => AppTheme(

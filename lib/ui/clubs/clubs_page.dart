@@ -1,10 +1,12 @@
+import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/ui/clubs/view_models/clubs_view_model.dart';
 import 'package:booklub/ui/clubs/widgets/club_vertical_card_widget.dart';
 import 'package:booklub/ui/core/widgets/carousel/named_section_carousel_widget.dart';
 import 'package:booklub/ui/core/widgets/grids/named_section_grid_widget.dart';
 import 'package:booklub/ui/core/widgets/vertical_card_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
-import 'package:flutter/material.dart';
+import 'package:booklub/utils/pagination/page.dart';
+import 'package:flutter/material.dart' hide Page;
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -81,7 +83,7 @@ class _ClubsPageState extends State<ClubsPage> {
     final cardHeight = _getCardHeight(context);
     final cardAspectRatio = _getCardAspectRatio();
 
-    final myClubs = clubsViewModel.myClubs;
+    final myClubs = clubsViewModel.findMyClubs(10);
 
     return NamedSectionCarouselWidget.sliver(
       name: 'Meus Clubes',
@@ -90,13 +92,24 @@ class _ClubsPageState extends State<ClubsPage> {
       showSeeMore: true,
       itemBuilder: (context, index) => AsyncBuilder(
         future: myClubs,
-        onRetrieved: (data) => index < data.length
-          ? ClubVerticalCardWidget(club: data[index])
-          : const SizedBox.shrink(),
+        onRetrieved: (paginator) => _buildClubCard(paginator[index], index),
         onLoading: () => const Center(child: CircularProgressIndicator()),
         onError: (_, _) => Placeholder(),
       ),
-      itemCount: 11,
+      itemCount: 10,
+    );
+  }
+
+  Widget _buildClubCard(Future<Page<Club>> page, int index) {
+    return AsyncBuilder(
+      future: page,
+      onRetrieved: (data) => ClubVerticalCardWidget(
+        club: data.toList()[index],
+      ),
+      onLoading: () => Center(
+        child: CircularProgressIndicator()
+      ),
+      onError: (_, _) => VerticalCardWidget()
     );
   }
 
