@@ -1,5 +1,6 @@
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/infra/clubs/club_repository.dart';
+import 'package:booklub/utils/pagination/paginator.dart';
 import 'package:flutter/cupertino.dart';
 
 class ClubsViewModel extends ChangeNotifier {
@@ -10,16 +11,16 @@ class ClubsViewModel extends ChangeNotifier {
     required this.clubRepository,
   });
 
-  Future<List<Club>> get myClubs async {
-    return clubRepository.findClubsByUserId('1');
+  Future<Paginator<Club>> findMyClubs(int pageSize) async {
+    return clubRepository.findClubsByUserId(pageSize, '1');
   }
 
-  Future<List<Club>> get recentClubs async {
-    return clubRepository.findClubsByUserId('1');
+  Future<Paginator<Club>> findRecentClubs(int pageSize) async {
+    return clubRepository.findClubsByUserId(pageSize, '1');
   }
 
-  Future<List<Club>> get allClubs async {
-    return clubRepository.findClubsByUserId('1');
+  Future<Paginator<Club>> findAllClubs(int pageSize) async {
+    return clubRepository.findClubs(pageSize);
   }
 
 

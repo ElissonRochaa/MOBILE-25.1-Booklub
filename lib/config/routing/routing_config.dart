@@ -22,14 +22,16 @@ abstract final class RoutingConfig {
           ),
         ),
         GoRoute(
-            name: 'Club Profile',
-            path: Routes.clubProfile(),
-            builder: (context, state) {
-              final clubId = state.pathParameters['id'];
-              return ScrollBaseLayout(
-                sliver: ClubProfilePage(clubId: clubId!)
-              );
-            },
+          name: 'Club Profile',
+          path: Routes.clubProfile(),
+          builder: (context, state) {
+            final clubId = state.pathParameters['id'];
+            return ScrollBaseLayout(
+              sliver: ClubProfilePage(
+                clubId: clubId!,
+              )
+            );
+          },
         ),
         ShellRoute(
           builder: (context, state, child) => BaseLayout(child: child),

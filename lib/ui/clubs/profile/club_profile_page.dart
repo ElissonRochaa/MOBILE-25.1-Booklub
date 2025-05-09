@@ -1,8 +1,9 @@
 import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
+import 'package:booklub/ui/clubs/profile/widgets/club_activities_list_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Page;
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -29,16 +30,44 @@ class ClubProfilePage extends StatelessWidget {
         this.club = club;
         return Builder(builder: _buildPage);
       },
-      onLoading: () => Builder(builder: _buildLoading),
-      onError: (_, _) => Builder(builder: _buildError),
+      onLoading: () => Builder(builder: _buildLoadingPage),
+      onError: (_, _) => Builder(builder: _buildErrorPage),
+    );
+  }
+
+  Widget _buildLoadingPage(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CircularProgressIndicator()
+          ]
+      ),
+    );
+  }
+
+  Widget _buildErrorPage(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Center(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('Club with id "$clubId" not found! =(')
+            ]
+        ),
+      ),
     );
   }
 
   Widget _buildPage(BuildContext context) {
+    final scrollController = context.read<ScrollController>();
+
     return MultiSliver(
       children: [
         Builder(builder: _buildHeading),
-        ProfileExploreSection()
+        ClubActivitiesListWidget(scrollController: scrollController),
       ]
     );
   }
@@ -152,119 +181,4 @@ class ClubProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildLoading(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CircularProgressIndicator()
-        ]
-      ),
-    );
-  }
-
-  Widget _buildError(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text('Club with id "$clubId" not found! =(')
-          ]
-        ),
-      ),
-    );
-  }
-
 }
-
-
-class ProfileExploreSection extends StatefulWidget {
-  const ProfileExploreSection({super.key});
-
-  @override
-  State<ProfileExploreSection> createState() => _ProfileExploreSectionState();
-}
-
-class _ProfileExploreSectionState extends State<ProfileExploreSection> {
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
-
-    Widget addButton() => Container(
-      decoration: BoxDecoration(
-          color: colorScheme.primary,
-          shape: BoxShape.circle
-      ),
-      child: IconButton(
-          color: colorScheme.onPrimary,
-          onPressed: () {},
-          icon: Icon(Icons.add_rounded)
-      ),
-    );
-
-    Widget sessionWidget(String nome) {
-      return Container(
-        decoration: BoxDecoration(
-            color: colorScheme.darkWhite,
-            borderRadius: BorderRadius.circular(24)
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            nome,
-            style: textTheme.labelMedium!.copyWith(
-                color: colorScheme.primary
-            ),
-          ),
-        ),
-      );
-    }
-
-    return MultiSliver(
-      children: [
-        SliverToBoxAdapter(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 0,
-                    spreadRadius: -1
-                ),
-                BoxShadow(
-                    color: Colors.white,
-                    blurRadius: 6.4,
-                    blurStyle: BlurStyle.inner
-                ),
-              ],
-              border: Border.all(color: Colors.black26),
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(100),
-                  bottomLeft: Radius.circular(100)
-              )
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  sessionWidget('Recentes'),
-                  sessionWidget('Livros'),
-                  sessionWidget('Encontros'),
-                  addButton()
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
