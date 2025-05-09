@@ -1,3 +1,4 @@
+import 'package:booklub/config/theme/theme_config.dart';
 import 'package:flutter/material.dart';
 
 class EditableField extends StatelessWidget {
@@ -14,19 +15,24 @@ class EditableField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return TextField(
       controller: controller,
       obscureText: obscureText,
-      style: TextTheme.of(context).titleSmall!.copyWith(
-        color: Theme.of(context).colorScheme.primary,
-        fontFamily: "Navicula",
-      ),
+      style: TextTheme.of(
+        context,
+      ).titleSmall!.copyWith(color: Theme.of(context).colorScheme.primary),
       decoration: InputDecoration(
         labelText: label,
-        suffixIcon: const Icon(Icons.edit_outlined),
+        suffixIcon: Icon(
+          Icons.edit_note_outlined,
+          color: colorScheme.primary,
+          size: 24,
+        ),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
-        fillColor: Color(0xFFCFCFCF), //o branco mas do figma
+        fillColor: colorScheme.white, //o branco mas do figma
       ),
     );
   }
