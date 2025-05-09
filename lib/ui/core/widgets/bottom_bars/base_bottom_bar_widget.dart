@@ -6,7 +6,10 @@ import '../navigation_icon_widget.dart';
 class BaseBottomBarWidget extends StatelessWidget {
   final double height;
 
-  const BaseBottomBarWidget({super.key, this.height=kBottomNavigationBarHeight});
+  const BaseBottomBarWidget({
+    super.key,
+    this.height = kBottomNavigationBarHeight,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,28 +19,28 @@ class BaseBottomBarWidget extends StatelessWidget {
     Widget buildNavIcon({
       required IconData icon,
       required bool selected,
-      required String destination
+      required String destination,
     }) => Flexible(
-        flex: 1,
-        child: NavigationIconWidget(
-          icon: icon,
-          selected: selected,
-          destination: destination,
-        )
+      flex: 1,
+      child: NavigationIconWidget(
+        icon: icon,
+        selected: selected,
+        destination: destination,
+      ),
     );
 
     final navigationIcons = [
       buildNavIcon(
-          icon: Icons.group,
-          selected: currentRoute == Routes.clubs,
-          destination: Routes.clubs
+        icon: Icons.group,
+        selected: currentRoute == Routes.clubs,
+        destination: Routes.clubs,
       ),
       Spacer(flex: 1),
       buildNavIcon(
-          icon: Icons.person,
-          selected: currentRoute == Routes.profile,
-          destination: Routes.profile
-      )
+        icon: Icons.person,
+        selected: currentRoute == Routes.userProfile(userId: 'abc123'), //se mudar de id não vai mais estar selecionado. isso aqui é só para meu perfil ent não pode mudar o id
+        destination: Routes.userProfile(userId: 'abc123'),
+      ),
     ];
 
     return BottomAppBar(
@@ -50,5 +53,4 @@ class BaseBottomBarWidget extends StatelessWidget {
       ),
     );
   }
-
 }

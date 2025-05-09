@@ -29,7 +29,7 @@ class AsyncBuilder<T> extends StatelessWidget {
             snapshot.stackTrace!
         ),
         ConnectionState.done when snapshot.hasData => onRetrieved(
-          snapshot.data!
+          snapshot.data as T
         ),
         _ => SizedBox.shrink(),
       },

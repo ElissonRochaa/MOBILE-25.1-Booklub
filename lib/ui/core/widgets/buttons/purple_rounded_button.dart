@@ -19,11 +19,11 @@ class PurpleRoundedButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
         ),
       ),
+      onPressed: onPressed,
       child: Text(
         label,
         style: TextStyle(color: theme.colorScheme.onPrimary, fontSize: 25, fontFamily: 'Navicula'),
       ),
-      onPressed: onPressed,
     );
   }
 }

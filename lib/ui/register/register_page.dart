@@ -6,6 +6,8 @@ import 'package:booklub/ui/register/widgets/logar_clickable_text.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   State<StatefulWidget> createState() => _RegisterPageState();
 }
