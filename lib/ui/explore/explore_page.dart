@@ -9,6 +9,7 @@ class ExplorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: 16),
@@ -22,11 +23,42 @@ class ExplorePage extends StatelessWidget {
           (context, index) => _buildHorizontalCard(
             colorScheme: colorScheme,
             imageProvider: NetworkImage('https://i.pinimg.com/236x/ca/69/5c/ca695c269ab2dcf39c9ff5459ee65662.jpg'),
-            child: Column(
-              children: [
-                Text('Spider Man Fans'),
-                Text('A culpa é das estrelas')
-              ],
+            child: Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Spider Man Fans',
+                            style: textTheme.labelLarge,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(Icons.book_rounded),
+                              Text(
+                                'A culpa é das estrelas',
+                                style: textTheme.labelMedium,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Icon(Icons.groups),
+                        Text('10'),
+                      ]
+                    )
+                  ],
+                ),
+              ),
             )
           ),
           childCount: 6
