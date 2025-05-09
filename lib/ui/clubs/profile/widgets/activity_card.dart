@@ -1,5 +1,7 @@
+import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/config/theme/theme_config.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ActivityCard extends StatelessWidget {
 
@@ -21,12 +23,15 @@ class ActivityCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    final imageWidget = Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage('https://m.media-amazon.com/images/I/91ocgbfq55L._AC_UF1000,1000_QL80_.jpg'),
-          fit: BoxFit.cover,
-        )
+    final imageWidget = InkWell(
+      onTap: () => context.push(Routes.individualBook()),
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage('https://m.media-amazon.com/images/I/91ocgbfq55L._AC_UF1000,1000_QL80_.jpg'),
+            fit: BoxFit.cover,
+          )
+        ),
       ),
     );
 
