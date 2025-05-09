@@ -5,7 +5,9 @@ import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
 import 'package:go_router/go_router.dart';
 import '../../ui/login/login_page.dart';
 import '../../ui/register/register_page.dart';
+import 'package:booklub/ui/book/individual_book_page.dart';
 import 'package:booklub/ui/user/profile_page.dart';
+
 
 abstract final class RoutingConfig {
   static GoRouter get router => GoRouter(
@@ -26,6 +28,17 @@ abstract final class RoutingConfig {
           return ScrollBaseLayout(sliver: ClubProfilePage(clubId: clubId!));
         },
       ),
+
+      ShellRoute(
+        builder: (context, state, child) => BaseLayout(child: child),
+        routes: [
+          GoRoute(
+            name: 'Profile',
+            path: Routes.profile,
+            builder: (context, state) => const Placeholder(),
+          ),
+        ],
+        
       GoRoute(
         name: 'User Profile',
         path: Routes.userProfile(),
@@ -41,6 +54,7 @@ abstract final class RoutingConfig {
             ),
           );
         },
+
       ),
       GoRoute(
         name: 'Login',
@@ -52,6 +66,16 @@ abstract final class RoutingConfig {
         path: Routes.register,
         builder: (context, state) => RegisterPage(),
       ),
+
+      GoRoute(
+        name: 'Individual Book',
+        path: Routes.individualBook(),
+        builder: (context, state) {
+          final bookId = state.pathParameters['id'];
+          return IndividualBookPage(bookId: bookId!);
+        },
+      ),
+
     ],
   );
 }

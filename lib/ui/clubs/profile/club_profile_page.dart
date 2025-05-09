@@ -3,10 +3,8 @@ import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dar
 import 'package:booklub/utils/async_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 class ClubProfilePage extends StatelessWidget {
-
   final String clubId;
 
   late final Club club;
@@ -35,11 +33,7 @@ class ClubProfilePage extends StatelessWidget {
   }
 
   Widget _buildPage(BuildContext context) {
-    return Column(
-      children: [
-        Builder(builder: _buildHeading),
-      ]
-    );
+    return Column(children: [Builder(builder: _buildHeading)]);
   }
 
   Widget _buildHeading(BuildContext context) {
@@ -51,20 +45,17 @@ class ClubProfilePage extends StatelessWidget {
         Container(
           height: circleDiameter,
           width: circleDiameter,
-          constraints: BoxConstraints(
-            maxWidth: 120,
-            maxHeight: 120
-          ),
+          constraints: BoxConstraints(maxWidth: 120, maxHeight: 120),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.white,
             image: DecorationImage(
               image: NetworkImage(club.imageUrl),
-              fit: BoxFit.cover
+              fit: BoxFit.cover,
             ),
           ),
-        )
-      ]
+        ),
+      ],
     );
   }
 
@@ -72,9 +63,7 @@ class ClubProfilePage extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        CircularProgressIndicator()
-      ]
+      children: [CircularProgressIndicator()],
     );
   }
 
@@ -83,12 +72,8 @@ class ClubProfilePage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text('Club with id "$clubId" not found! =(')
-        ]
+        children: [Text('Club with id "$clubId" not found! =(')],
       ),
     );
   }
-
-
 }
