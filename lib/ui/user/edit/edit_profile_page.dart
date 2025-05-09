@@ -9,11 +9,19 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
+  // 
   @override
   Widget build(BuildContext context) {
     return MultiSliver(
       children: [
-        
+        SliverToBoxAdapter(
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              
+            ],
+          ),
+        )
       ],
 
     );

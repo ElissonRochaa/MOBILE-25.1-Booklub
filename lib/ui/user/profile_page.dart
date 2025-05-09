@@ -148,6 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         'https://i.pinimg.com/736x/49/6d/b2/496db2c246a23ffc00dd4ea8650f8fff.jpg',
                     quantidadeFriends: 4,
                     isMyOwnUserProfile: widget.isMyOwnUserProfile,
+                    userId: widget.userId,
                   ),
                 ),
               ),
