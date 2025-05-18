@@ -1,0 +1,85 @@
+services:
+  app:
+    image: luanvn4/booklub-api
+    container_name: booklub-flutter-booklub-api
+    environment:
+      - SERVER_PORT=8081
+      - DB_URL=jdbc:postgresql://postgresql:5432/booklub
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=1234
+      - KEYCLOAK_CLIENT_ID=booklub-api
+      - KEYCLOAK_CLIENT_SECRET=keycloak
+      - KEYCLOAK_REALM=booklub
+      - KEYCLOAK_AUTH_URL=http://keycloak:8080
+      - S3_URL=http://host.docker.internal:9000
+      - S3_ACCESS_NAME=minio
+      - S3_ACCESS_SECRET=12345678
+    ports:
+      - "8081:8081"
+    depends_on:
+      keycloak:
+        condition: service_started
+      postgresql:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    networks:
+      - booklub-network
+
+  keycloak:
+    image: luanvn4/booklub-keycloak:latest
+    container_name: booklub-flutter-keycloak
+    command: ["start-dev", "--import-realm", "--features=scripts", "--spi-scripting-scripts-enabled=true"]
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL_HOST=postgresql
+      - KC_DB_URL_DATABASE=booklub
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=1234
+      - KC_DB_URL_PORT=5432
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    networks:
+      - booklub-network
+
+  postgresql:
+    image: postgres:16
+    container_name: booklub-flutter-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: booklub
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker-volumes/postgresql:/var/lib/postgresql/data
+    networks:
+      - booklub-network
+
+  minio:
+    image: quay.io/minio/minio
+    container_name: booklub-flutter-minio
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: 12345678
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./docker-volumes/minio:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - booklub-network
+
+networks:
+  booklub-network:
