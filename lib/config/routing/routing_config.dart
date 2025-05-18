@@ -1,9 +1,11 @@
 import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/ui/clubs/clubs_page.dart';
 import 'package:booklub/ui/clubs/profile/club_profile_page.dart';
+import 'package:booklub/ui/core/layouts/base_layout.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
 import 'package:booklub/ui/explore/explore_page.dart';
 import 'package:booklub/ui/explore/layout/explore_layout.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import '../../ui/login/login_page.dart';
 import '../../ui/register/register_page.dart';
@@ -15,6 +17,11 @@ abstract final class RoutingConfig {
   static GoRouter get router => GoRouter(
     initialLocation: Routes.clubs,
       routes: [
+        GoRoute(
+          name: 'Home',
+          path: Routes.home,
+          builder: (context, state) => BaseLayout(child: Placeholder()),
+        ),
         GoRoute(
           name: 'Clubs',
           path: Routes.clubs,

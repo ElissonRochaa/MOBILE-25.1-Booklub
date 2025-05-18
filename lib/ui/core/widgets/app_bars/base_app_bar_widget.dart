@@ -39,11 +39,7 @@ class BaseAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   List<Widget> _getActions(BuildContext context) => [
     IconButton(
-      icon: Icon(Icons.search),
-      onPressed: () => context.push(Routes.explore),
-    ),
-    IconButton(
-      icon: Icon(Icons.add_alert),
+      icon: Icon(Icons.notifications_rounded),
       onPressed: () {},
     ),
     IconButton(

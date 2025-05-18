@@ -1,4 +1,7 @@
 abstract final class Routes {
+
+  static const String home = '/';
+
   static const String clubs = '/clubs';
 
   static String edit({String? userId = ':id'}) => 
