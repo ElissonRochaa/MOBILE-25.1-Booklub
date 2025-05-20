@@ -21,80 +21,86 @@ class _CreatePageState extends State<CreateClubPage> {
   final InputFieldValidation fieldValidatorModel = InputFieldValidation();
   bool hasParticipantLimit = false;
 
-  @override
-  Widget build(BuildContext context) {
-    final viewModel = Provider.of<CreateClubViewModel>(context);
-    ThemeData theme = Theme.of(context);
+@override
+Widget build(BuildContext context) {
+  final viewModel = Provider.of<CreateClubViewModel>(context);
+  ThemeData theme = Theme.of(context);
 
-    return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 30),
-      sliver: SliverToBoxAdapter(child: _buildWidgets(theme)),
-    );
-  }
-
-  Widget _buildWidgets(ThemeData theme) {
-    return Column(children: [_buildForm(theme)]);
-  }
-
-  Widget _buildForm(ThemeData theme) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      spacing: 30,
-      children: [
-        _buildClubNameWidget(theme),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+  return SliverPadding(
+    padding: EdgeInsets.all(30),
+    sliver: SliverToBoxAdapter(
+      child: Form(
+        key: viewModel.formKey,
+        child: Column(
+          spacing: 30,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildPrivacityWidget(theme),
-            _buildParticipantsLimit(theme),
+            _buildClubNameWidget(theme),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildPrivacityWidget(theme),
+                _buildParticipantsLimit(theme),
+              ],
+            ),
+            _buildUploadWidget(theme),
+            PurpleRoundedButton("Criar", () => viewModel.submitForm()),
           ],
         ),
-        _buildLabelText("Imagem de capa", theme),
-        _buildUploadWidget(theme),
-        PurpleRoundedButton("Criar", () => {}),
-      ],
-    );
-  }
+      ),
+    ),
+  );
+}
 
   Widget _buildUploadWidget(ThemeData theme) {
     final viewModel = Provider.of<CreateClubViewModel>(context);
 
-    return GestureDetector(
-      onTap: () async {
-        FilePickerResult? result = await FilePicker.platform.pickFiles(
-          type: FileType.image,
-        );
+    return Column(
+      children: [
+        _buildLabelText("Image da capa do clube", theme),
+        GestureDetector(
+          onTap: () async {
+            FilePickerResult? result = await FilePicker.platform.pickFiles(
+              type: FileType.image,
+            );
 
-        if (result != null && result.files.isNotEmpty) {
-          final fileBytes = result.files.first.bytes;
-          if (fileBytes != null) {
-            setState(() {
-              viewModel.coverImageBytes = fileBytes;
-            });
-          }
-        }
-      },
-      child: Container(
-        height: 250,
-        width: 250,
-        decoration: BoxDecoration(
-          color: theme.colorScheme.onPrimary,
-          boxShadow: [
-            BoxShadow(blurRadius: 5, color: const Color.fromARGB(255, 0, 0, 0)),
-          ],
-        ),
-        child: FractionallySizedBox(
-          widthFactor: 0.9,
-          heightFactor: 0.9,
+            if (result != null && result.files.isNotEmpty) {
+              final fileBytes = result.files.first.bytes;
+              if (fileBytes != null) {
+                viewModel.updateClubCoverImageBytes(fileBytes);
+              }
+            }
+          },
           child: Container(
-            decoration: BoxDecoration(color: theme.colorScheme.darkWhite),
-            child: Center(
-              child: Icon(
-                Icons.file_upload_outlined,
-                size: 25,
-                color: theme.primaryColor,
-              ),
+            height: 250,
+            width: 250,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.onPrimary,
+              boxShadow: [
+                BoxShadow(blurRadius: 5, color: theme.colorScheme.black),
+              ],
             ),
+            child:
+                viewModel.coverImage != null
+                    ? Image.memory(viewModel.coverImage!, fit: BoxFit.cover)
+                    : _buildUploadSquare(theme),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUploadSquare(ThemeData theme) {
+    return FractionallySizedBox(
+      widthFactor: 0.9,
+      heightFactor: 0.9,
+      child: Container(
+        decoration: BoxDecoration(color: theme.colorScheme.darkWhite),
+        child: Center(
+          child: Icon(
+            Icons.file_upload_outlined,
+            size: 25,
+            color: theme.primaryColor,
           ),
         ),
       ),
@@ -110,7 +116,7 @@ class _CreatePageState extends State<CreateClubPage> {
         _buildLabelText("Nome do seu clube", theme),
         TextFieldRounded(
           fieldValidatorModel.validateBasicTextField,
-          (value) => viewModel.clubName = value,
+          (value) => viewModel.updateClubName(value),
         ),
       ],
     );
@@ -122,10 +128,10 @@ class _CreatePageState extends State<CreateClubPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildLabelText("Privacidade", theme),
+        _buildLabelText("Clube Privado", theme),
         ClubPrivacyToggle(
-          isToggled: viewModel.isPrivate,
-          onChanged: (value) => viewModel.isPrivate = value,
+          viewModel.isPrivate,
+          (value) => viewModel.togglePrivacy(),
         ),
       ],
     );
@@ -148,14 +154,14 @@ class _CreatePageState extends State<CreateClubPage> {
                 });
               },
               activeColor: theme.colorScheme.primary,
-              checkColor: Colors.white,
+              checkColor: theme.colorScheme.onPrimary,
             ),
             if (hasParticipantLimit)
               SizedBox(
-                width: 100,
+                width: 80,
                 child: IntFieldRounded(
                   fieldValidatorModel.validateBasicTextField,
-                  (value) => viewModel.participantLimit = value as int?,
+                  (value) => viewModel.updateParticipantLimit(value),
                 ),
               ),
           ],

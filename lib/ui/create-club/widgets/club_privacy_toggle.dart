@@ -4,11 +4,7 @@ class ClubPrivacyToggle extends StatefulWidget {
   final bool isToggled;
   final ValueChanged<bool> onChanged;
 
-  const ClubPrivacyToggle({
-    Key? key,
-    required this.isToggled,
-    required this.onChanged,
-  }) : super(key: key);
+  const ClubPrivacyToggle(this.isToggled, this.onChanged, {super.key});
 
   @override
   _ClubPrivacyToggleState createState() => _ClubPrivacyToggleState();

@@ -12,7 +12,10 @@ class CreateClubViewModel extends ChangeNotifier {
   int? participantLimit;
   Uint8List? coverImage;
 
-  set coverImageBytes(Uint8List coverImageBytes) {}
+  void updateClubCoverImageBytes(Uint8List coverImageBytes) {
+    coverImage = coverImageBytes;
+    notifyListeners();
+  }
 
   void togglePrivacy() {
     isPrivate = !isPrivate;
@@ -46,7 +49,7 @@ class CreateClubViewModel extends ChangeNotifier {
 
   void submitForm() {
     if (formKey.currentState?.validate() ?? false) {
-      // Perform submission logic
+      //api aqui
     }
   }
 }
