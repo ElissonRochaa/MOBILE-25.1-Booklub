@@ -46,7 +46,14 @@ class _InfiniteGridWidgetState<T> extends State<InfiniteGridWidget<T>> {
 
   bool get _hasMore => _currentPage < widget.paginator.totalPages;
 
-  void _fetchNextPage() async {
+  bool get isScrollable {
+    final maxScrollExtent = widget.controller.position.maxScrollExtent;
+    final viewPortExtent = widget.controller.position.viewportDimension;
+
+    return maxScrollExtent > viewPortExtent;
+  }
+
+  Future<void> _fetchNextPage() async {
     setState(() => _isLoading = true);
 
     try {
@@ -70,7 +77,6 @@ class _InfiniteGridWidgetState<T> extends State<InfiniteGridWidget<T>> {
     ? _buildSliverPaginatedGridWidget()
     : _buildPaginatedGridWidget();
 
-
   void _onScroll() {
     final preloadOffset = widget.controller.position.maxScrollExtent - 200;
     final scrollPosition = widget.controller.position.pixels;
@@ -84,6 +90,8 @@ class _InfiniteGridWidgetState<T> extends State<InfiniteGridWidget<T>> {
   }
 
   Widget _buildPaginatedGridWidget() {
+    if (_hasMore && !_isLoading && !isScrollable) _fetchNextPage();
+
     return Column(
       children: [
         Expanded(
@@ -102,6 +110,8 @@ class _InfiniteGridWidgetState<T> extends State<InfiniteGridWidget<T>> {
   }
 
   Widget _buildSliverPaginatedGridWidget() {
+    if (_hasMore && !_isLoading && !isScrollable) _fetchNextPage();
+
     return MultiSliver(
       children: [
         SliverGrid(
