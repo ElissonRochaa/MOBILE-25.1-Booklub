@@ -11,7 +11,7 @@ abstract final class Routes {
 
   static String userProfile({String? userId = ':id'}) => '/user/$userId';
 
-  static const String login = '/login';
+  static const String login = '/login'; 
 
   static const String register = '/register';
 
@@ -21,4 +21,5 @@ abstract final class Routes {
 
   static String explore = '/explore';
 
+  static const String createClub = '/create-club';
 }
