@@ -51,11 +51,11 @@ class ClubProfilePage extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Center(
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('Club with id "$clubId" not found! =(')
-            ]
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('Club with id "$clubId" not found! =(')
+          ]
         ),
       ),
     );

@@ -25,7 +25,11 @@ abstract final class ThemeConfig {
     labelMedium: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 16
-    )
+    ),
+    labelSmall: TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 14
+    ),
   );
 
   static AppTheme get lightTheme => AppTheme(
