@@ -33,6 +33,7 @@ class ScrollBaseLayout extends StatelessWidget {
           child: Image.asset(
             'assets/images/light-background.png',
             fit: BoxFit.cover,
+            opacity:  const AlwaysStoppedAnimation(0.45),
           ),
         ),
         CustomScrollView(
