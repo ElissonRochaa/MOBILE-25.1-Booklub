@@ -1,10 +1,7 @@
 import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
-import 'package:booklub/ui/clubs/profile/widgets/activity_card.dart';
-import 'package:booklub/ui/core/widgets/buttons/selectable_button.dart';
-import 'package:booklub/ui/core/widgets/buttons/selectable_button.dart';
-import 'package:booklub/ui/core/widgets/buttons/selectable_button.dart';
 import 'package:booklub/ui/core/widgets/grids/infinite_grid_widget.dart';
+import 'package:booklub/ui/core/widgets/section_selector_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
 import 'package:booklub/utils/pagination/paginator.dart';
 import 'package:flutter/material.dart';
@@ -30,125 +27,84 @@ class _ClubActivitiesListWidgetState extends State<ClubActivitiesListWidget> {
 
   ClubActivity activity = ClubActivity.leituras;
 
-  void setSession(ClubActivity session) => setState(
-    () => activity = session);
-
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
     final clubProfilePageViewModel = context.watch<ClubProfileViewModel>();
 
     return MultiSliver(
       children: [
-        _buildSessionSelector(context),
+        Builder(builder: _buildClubActivityTypeSelector),
         AsyncBuilder(
-          future: clubProfilePageViewModel.findClubs(3),
-          onRetrieved: (paginator) => _buildActivitiesInfiniteScroll(
-            paginator: paginator,
-            colorScheme: colorScheme,
-            textTheme: textTheme
+          future: clubProfilePageViewModel.findClubs(2),
+          onRetrieved: (paginator) => Builder(
+            builder: (context) => _buildActivitiesInfiniteScroll(
+              context: context,
+              paginator: paginator
+            )
           ),
-          onLoading: () => _buildSessionLoadingWidget(),
-          onError: (_, _) => _buildSessionErrorWidget()
+          onLoading: () => Builder(builder: _buildSessionLoading),
+          onError: (_, _) => Builder(builder: _buildSessionError),
         ),
       ],
     );
   }
 
-  Widget _buildSessionSelector(BuildContext context) {
+  Widget _buildClubActivityTypeSelector(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    Widget addButton() => Container(
-      decoration: BoxDecoration(
-          color: colorScheme.primary,
-          shape: BoxShape.circle
+    final sections = [
+      SectionSelectorItem(
+        label: 'Recentes',
+        onSelect: () => setState(() => activity = ClubActivity.recentes),
+        isSelected: activity == ClubActivity.recentes,
       ),
-      child: IconButton(
-          color: colorScheme.onPrimary,
-          onPressed: () {},
-          icon: Icon(Icons.add_rounded)
+      SectionSelectorItem(
+        label: 'Leituras',
+        onSelect: () => setState(() => activity = ClubActivity.leituras),
+        isSelected: activity == ClubActivity.leituras,
       ),
-    );
+      SectionSelectorItem(
+        label: 'Encontros',
+        onSelect: () => setState(() => activity = ClubActivity.encontros),
+        isSelected: activity == ClubActivity.encontros,
+      ),
+    ];
 
-    final sessionSelector = SliverToBoxAdapter(
+    return SliverToBoxAdapter(
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.transparent,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 0,
-              spreadRadius: -1,
-            ),
-            BoxShadow(
-              color: Colors.white,
-              blurRadius: 6.4,
-              blurStyle: BlurStyle.inner,
-            ),
-          ],
-          border: Border.all(color: Colors.black26),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(100),
-            bottomLeft: Radius.circular(100)
-          ),
+          color: colorScheme.white,
+          boxShadow: [BoxShadow(
+            color: Colors.black26,
+            offset: Offset(0, 4),
+            blurRadius: 4
+          )]
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SelectableButton(
-                label: 'Recentes',
-                selected: activity == ClubActivity.recentes,
-                onPressed: () => setState(() {
-                  activity = ClubActivity.recentes;
-                }),
-              ),
-              SelectableButton(
-                label: 'Leituras',
-                selected: activity == ClubActivity.leituras,
-                onPressed: () => setState(() {
-                  activity = ClubActivity.leituras;
-                }),
-              ),
-              SelectableButton(
-                label: 'Encontros',
-                selected: activity == ClubActivity.encontros,
-                onPressed: () => setState(() {
-                  activity = ClubActivity.encontros;
-                }),
-              ),
-              addButton()
-            ],
-          ),
+        padding: EdgeInsets.symmetric(vertical: 6),
+        child: SectionSelectorWidget(
+          sections: sections,
+          spacing: 8,
         ),
       ),
-    );
-
-    return SliverPadding(
-      padding: EdgeInsets.symmetric(vertical: 16),
-      sliver: sessionSelector,
     );
   }
 
-  Widget _buildSessionLoadingWidget() => SliverToBoxAdapter(
+  Widget _buildSessionLoading(BuildContext context) => SliverFillRemaining(
+    hasScrollBody: false,
     child: Center(
       child: CircularProgressIndicator(),
     ),
   );
 
-  Widget _buildSessionErrorWidget() => SliverToBoxAdapter(
+  Widget _buildSessionError(BuildContext context) => SliverFillRemaining(
     child: Center(
-      child: Text('Não foi possível acessar o clube'),
+      child: Text('Não foi possível acessar as atividades do clube'),
     ),
   );
 
   Widget _buildActivitiesInfiniteScroll<T>({
+    required BuildContext context,
     required Paginator<T> paginator,
-    required ColorScheme colorScheme,
-    required TextTheme textTheme,
   }) {
     final infiniteScroll = InfiniteGridWidget.sliver(
       paginator: paginator,
@@ -156,22 +112,23 @@ class _ClubActivitiesListWidgetState extends State<ClubActivitiesListWidget> {
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 1,
         mainAxisSpacing: 16,
-        childAspectRatio: 20/9,
+        childAspectRatio: 5/2,
       ),
       childrenDelegateProvider: (itens, totalItens) => (
         SliverChildBuilderDelegate(
-          (context, index) => ActivityCard(
-            activity: 'Nova meta de leitura',
-            title: 'Alice no país das maravilhas',
-            date: DateTime.now(),
-          ),
+          (context, index) => Placeholder(),
           childCount: totalItens,
         )
       ),
     );
 
     return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.only(
+        top: 12,
+        left: 12,
+        right: 12,
+        bottom: 32
+      ),
       sliver: infiniteScroll,
     );
   }

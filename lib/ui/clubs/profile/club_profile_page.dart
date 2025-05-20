@@ -2,27 +2,35 @@ import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
 import 'package:booklub/ui/clubs/profile/widgets/club_activities_list_widget.dart';
+import 'package:booklub/ui/core/widgets/circle_image_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
 import 'package:flutter/material.dart' hide Page;
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-class ClubProfilePage extends StatelessWidget {
+class ClubProfilePage extends StatefulWidget {
 
   final String clubId;
 
-  late final Club club;
-
-  // ignore: prefer_const_constructors_in_immutables
-  ClubProfilePage({
+  const ClubProfilePage({
     super.key,
     required this.clubId,
   });
 
   @override
+  State<ClubProfilePage> createState() => _ClubProfilePageState();
+}
+
+enum ClubActivity {recentes, leituras, encontros}
+
+class _ClubProfilePageState extends State<ClubProfilePage> {
+
+  Club? club;
+
+  @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<ClubProfileViewModel>();
-    final futureClub = viewModel.findClubById(clubId);
+    final futureClub = viewModel.findClubById(widget.clubId);
 
     return AsyncBuilder(
       future: futureClub,
@@ -36,7 +44,8 @@ class ClubProfilePage extends StatelessWidget {
   }
 
   Widget _buildLoadingPage(BuildContext context) {
-    return SliverToBoxAdapter(
+    return SliverFillRemaining(
+      hasScrollBody: false,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,13 +57,22 @@ class ClubProfilePage extends StatelessWidget {
   }
 
   Widget _buildErrorPage(BuildContext context) {
-    return SliverToBoxAdapter(
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return SliverFillRemaining(
+      hasScrollBody: false,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Club with id "$clubId" not found! =(')
+            Text(
+              'Club with id "${widget.clubId}" not found! =(',
+              style: textTheme.titleSmall!.copyWith(
+                color: colorScheme.error,
+              ),
+            )
           ]
         ),
       ),
@@ -83,22 +101,27 @@ class ClubProfilePage extends StatelessWidget {
   }
 
   Widget _buildClubImage(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
-    final circleDiameter = screenWidth * 0.4;
+    final minRadius = 120.0;
+    final desiredRadius = screenWidth * 0.15;
+    final maxRadius = desiredRadius > minRadius ? desiredRadius : minRadius;
 
-    return Container(
-      height: circleDiameter,
-      width: circleDiameter,
-      constraints: BoxConstraints(
-          maxWidth: 120,
-          maxHeight: 120
-      ),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white,
-        image: DecorationImage(
-            image: NetworkImage(club.imageUrl),
-            fit: BoxFit.cover
+    return SliverToBoxAdapter(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 24),
+        color: colorScheme.white,
+        child: CircleImageWidget(
+          constraint: CircleConstraint(
+            minRadius: minRadius,
+            maxRadius: maxRadius
+          ),
+          backgroundColor: colorScheme.white,
+          borderColor: colorScheme.primary,
+          borderWidth: 2,
+          decorationImage: DecorationImage(
+            image: NetworkImage(club!.imageUrl),
+          ),
         ),
       ),
     );
@@ -108,18 +131,18 @@ class ClubProfilePage extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Column(
+    final labels = Column(
       children: [
         Text(
           'Clube',
           style: textTheme.titleMedium!.copyWith(
-              color: colorScheme.secondary,
-              fontFamily: 'Navicula',
-              fontWeight: FontWeight.w700
+            color: colorScheme.secondary,
+            fontFamily: 'Navicula',
+            fontWeight: FontWeight.w700
           ),
         ),
         Text(
-          club.name,
+          club!.name,
           style: textTheme.titleLarge!.copyWith(
             color: colorScheme.primary,
             fontFamily: 'Navicula',
@@ -127,6 +150,14 @@ class ClubProfilePage extends StatelessWidget {
           ),
         )
       ],
+    );
+
+    return SliverToBoxAdapter(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        color: colorScheme.white,
+        child: labels
+      ),
     );
   }
 
@@ -166,17 +197,22 @@ class ClubProfilePage extends StatelessWidget {
       ),
     );
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        spacing: 8,
-        children: [
-          profileInfoCard('Membros', 8),
-          profileInfoCard('Leituras', 3),
-          profileInfoCard('Badges', 1),
-          profileInfoCard('Solicitações', 4),
-        ],
+    final profileInfo = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      spacing: 8,
+      children: [
+        profileInfoCard('Membros', 8),
+        profileInfoCard('Leituras', 3),
+        profileInfoCard('Badges', 1),
+        profileInfoCard('Solicitações', 4),
+      ],
+    );
+
+    return SliverToBoxAdapter(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 24),
+        color: colorScheme.white,
+        child: profileInfo,
       ),
     );
   }

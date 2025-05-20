@@ -2,8 +2,11 @@ import 'package:booklub/config/theme/theme_config.dart';
 import 'package:flutter/material.dart';
 
 class SectionSelectorItem {
+
   final String label;
+
   final VoidCallback? onSelect;
+
   final bool isSelected;
 
   const SectionSelectorItem({
@@ -14,11 +17,17 @@ class SectionSelectorItem {
 
 }
 
-class SectionSelector extends StatelessWidget {
+class SectionSelectorWidget extends StatelessWidget {
 
   final List<SectionSelectorItem> sections;
 
-  const SectionSelector({super.key, required this.sections});
+  final double spacing;
+
+  const SectionSelectorWidget({
+    super.key,
+    required this.sections,
+    this.spacing = 12,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +58,12 @@ class SectionSelector extends StatelessWidget {
           minWidth: MediaQuery.of(context).size.width,
         ),
         child: Row(
-          spacing: 12,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          spacing: spacing,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(width: 12),
+            SizedBox(width: spacing),
             ...sectionButtons,
-            SizedBox(width: 12),
+            SizedBox(width: spacing),
           ],
         ),
       ),

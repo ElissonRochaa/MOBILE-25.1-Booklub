@@ -1,5 +1,18 @@
 import 'package:flutter/material.dart';
 
+class CircleConstraint {
+
+  final double minRadius;
+
+  final double maxRadius;
+
+  const CircleConstraint({
+    this.minRadius = 0,
+    this.maxRadius = double.infinity,
+  });
+
+}
+
 class CircleImageWidget extends StatelessWidget {
 
   final bool isExpanded;
@@ -12,11 +25,14 @@ class CircleImageWidget extends StatelessWidget {
 
   final double borderWidth;
 
-  final double radius;
+  final double? radius;
+
+  final CircleConstraint? constraint;
 
   const CircleImageWidget({
     super.key,
-    required this.radius,
+    this.radius,
+    this.constraint,
     this.decorationImage,
     this.backgroundColor = Colors.transparent,
     this.borderColor,
@@ -29,7 +45,7 @@ class CircleImageWidget extends StatelessWidget {
     this.backgroundColor = Colors.transparent,
     this.borderColor,
     this.borderWidth = 0,
-  }): isExpanded = true, radius=0;
+  }): isExpanded = true, radius=null, constraint=null;
 
   @override
   Widget build(BuildContext context) => isExpanded
@@ -42,7 +58,18 @@ class CircleImageWidget extends StatelessWidget {
       : null
     );
 
+    final boxConstraint = (constraint != null
+      ? BoxConstraints(
+          minWidth: constraint!.minRadius,
+          maxWidth: constraint!.maxRadius,
+          minHeight: constraint!.minRadius,
+          maxHeight: constraint!.maxRadius,
+        )
+      : null
+    );
+
     return Container(
+      constraints: boxConstraint,
       height: radius,
       width: radius,
       decoration: BoxDecoration(

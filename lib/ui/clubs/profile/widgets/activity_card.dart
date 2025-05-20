@@ -9,13 +9,13 @@ class ActivityCard extends StatelessWidget {
 
   final String title;
 
-  final DateTime date;
+  final Widget additionalContent;
 
   const ActivityCard({
     super.key,
     required this.activity,
     required this.title,
-    required this.date,
+    required this.additionalContent,
   });
 
   @override
@@ -35,7 +35,7 @@ class ActivityCard extends StatelessWidget {
       ),
     );
 
-    final labels = [
+    final content = [
       Text(activity),
       Text(
         title,
@@ -45,10 +45,7 @@ class ActivityCard extends StatelessWidget {
           color: colorScheme.primary
         ),
       ),
-      Text(
-        '${date.day.toString().padLeft(2, '0')}/'
-        '${date.month.toString().padLeft(2, '0')}/${date.year}'
-      )
+      additionalContent
     ];
 
     return Card(
@@ -61,7 +58,7 @@ class ActivityCard extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: labels,
+                children: content,
               ),
             ),
             AspectRatio(

@@ -1,7 +1,9 @@
+import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/ui/core/widgets/circle_image_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HorizontalClubCardWidget extends StatelessWidget {
 
@@ -16,13 +18,11 @@ class HorizontalClubCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    final cardShape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(100),
-        topRight: Radius.circular(36),
-        bottomLeft: Radius.circular(100),
-        bottomRight: Radius.circular(36),
-      )
+    final borderRadius = BorderRadius.only(
+      topLeft: Radius.circular(100),
+      topRight: Radius.circular(36),
+      bottomLeft: Radius.circular(100),
+      bottomRight: Radius.circular(36),
     );
 
     final clubImage = CircleImageWidget.expanded(
@@ -62,14 +62,20 @@ class HorizontalClubCardWidget extends StatelessWidget {
       )
     );
 
-    return Card(
-      shape: cardShape,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          clubImage,
-          clubInfo
-        ],
+    return InkWell(
+      onTap: () => context.push(Routes.clubProfile(clubId: club.id)),
+      borderRadius: borderRadius,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: borderRadius
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            clubImage,
+            clubInfo
+          ],
+        ),
       ),
     );
   }

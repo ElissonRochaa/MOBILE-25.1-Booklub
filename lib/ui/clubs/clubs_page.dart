@@ -54,7 +54,7 @@ class _ClubsPageState extends State<ClubsPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(color: colorScheme.white),
-        child: SectionSelector(sections: sections)
+        child: SectionSelectorWidget(sections: sections)
       )
     );
   }
