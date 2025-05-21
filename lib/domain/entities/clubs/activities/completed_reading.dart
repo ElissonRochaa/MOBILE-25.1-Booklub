@@ -20,7 +20,9 @@ class CompletedReading extends ClubActivity {
     required this.userId,
     required this.startDate,
     required this.finishDate,
-  });
+  }): super(
+    category: ClubActivityCategory.readings
+  );
 
   factory CompletedReading.fromJson(Map<String, dynamic> json) =>
       _$CompletedReadingFromJson(json);

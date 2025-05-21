@@ -14,13 +14,15 @@ class NewMeeting extends ClubActivity {
 
   final DateTime date;
 
-  NewMeeting({
+  const NewMeeting({
     required super.clubId,
     required this.bookId,
     required this.location,
     required this.participantsIds,
     required this.date,
-  });
+  }): super(
+    category: ClubActivityCategory.meetings
+  );
 
   factory NewMeeting.fromJson(Map<String, dynamic> json) => _$NewMeetingFromJson(json);
 

@@ -17,7 +17,7 @@ class ReadingGoal extends ClubActivity {
     required this.bookId,
     required this.startDate,
     required this.finishDate,
-  });
+  }): super(category: ClubActivityCategory.readings);
 
   factory ReadingGoal.fromJson(Map<String, dynamic> json) => _$ReadingGoalFromJson(json);
 
