@@ -1,7 +1,7 @@
 import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/clubs/activities/club_activity.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
-import 'package:booklub/ui/clubs/profile/widgets/activity_card_builder.dart';
+import 'package:booklub/ui/core/widgets/cards/activity_cards/activity_card_builder.dart';
 import 'package:booklub/ui/core/widgets/grids/infinite_grid_widget.dart';
 import 'package:booklub/ui/core/widgets/section_selector_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
@@ -32,10 +32,10 @@ class _ClubActivitiesListWidgetState extends State<ClubActivitiesListWidget> {
     switch (activitiesCategory) {
       case null:
         futureClubActivities = clubProfilePageViewModel
-          .findClubActivities('1', 2);
+          .findClubActivities(2);
       case _:
         futureClubActivities = clubProfilePageViewModel
-          .findClubActivities('1', 2, activitiesCategory);
+          .findClubActivities(2, activitiesCategory);
     }
 
     return MultiSliver(

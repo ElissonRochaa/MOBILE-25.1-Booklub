@@ -1,13 +1,14 @@
 import 'package:booklub/domain/entities/clubs/activities/reading_goal.dart';
-import 'package:booklub/ui/clubs/profile/widgets/activity_card.dart';
 import 'package:booklub/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 
-class ReadingGoalActivityCard extends StatelessWidget {
+import 'activity_card_widget.dart';
+
+class ReadingGoalActivityCardWidget extends StatelessWidget {
 
   final ReadingGoal readingGoal;
 
-  const ReadingGoalActivityCard({
+  const ReadingGoalActivityCardWidget({
     super.key,
     required this.readingGoal
   });
@@ -31,7 +32,7 @@ class ReadingGoalActivityCard extends StatelessWidget {
       ],
     );
 
-    return ActivityCard(
+    return ActivityCardWidget(
       activity: 'Nova meta de leitura',
       title: readingGoal.bookId, // TODO book title
       additionalContent: Expanded(

@@ -3,7 +3,7 @@ import 'package:booklub/config/theme/theme_config.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class ActivityCard extends StatelessWidget {
+class ActivityCardWidget extends StatelessWidget {
 
   final String activity;
 
@@ -11,7 +11,7 @@ class ActivityCard extends StatelessWidget {
 
   final Widget additionalContent;
 
-  const ActivityCard({
+  const ActivityCardWidget({
     super.key,
     required this.activity,
     required this.title,

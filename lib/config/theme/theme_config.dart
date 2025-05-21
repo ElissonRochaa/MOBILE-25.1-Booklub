@@ -39,7 +39,7 @@ abstract final class ThemeConfig {
         primary: CustomColors.violet,
         onPrimary: CustomColors.white,
         secondary: CustomColors.violetBlue,
-        onSecondary: CustomColors.darkWhite,
+        onSecondary: CustomColors.white,
         error: CustomColors.red,
         onError: CustomColors.white,
         surface: CustomColors.white,

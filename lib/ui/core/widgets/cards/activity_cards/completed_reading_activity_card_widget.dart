@@ -1,14 +1,14 @@
 import 'package:booklub/domain/entities/clubs/activities/completed_reading.dart';
-import 'package:booklub/ui/clubs/profile/widgets/activity_card.dart';
+import 'package:booklub/ui/core/widgets/cards/activity_cards/activity_card_widget.dart';
 import 'package:booklub/ui/core/widgets/circle_image_widget.dart';
 import 'package:booklub/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 
-class CompletedReadingActivityCard extends StatelessWidget {
+class CompletedReadingActivityCardWidget extends StatelessWidget {
 
   final CompletedReading completedReading;
 
-  const CompletedReadingActivityCard({
+  const CompletedReadingActivityCardWidget({
     super.key,
     required this.completedReading,
   });
@@ -54,7 +54,7 @@ class CompletedReadingActivityCard extends StatelessWidget {
       ]
     );
 
-    return ActivityCard(
+    return ActivityCardWidget(
       activity: 'Leitura completa',
       title: completedReading.bookId,
       additionalContent: Expanded(
