@@ -93,7 +93,9 @@ class CircleImageWidget extends StatelessWidget {
         builder: (context, constraints) => Container(
           constraints: BoxConstraints(
             minHeight: constraints.maxHeight,
+            minWidth: constraints.maxHeight,
             maxHeight: constraints.maxHeight,
+            maxWidth: constraints.maxHeight,
           ),
           decoration: BoxDecoration(
             border: border,

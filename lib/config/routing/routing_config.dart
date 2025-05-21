@@ -34,11 +34,7 @@ abstract final class RoutingConfig {
           path: Routes.clubProfile(),
           builder: (context, state) {
             final clubId = state.pathParameters['id'];
-            return ScrollBaseLayout(
-              sliver: ClubProfilePage(
-                clubId: clubId!,
-              )
-            );
+            return ScrollBaseLayout(sliver: ClubProfilePage(clubId: clubId!));
           },
         ),
         GoRoute(

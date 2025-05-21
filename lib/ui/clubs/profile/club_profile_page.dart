@@ -19,6 +19,7 @@ class ClubProfilePage extends StatefulWidget {
 
   @override
   State<ClubProfilePage> createState() => _ClubProfilePageState();
+
 }
 
 enum ClubActivity {recentes, leituras, encontros}
@@ -80,12 +81,10 @@ class _ClubProfilePageState extends State<ClubProfilePage> {
   }
 
   Widget _buildPage(BuildContext context) {
-    final scrollController = context.read<ScrollController>();
-
     return MultiSliver(
       children: [
         Builder(builder: _buildHeading),
-        ClubActivitiesListWidget(scrollController: scrollController),
+        const ClubActivitiesListWidget(),
       ]
     );
   }
@@ -103,7 +102,7 @@ class _ClubProfilePageState extends State<ClubProfilePage> {
   Widget _buildClubImage(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
-    final minRadius = 120.0;
+    const minRadius = 120.0;
     final desiredRadius = screenWidth * 0.15;
     final maxRadius = desiredRadius > minRadius ? desiredRadius : minRadius;
 
@@ -210,7 +209,7 @@ class _ClubProfilePageState extends State<ClubProfilePage> {
 
     return SliverToBoxAdapter(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 24),
         color: colorScheme.white,
         child: profileInfo,
       ),

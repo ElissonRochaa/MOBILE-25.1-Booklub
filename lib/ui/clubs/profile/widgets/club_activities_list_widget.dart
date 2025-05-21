@@ -1,5 +1,9 @@
 import 'package:booklub/config/theme/theme_config.dart';
+import 'package:booklub/domain/entities/clubs/activities/club_activity.dart';
+import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
+import 'package:booklub/ui/clubs/profile/widgets/activity_card.dart';
+import 'package:booklub/ui/clubs/profile/widgets/activity_card_builder.dart';
 import 'package:booklub/ui/core/widgets/grids/infinite_grid_widget.dart';
 import 'package:booklub/ui/core/widgets/section_selector_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
@@ -8,16 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-enum ClubActivity {recentes, leituras, encontros}
-
 class ClubActivitiesListWidget extends StatefulWidget {
 
-  final ScrollController scrollController;
-
-  const ClubActivitiesListWidget({
-    super.key,
-    required this.scrollController,
-  });
+  const ClubActivitiesListWidget({super.key});
 
   @override
   State<ClubActivitiesListWidget> createState() => _ClubActivitiesListWidgetState();
@@ -25,23 +22,33 @@ class ClubActivitiesListWidget extends StatefulWidget {
 
 class _ClubActivitiesListWidgetState extends State<ClubActivitiesListWidget> {
 
-  ClubActivity activity = ClubActivity.leituras;
+  ClubActivityCategory? activitiesCategory = ClubActivityCategory.readings;
+
+  Paginator<ClubActivity>? paginator;
 
   @override
   Widget build(BuildContext context) {
     final clubProfilePageViewModel = context.watch<ClubProfileViewModel>();
 
+    final Future<Paginator<ClubActivity>> futureClubActivities;
+    switch (activitiesCategory) {
+      case null:
+        futureClubActivities = clubProfilePageViewModel
+          .findClubActivities('1', 2);
+      case _:
+        futureClubActivities = clubProfilePageViewModel
+          .findClubActivities('1', 2, activitiesCategory);
+    }
+
     return MultiSliver(
       children: [
         Builder(builder: _buildClubActivityTypeSelector),
         AsyncBuilder(
-          future: clubProfilePageViewModel.findClubs(2),
-          onRetrieved: (paginator) => Builder(
-            builder: (context) => _buildActivitiesInfiniteScroll(
-              context: context,
-              paginator: paginator
-            )
-          ),
+          future: futureClubActivities,
+          onRetrieved: (paginator) {
+            this.paginator = paginator;
+            return Builder(builder: _buildActivitiesInfiniteScroll);
+          },
           onLoading: () => Builder(builder: _buildSessionLoading),
           onError: (_, _) => Builder(builder: _buildSessionError),
         ),
@@ -55,18 +62,18 @@ class _ClubActivitiesListWidgetState extends State<ClubActivitiesListWidget> {
     final sections = [
       SectionSelectorItem(
         label: 'Recentes',
-        onSelect: () => setState(() => activity = ClubActivity.recentes),
-        isSelected: activity == ClubActivity.recentes,
+        onSelect: () => setState(() => activitiesCategory = null),
+        isSelected: activitiesCategory == null,
       ),
       SectionSelectorItem(
         label: 'Leituras',
-        onSelect: () => setState(() => activity = ClubActivity.leituras),
-        isSelected: activity == ClubActivity.leituras,
+        onSelect: () => setState(() => activitiesCategory = ClubActivityCategory.readings),
+        isSelected: activitiesCategory == ClubActivityCategory.readings,
       ),
       SectionSelectorItem(
         label: 'Encontros',
-        onSelect: () => setState(() => activity = ClubActivity.encontros),
-        isSelected: activity == ClubActivity.encontros,
+        onSelect: () => setState(() => activitiesCategory = ClubActivityCategory.meetings),
+        isSelected: activitiesCategory == ClubActivityCategory.meetings,
       ),
     ];
 
@@ -102,24 +109,29 @@ class _ClubActivitiesListWidgetState extends State<ClubActivitiesListWidget> {
     ),
   );
 
-  Widget _buildActivitiesInfiniteScroll<T>({
-    required BuildContext context,
-    required Paginator<T> paginator,
-  }) {
+  Widget _buildActivitiesInfiniteScroll(BuildContext context) {
+    final scrollController = context.watch<ScrollController>();
+
+    final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 1,
+      mainAxisSpacing: 12,
+      childAspectRatio: 5/2
+    );
+
+    SliverChildBuilderDelegate childrenDelegateProvider(
+      List<ClubActivity> itens,
+      int totalItens,
+    ) => SliverChildBuilderDelegate(
+      (context, index) => ActivityCardBuilder(clubActivity: itens[index]),
+      childCount: totalItens,
+    );
+
+
     final infiniteScroll = InfiniteGridWidget.sliver(
-      paginator: paginator,
-      controller: widget.scrollController,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 1,
-        mainAxisSpacing: 16,
-        childAspectRatio: 5/2,
-      ),
-      childrenDelegateProvider: (itens, totalItens) => (
-        SliverChildBuilderDelegate(
-          (context, index) => Placeholder(),
-          childCount: totalItens,
-        )
-      ),
+      paginator: paginator!,
+      controller: scrollController,
+      gridDelegate: gridDelegate,
+      childrenDelegateProvider: childrenDelegateProvider
     );
 
     return SliverPadding(
@@ -127,7 +139,7 @@ class _ClubActivitiesListWidgetState extends State<ClubActivitiesListWidget> {
         top: 12,
         left: 12,
         right: 12,
-        bottom: 32
+        bottom: 36
       ),
       sliver: infiniteScroll,
     );

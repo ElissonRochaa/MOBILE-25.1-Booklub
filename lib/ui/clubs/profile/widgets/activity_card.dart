@@ -52,11 +52,12 @@ class ActivityCard extends StatelessWidget {
       color: colorScheme.white,
       elevation: 4,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
             Expanded(
               child: Column(
+                spacing: 4,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: content,
               ),

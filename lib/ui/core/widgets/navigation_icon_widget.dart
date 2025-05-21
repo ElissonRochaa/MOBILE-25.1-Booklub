@@ -21,14 +21,14 @@ class NavigationIconWidget extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return IconButton(
-        onPressed: () {
-          context.go(destination);
-        },
-        icon: Icon(
-          icon,
-          size: 36,
-          color: selected ? colorScheme.primary : colorScheme.secondary,
-        )
+      onPressed: () {
+        context.go(destination);
+      },
+      icon: Icon(
+        icon,
+        size: 36,
+        color: selected ? colorScheme.primary : colorScheme.secondary,
+      )
     );
   }
 

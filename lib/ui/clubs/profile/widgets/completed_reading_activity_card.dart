@@ -17,28 +17,48 @@ class CompletedReadingActivityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
+    final userPicture = AspectRatio(
+      aspectRatio: 1,
+      child: LayoutBuilder(
+        builder: (context, constraints) => CircleImageWidget(
+          borderColor: colorScheme.primary,
+          borderWidth: 2,
+          radius: 25,
+        ),
+      ),
+    );
+
+
+    final activityDetails = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('<username>', textAlign: TextAlign.center), // TODO user name
+        Row(
+          children: [
+            Text(DateFormatter.formatToDayMonthYear(completedReading.startDate)),
+            Icon(Icons.arrow_forward_rounded, size: 16),
+            Text(DateFormatter.formatToDayMonthYear(completedReading.finishDate))
+          ],
+        )
+      ],
+    );
+
+    final content = Row(
+      children: [
+        userPicture,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: activityDetails,
+        )
+      ]
+    );
+
     return ActivityCard(
       activity: 'Leitura completa',
       title: completedReading.bookId,
-      additionalContent: Row(
-        children: [
-          CircleImageWidget.expanded(
-            borderColor: colorScheme.primary,
-            // TODO user image
-          ),
-          Column(
-            children: [
-              Text('<username>'), // TODO user name
-              Row(
-                children: [
-                  Text(DateFormatter.formatToDayMonthYear(completedReading.startDate)),
-                  Icon(Icons.arrow_forward_rounded, size: 16),
-                  Text(DateFormatter.formatToDayMonthYear(completedReading.finishDate))
-                ],
-              )
-            ],
-          ),
-        ]
+      additionalContent: Expanded(
+        child: content
       )
     );
   }
