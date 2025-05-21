@@ -3,6 +3,7 @@ import 'package:booklub/ui/clubs/clubs_page.dart';
 import 'package:booklub/ui/clubs/profile/club_profile_page.dart';
 import 'package:booklub/ui/core/layouts/base_layout.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
+import 'package:booklub/ui/core/view_models/auth_view_model.dart';
 import 'package:booklub/ui/create-club/create_club_page.dart';
 import 'package:booklub/ui/create-club/view_models/create_club_view_model.dart';
 import 'package:booklub/ui/explore/explore_page.dart';
@@ -17,8 +18,21 @@ import 'package:booklub/ui/user/profile_page.dart';
 import 'package:booklub/ui/user/edit/edit_profile_page.dart';
 
 abstract final class RoutingConfig {
-  static GoRouter get router => GoRouter(
-    initialLocation: Routes.clubs,
+  static GoRouter createRouter(AuthViewModel authViewModel) => GoRouter(
+    initialLocation: Routes.home,
+    refreshListenable: authViewModel,
+    redirect: (context, state) {
+      final isLoggedIn = authViewModel.isAuthenticated;
+      final isGoingToAuthPage = (
+        state.uri.path == Routes.register
+        || state.uri.path == Routes.login
+      );
+
+      if (!isLoggedIn && !isGoingToAuthPage) return Routes.login;
+      if (isLoggedIn && isGoingToAuthPage) return Routes.home;
+
+      return null;
+    },
     routes: [
       GoRoute(
         name: 'Home',
@@ -102,4 +116,5 @@ abstract final class RoutingConfig {
       ),
     ],
   );
+
 }
