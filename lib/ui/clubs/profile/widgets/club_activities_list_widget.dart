@@ -1,8 +1,6 @@
 import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/clubs/activities/club_activity.dart';
-import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
-import 'package:booklub/ui/clubs/profile/widgets/activity_card.dart';
 import 'package:booklub/ui/clubs/profile/widgets/activity_card_builder.dart';
 import 'package:booklub/ui/core/widgets/grids/infinite_grid_widget.dart';
 import 'package:booklub/ui/core/widgets/section_selector_widget.dart';
