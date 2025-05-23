@@ -14,7 +14,9 @@ void main() {
   runApp(MultiProvider(
     providers: [
       Provider<AuthRepository>(
-        create: (context) => AuthRepository(),
+        create: (context) => AuthRepository(
+          apiUrl: 'http://10.0.2.2:8081'
+        ),
       ),
       ChangeNotifierProvider<AuthViewModel>(
         create: (context) => AuthViewModel(

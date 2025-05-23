@@ -1,62 +1,41 @@
-import 'package:booklub/ui/register/view_models/input_field_validation.dart';
+import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/ui/core/widgets/buttons/purple_rounded_button.dart';
+import 'package:booklub/ui/core/widgets/input_fields/named_text_field_widget.dart';
+import 'package:booklub/ui/login/view_models/login_view_model.dart';
 import 'package:booklub/ui/login/widgets/cadastrar_clickable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
-
-  const LoginPage({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _LoginPageState();
-
-}
-
-class _LoginPageState extends State<LoginPage> {
+class LoginPage extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
-  final InputFieldValidation fieldValidatorModel = InputFieldValidation();
+  late final LoginViewModel loginViewModel;
+
+  LoginPage({
+    super.key
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          _buildBackground(),
-          Center(
-            child: FractionallySizedBox(
-              widthFactor: 0.7,
-              child: _buildLoginForm(context),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+    loginViewModel = context.read<LoginViewModel>();
 
-  Widget _buildBackground() {
-    return Positioned.fill(
-      child: Opacity(
-        opacity: 0.5,
-        child: Image.asset(
-          'assets/images/light-background.png',
-          fit: BoxFit.cover,
+    return SliverPadding(
+      padding: const EdgeInsets.all(24),
+      sliver: SliverFillRemaining(
+        hasScrollBody: false,
+        child: Column(
+          spacing: 24,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Builder(builder: _buildLogo),
+            Builder(builder: _buildForm),
+            Builder(builder: _buildButtons),
+          ],
         ),
       ),
-    );
-  }
-
-  Widget _buildLoginForm(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildLogo(context),
-        const SizedBox(height: 30),
-        _buildTextFields(),
-        const SizedBox(height: 30),
-        _buildButtons(),
-      ],
     );
   }
 
@@ -67,32 +46,52 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildTextFields() {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          //TextFieldWithFieldName("E-mail", fieldValidatorModel.validateEmail),
-          SizedBox(height: 16),
-          //TextFieldPassword(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildButtons() {
+  Widget _buildButtons(BuildContext context) {
     return Column(
+      spacing: 16,
       children: [
-        PurpleRoundedButton("Entrar", () => _submitForm()),
-        SizedBox(height: 16),
+        PurpleRoundedButton("Entrar", () => _onSubmit(context)),
         CadastrarClickableText(),
       ],
     );
   }
 
-  void _submitForm() {
+  void _onSubmit(BuildContext context) async {
     if (_formKey.currentState?.validate() ?? false) {
-      // Api call aqui qnd a gnt for itnegrar
+      final succeded = await loginViewModel.login();
+      if (context.mounted && succeded) context.go(Routes.home);
     }
   }
+
+  Widget _buildForm(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        spacing: 24,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Builder(builder: _buildUsernameField),
+          Builder(builder: _buildPasswordField),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUsernameField(BuildContext context) {
+    return NamedTextFieldWidget(
+      label: 'Usuário',
+      inputWrapper: loginViewModel.usernameInput,
+    );
+  }
+
+  Widget _buildPasswordField(BuildContext context) {
+    return NamedTextFieldWidget(
+      label: 'Senha',
+      inputWrapper: loginViewModel.passwordInput,
+      hidable: true,
+    );
+  }
+
+
+
 }

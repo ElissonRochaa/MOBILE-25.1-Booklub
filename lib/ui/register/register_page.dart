@@ -1,5 +1,4 @@
 import 'package:booklub/config/routing/routes.dart';
-import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:booklub/ui/core/widgets/buttons/purple_rounded_button.dart';
 import 'package:booklub/ui/core/widgets/input_fields/image_field_widget.dart';
 import 'package:booklub/ui/core/widgets/input_fields/named_date_field_widget.dart';
@@ -49,6 +48,7 @@ class RegisterPage extends StatelessWidget {
 
   Widget _buildButtons(BuildContext context) {
     return Column(
+      spacing: 16,
       children: [
         PurpleRoundedButton("Cadastrar", () => _onSubmit(context)),
         LogarClickableText(),
@@ -58,8 +58,8 @@ class RegisterPage extends StatelessWidget {
 
   void _onSubmit(BuildContext context) async {
     if (_formKey.currentState?.validate() ?? false) {
-      await registerViewModel.register();
-      if (context.mounted) context.go(Routes.login);
+      final succeded = await registerViewModel.register();
+      if (context.mounted && succeded) context.go(Routes.login);
     }
   }
 

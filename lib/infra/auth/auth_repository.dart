@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:booklub/domain/entities/users/auth_data.dart';
 import 'package:booklub/domain/entities/users/user_creation_dto.dart';
 import 'package:booklub/utils/http/http_error_dto.dart';
@@ -18,17 +20,28 @@ class AuthException implements Exception {
 
 class AuthRepository {
 
-  final logger = Logger();
+  final _logger = Logger();
 
-  final apiUrl = 'http://10.0.2.2:8081';
+  final _secureStorage = const FlutterSecureStorage();
 
-  Future<AuthData> login(String email, String password) async {
+  static const _authDataKey = 'auth_data';
+
+  final String _apiUrl;
+
+  AuthRepository({
+    required String apiUrl,
+  }): _apiUrl = apiUrl;
+
+  Future<AuthData> login(String username, String password) async {
     final response = await http.post(
-      Uri.parse('$apiUrl/api/v1/auth/login'),
-      body: {
-        'email': email,
+      Uri.parse('$_apiUrl/api/v1/auth/login'),
+      body: jsonEncode({
+        'username': username,
         'password': password,
-      },
+      }),
+      headers: {
+        HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+      }
     );
 
     if (response.statusCode == 200) {
@@ -40,7 +53,7 @@ class AuthRepository {
   }
 
   Future<void> register(UserCreationDTO dto) async {
-    final url = Uri.parse('$apiUrl/api/v1/auth/register');
+    final url = Uri.parse('$_apiUrl/api/v1/auth/register');
     final request = http.MultipartRequest('POST', url);
 
     dto.fillMultipartRequest(request);
@@ -48,7 +61,7 @@ class AuthRepository {
     final response = await request.send();
 
     if (response.statusCode == 200) {
-      logger.i('Usuário registrado com sucesso!');
+      _logger.i('Usuário registrado com sucesso!');
       return;
     }
 
@@ -57,6 +70,26 @@ class AuthRepository {
     final httpErrorDto = HttpErrorDTO.fromJson(responseBody);
 
     throw AuthException('Erro ao registrar usuário: ${httpErrorDto.message}');
+  }
+
+  Future<void> saveAuthData(AuthData authData) async {
+    final json = authData.toJson();
+    await _secureStorage.write(
+        key: _authDataKey,
+        value: jsonEncode(json)
+    );
+  }
+
+  Future<AuthData?> getAuthData() async {
+    final jsonString = await _secureStorage.read(key: _authDataKey);
+    if (jsonString == null) return null;
+
+    final json = jsonDecode(jsonString);
+    return AuthData.fromJson(json);
+  }
+
+  Future<void> clearAuthData() async {
+    await _secureStorage.delete(key: _authDataKey);
   }
 
 }

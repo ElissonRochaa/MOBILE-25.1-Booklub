@@ -10,12 +10,13 @@ import 'package:booklub/ui/create-club/create_club_page.dart';
 import 'package:booklub/ui/create-club/view_models/create_club_view_model.dart';
 import 'package:booklub/ui/explore/explore_page.dart';
 import 'package:booklub/ui/explore/layout/explore_layout.dart';
+import 'package:booklub/ui/login/login_page.dart';
+import 'package:booklub/ui/login/view_models/login_view_model.dart';
+import 'package:booklub/ui/register/register_page.dart';
 import 'package:booklub/ui/register/view_models/register_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../../ui/login/login_page.dart';
-import '../../ui/register/register_page.dart';
 import 'package:booklub/ui/book/individual_book_page.dart';
 import 'package:booklub/ui/user/profile_page.dart';
 import 'package:booklub/ui/user/edit/edit_profile_page.dart';
@@ -24,8 +25,8 @@ abstract final class RoutingConfig {
   static GoRouter createRouter(AuthViewModel authViewModel) => GoRouter(
     initialLocation: Routes.home,
     refreshListenable: authViewModel,
-    redirect: (context, state) {
-      final isLoggedIn = authViewModel.isAuthenticated;
+    redirect: (context, state) async {
+      final isLoggedIn = await authViewModel.validateToken();
       final isGoingToAuthPage = (
         state.uri.path == Routes.register
         || state.uri.path == Routes.login
@@ -109,7 +110,17 @@ abstract final class RoutingConfig {
       GoRoute(
         name: 'Login',
         path: Routes.login,
-        builder: (context, state) => LoginPage(),
+        builder: (context, state) => ChangeNotifierProvider(
+          create: (context) => LoginViewModel(
+            authRepository: context.read(),
+            inputValidators: context.read(),
+          ),
+          child: ScrollBaseLayout(
+            appBarVisible: false,
+            bottomBarVisible: false,
+            sliver: LoginPage()
+          ),
+        ),
       ),
       GoRoute(
         name: 'Register',

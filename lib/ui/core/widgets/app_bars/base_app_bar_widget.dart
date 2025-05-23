@@ -1,6 +1,8 @@
 import 'package:booklub/config/routing/routes.dart';
+import 'package:booklub/ui/core/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class BaseAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
@@ -42,9 +44,21 @@ class BaseAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       icon: Icon(Icons.notifications_rounded),
       onPressed: () {},
     ),
-    IconButton(
+    PopupMenuButton(
       icon: Icon(Icons.more_vert),
-      onPressed: () {},
+      onSelected: (value) {
+        switch (value) {
+          case 'logout':
+            context.read<AuthViewModel>().logout();
+            break;
+        }
+      },
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: 'logout',
+          child: Text('Logout'),
+        ),
+      ],
     ),
   ];
 

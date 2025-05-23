@@ -76,7 +76,7 @@ class RegisterViewModel extends ChangeNotifier {
     passwordInput.addListener(notifyListeners);
   }
 
-  Future<void> register() async {
+  Future<bool> register() async {
     final inputs = [
       firstNameInput,
       lastNameInput,
@@ -86,13 +86,11 @@ class RegisterViewModel extends ChangeNotifier {
       passwordInput,
     ];
 
-    print('Registering');
-
     final invalidInputs = inputs.where((input) => !input.isValid);
 
     if (invalidInputs.isNotEmpty) {
       log.d(invalidInputs);
-      return;
+      return false;
     }
 
     final dto = UserCreationDTO(
@@ -105,6 +103,7 @@ class RegisterViewModel extends ChangeNotifier {
     );
 
     await authRepository.register(dto);
+    return true;
   }
 
   Future<void> pickProfilePicture() async {

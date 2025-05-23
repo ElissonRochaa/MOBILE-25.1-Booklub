@@ -1,5 +1,4 @@
-import 'package:booklub/domain/entities/users/auth_data.dart';
-import 'package:booklub/domain/entities/users/user_creation_dto.dart';
+import 'package:booklub/domain/entities/users/auth_token.dart';
 import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
@@ -10,47 +9,61 @@ class AuthViewModel extends ChangeNotifier {
 
   final AuthRepository authRepository;
 
-  AuthData? _authData;
+  bool _isValidating = false;
 
-  AuthData? get authData => _authData;
+  AuthToken? _authToken;
 
-  String get fullAccessToken => '$_authData.token.tokenType $_authData.token.accessToken';
+  AuthToken? get authToken => _authToken;
 
-  bool get isAuthenticated {
-    if (_authData == null) return false;
-    validateToken();
-    return _authData != null;
+  String get fullAccessToken => '$_authToken.tokenType $_authToken.accessToken';
+
+  AuthViewModel({required this.authRepository}) {
+    authRepository.getAuthData().then(
+      (authData) => _setAuthToken(authData?.token, notify: false)
+    );
   }
 
-  AuthViewModel({required this.authRepository});
-
-  void _setAuthData(AuthData? authData) {
-    _authData = authData;
-    notifyListeners();
+  void _setAuthToken(AuthToken? authToken, {bool notify = false}) {
+    _authToken = authToken;
+    if (notify) notifyListeners();
   }
 
-  Future<void> validateToken() async {
-    if (_authData == null) throw StateError('Usuário não autenticado');
+  Future<bool> validateToken() async {
+    if (_isValidating) return false;
+    _isValidating = true;
 
-    if (_authData!.token.expiration.isBefore(DateTime.now())) {
-      logger.i('Token validado com sucesso.');
-      return;
+    if (_authToken == null) {
+      await _refresh();
+      if (_authToken == null) {
+        logger.d('Usuário não autenticado');
+        _isValidating = false;
+        return false;
+      }
     }
 
-    _setAuthData(null);
-    logger.w('Token expirado.');
+    print('Validando token: ${_authToken!.expiration}');
+
+    if (_authToken!.expiration.isAfter(DateTime.now())) {
+      logger.d('Token validado com sucesso.');
+      _isValidating = false;
+      return true;
+    }
+
+    _authToken = null;
+    logger.d('Token expirado. aaaaaaaaaaa');
+    _isValidating = false;
+    return false;
   }
 
-  Future<void> login(String email, String password) async {
-    _setAuthData(await authRepository.login(email, password));
-  }
-
-  Future<void> register(UserCreationDTO dto) async {
-    authRepository.register(dto);
+  Future<void> _refresh() async {
+    final authData = await authRepository.getAuthData();
+    _setAuthToken(authData?.token, notify: false);
   }
 
   Future<void> logout() async {
-    _setAuthData(null);
+    authRepository.clearAuthData();
+    _setAuthToken(null, notify: true);
   }
+
 
 }
