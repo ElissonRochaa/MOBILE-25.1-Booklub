@@ -19,6 +19,7 @@ dependencies:
   file_picker: ^10.1.9
   http: ^1.4.0
   logger: ^2.5.0
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:

@@ -30,12 +30,18 @@ class UserCreationDTO {
     request.fields['firstName'] = firstName;
     request.fields['lastName'] = lastName;
     request.fields['password'] = password;
+
+
+
     if (image != null) {
+      print(image!.path!);
       request.files.add(await http.MultipartFile.fromPath(
         'image',
         image!.path
       ));
     }
+
+
   }
 
 }

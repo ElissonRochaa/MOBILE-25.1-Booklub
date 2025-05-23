@@ -1,19 +1,21 @@
-import 'package:booklub/ui/core/view_models/input_field_validation.dart';
+import 'package:booklub/ui/register/view_models/input_field_validation.dart';
 import 'package:booklub/ui/core/widgets/buttons/purple_rounded_button.dart';
-import 'package:booklub/ui/core/widgets/text_input_fields/text_field_password.dart';
-import 'package:booklub/ui/core/widgets/text_input_fields/text_field_with_field_name.dart';
 import 'package:booklub/ui/login/widgets/cadastrar_clickable_text.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
+
   const LoginPage({super.key});
 
   @override
   State<StatefulWidget> createState() => _LoginPageState();
+
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   final _formKey = GlobalKey<FormState>();
+
   final InputFieldValidation fieldValidatorModel = InputFieldValidation();
 
   @override
@@ -70,9 +72,9 @@ class _LoginPageState extends State<LoginPage> {
       key: _formKey,
       child: Column(
         children: [
-          TextFieldWithFieldName("E-mail", fieldValidatorModel.validateEmail),
+          //TextFieldWithFieldName("E-mail", fieldValidatorModel.validateEmail),
           SizedBox(height: 16),
-          TextFieldPassword(),
+          //TextFieldPassword(),
         ],
       ),
     );

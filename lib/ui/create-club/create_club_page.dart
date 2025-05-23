@@ -1,14 +1,12 @@
 import 'package:booklub/config/theme/theme_config.dart';
-import 'package:booklub/ui/core/view_models/input_field_validation.dart';
+import 'package:booklub/ui/register/view_models/input_field_validation.dart';
 import 'package:booklub/ui/core/widgets/buttons/purple_rounded_button.dart';
-import 'package:booklub/ui/core/widgets/text_input_fields/text_field_with_field_name.dart';
 import 'package:booklub/ui/create-club/view_models/create_club_view_model.dart';
 import 'package:booklub/ui/create-club/widgets/club_privacy_toggle.dart';
 import 'package:booklub/ui/create-club/widgets/number_input_rounded.dart';
 import 'package:booklub/ui/create-club/widgets/text_input_rounded.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class CreateClubPage extends StatefulWidget {

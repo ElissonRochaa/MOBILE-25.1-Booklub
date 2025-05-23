@@ -1,6 +1,8 @@
 import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/ui/clubs/clubs_page.dart';
 import 'package:booklub/ui/clubs/profile/club_profile_page.dart';
+import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
+import 'package:booklub/ui/clubs/view_models/clubs_view_model.dart';
 import 'package:booklub/ui/core/layouts/base_layout.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
 import 'package:booklub/ui/core/view_models/auth_view_model.dart';
@@ -8,6 +10,7 @@ import 'package:booklub/ui/create-club/create_club_page.dart';
 import 'package:booklub/ui/create-club/view_models/create_club_view_model.dart';
 import 'package:booklub/ui/explore/explore_page.dart';
 import 'package:booklub/ui/explore/layout/explore_layout.dart';
+import 'package:booklub/ui/register/view_models/register_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -42,16 +45,28 @@ abstract final class RoutingConfig {
       GoRoute(
         name: 'Clubs',
         path: Routes.clubs,
-        builder:
-            (context, state) =>
-                ScrollBaseLayout(sliver: ClubsPage(title: 'Clubes')),
+        builder: (context, state) => ChangeNotifierProvider(
+          create: (context) => ClubsViewModel(
+            clubRepository: context.read(),
+          ),
+          child: ScrollBaseLayout(
+            sliver: ClubsPage(title: 'Clubes')
+          ),
+        ),
       ),
       GoRoute(
         name: 'Club Profile',
         path: Routes.clubProfile(),
         builder: (context, state) {
           final clubId = state.pathParameters['id'];
-          return ScrollBaseLayout(sliver: ClubProfilePage(clubId: clubId!));
+          return ChangeNotifierProvider(
+            create: (context) => ClubProfileViewModel(
+              clubRepository: context.read(),
+            ),
+            child: ScrollBaseLayout(
+              sliver: ClubProfilePage(clubId: clubId!)
+            )
+          );
         },
       ),
       GoRoute(
@@ -99,7 +114,18 @@ abstract final class RoutingConfig {
       GoRoute(
         name: 'Register',
         path: Routes.register,
-        builder: (context, state) => RegisterPage(),
+        builder: (context, state) => ChangeNotifierProvider(
+          create: (context) => RegisterViewModel(
+            authRepository: context.read(),
+            inputValidators: context.read(),
+            ioRepository: context.read()
+          ),
+          child: ScrollBaseLayout(
+            appBarVisible: false,
+            bottomBarVisible: false,
+            sliver: RegisterPage()
+          ),
+        ),
       ),
       GoRoute(
         name: 'Individual Book',
