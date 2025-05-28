@@ -5,15 +5,16 @@ import 'package:booklub/ui/core/widgets/text_input_fields/text_field_with_field_
 import 'package:booklub/ui/login/widgets/cadastrar_clickable_text.dart';
 import 'package:booklub/ui/login/widgets/esqueceu_senha_clickable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RecoverPasswordPage extends StatefulWidget {
+  const RecoverPasswordPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _LoginPageState();
+  State<StatefulWidget> createState() => _RecoverPasswordPage();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RecoverPasswordPage extends State<RecoverPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   final InputFieldValidation fieldValidatorModel = InputFieldValidation();
 
@@ -23,13 +24,25 @@ class _LoginPageState extends State<LoginPage> {
       body: Stack(
         children: [
           _buildBackground(),
+          SafeArea(child: _buildBackButton(context)),
           Center(
             child: FractionallySizedBox(
-              widthFactor: 0.7,
+              widthFactor: 0.8,
               child: _buildLoginForm(context),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBackButton(BuildContext context) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        color: Theme.of(context).colorScheme.primary,
+        onPressed: () => context.pop(),
       ),
     );
   }
@@ -46,23 +59,40 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginForm(BuildContext context) {
+  Widget _buildTextMessage(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildLogo(context),
-        const SizedBox(height: 30),
-        _buildTextFields(),
-        const SizedBox(height: 30),
-        _buildButtons(),
+        Text(
+          "Recuperação de Conta",
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            color: theme.colorScheme.primary,
+            fontWeight: FontWeight.bold,
+            fontSize: 25,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          "Digite o e-mail referente à sua conta e iremos te enviar um e-mail com instruções pra recuperar sua senha.",
+          textAlign: TextAlign.left,
+          style: TextStyle(color: theme.colorScheme.primary, fontSize: 16),
+        ),
       ],
     );
   }
 
-  Widget _buildLogo(BuildContext context) {
-    return Image.asset(
-      'assets/images/Booklub_logo.png',
-      height: MediaQuery.sizeOf(context).height * 0.28,
+  Widget _buildLoginForm(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildTextMessage(context),
+        const SizedBox(height: 30),
+        _buildTextFields(),
+        const SizedBox(height: 30),
+        _buildButtons(context),
+      ],
     );
   }
 
@@ -72,28 +102,21 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         children: [
           TextFieldWithFieldName("E-mail", fieldValidatorModel.validateEmail),
-          SizedBox(height: 16),
-          TextFieldPassword(),
-          SizedBox(height: 16),
-          EsqueceuSenhaClickableText(),
         ],
       ),
     );
   }
 
-  Widget _buildButtons() {
+  Widget _buildButtons(BuildContext context) {
     return Column(
-      children: [
-        PurpleRoundedButton("Entrar", () => _submitForm()),
-        SizedBox(height: 16),
-        CadastrarClickableText(),
-      ],
+      children: [PurpleRoundedButton("Enviar e-mail", () => _submitForm(context))],
     );
   }
 
-  void _submitForm() {
+  void _submitForm(BuildContext context) {
     if (_formKey.currentState?.validate() ?? false) {
       // Api call aqui qnd a gnt for itnegrar
+      context.push("/check-email-recover");
     }
   }
 }

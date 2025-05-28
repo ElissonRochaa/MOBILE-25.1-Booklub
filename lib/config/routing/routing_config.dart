@@ -1,4 +1,5 @@
 import 'package:booklub/config/routing/routes.dart';
+import 'package:booklub/ui/check-your-email-recover/check_your_email_recover_page.dart';
 import 'package:booklub/ui/clubs/clubs_page.dart';
 import 'package:booklub/ui/clubs/profile/club_profile_page.dart';
 import 'package:booklub/ui/core/layouts/base_layout.dart';
@@ -7,6 +8,7 @@ import 'package:booklub/ui/create-club/create_club_page.dart';
 import 'package:booklub/ui/create-club/view_models/create_club_view_model.dart';
 import 'package:booklub/ui/explore/explore_page.dart';
 import 'package:booklub/ui/explore/layout/explore_layout.dart';
+import 'package:booklub/ui/recover-password/recover_password_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -81,6 +83,16 @@ abstract final class RoutingConfig {
         name: 'Login',
         path: Routes.login,
         builder: (context, state) => LoginPage(),
+      ),
+      GoRoute(
+        name: 'Recover password',
+        path: Routes.recoverPassword,
+        builder: (context, state) => RecoverPasswordPage(),
+      ),
+      GoRoute(
+        name: 'Check your e-mail for recovery password link',
+        path: Routes.CheckYourEmailRecover,
+        builder: (context, state) => CheckYourEmailRecoverPage(),
       ),
       GoRoute(
         name: 'Register',
