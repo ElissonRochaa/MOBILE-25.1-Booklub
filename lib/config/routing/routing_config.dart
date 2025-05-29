@@ -10,37 +10,41 @@ import '../../ui/register/register_page.dart';
 import 'package:booklub/ui/book/individual_book_page.dart';
 import 'package:booklub/ui/user/profile_page.dart';
 import 'package:booklub/ui/user/edit/edit_profile_page.dart';
+import 'package:booklub/ui/notifications/notifications_page.dart';
 
 abstract final class RoutingConfig {
   static GoRouter get router => GoRouter(
-    initialLocation: Routes.clubs,
-      routes: [
-        GoRoute(
-          name: 'Clubs',
-          path: Routes.clubs,
-          builder: (context, state) => ScrollBaseLayout(
-            sliver: ClubsPage(title: 'Clubes')
-          ),
-        ),
-        GoRoute(
-          name: 'Club Profile',
-          path: Routes.clubProfile(),
-          builder: (context, state) {
-            final clubId = state.pathParameters['id'];
-            return ScrollBaseLayout(
-              sliver: ClubProfilePage(
-                clubId: clubId!,
-              )
-            );
-          },
-        ),
-        GoRoute(
-          name: 'User Profile',
-          path: Routes.userProfile(),
-          builder: (context, state) {
-            final userIdFromRoute = state.pathParameters['id'];
-            final currentUserId = 'abc123';
-            final isMyOwnProfile = (userIdFromRoute == currentUserId);
+    initialLocation: '/notifications', //initialLocation: Routes.clubs,
+    routes: [
+      GoRoute(
+        name: 'Notifications',
+        path: Routes.notifications,
+        builder:
+            (context, state) =>
+                const ScrollBaseLayout(sliver: NotificationsPage()),
+      ),
+      GoRoute(
+        name: 'Clubs',
+        path: Routes.clubs,
+        builder:
+            (context, state) =>
+                ScrollBaseLayout(sliver: ClubsPage(title: 'Clubes')),
+      ),
+      GoRoute(
+        name: 'Club Profile',
+        path: Routes.clubProfile(),
+        builder: (context, state) {
+          final clubId = state.pathParameters['id'];
+          return ScrollBaseLayout(sliver: ClubProfilePage(clubId: clubId!));
+        },
+      ),
+      GoRoute(
+        name: 'User Profile',
+        path: Routes.userProfile(),
+        builder: (context, state) {
+          final userIdFromRoute = state.pathParameters['id'];
+          final currentUserId = 'abc123';
+          final isMyOwnProfile = (userIdFromRoute == currentUserId);
 
           return ScrollBaseLayout(
             sliver: ProfilePage(
@@ -81,13 +85,10 @@ abstract final class RoutingConfig {
         },
       ),
       GoRoute(
-          name: 'Explore',
-          path: Routes.explore,
-          builder: (context, state) => ExploreLayout(
-            sliver: ExplorePage()
-          ),
-        ),
+        name: 'Explore',
+        path: Routes.explore,
+        builder: (context, state) => ExploreLayout(sliver: ExplorePage()),
+      ),
     ],
   );
 }
-
