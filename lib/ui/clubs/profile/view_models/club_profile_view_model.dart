@@ -62,7 +62,6 @@ class ClubProfileViewModel extends ChangeNotifier {
   Club? get club => _club;
 
   Future<void> setClub(String clubId) async {
-    print("ola");
     _club = await _clubRepository.findClubById(clubId);
     notifyListeners();
   }

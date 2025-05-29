@@ -50,7 +50,7 @@ class AuthViewModel extends ChangeNotifier {
     }
 
     _authToken = null;
-    logger.d('Token expirado. aaaaaaaaaaa');
+    logger.d('Token expirado.');
     _isValidating = false;
     return false;
   }
