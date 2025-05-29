@@ -1,7 +1,4 @@
-import 'package:booklub/ui/core/view_models/input_field_validation.dart';
 import 'package:booklub/ui/core/widgets/buttons/purple_rounded_button.dart';
-import 'package:booklub/ui/core/widgets/text_input_fields/text_field_password.dart';
-import 'package:booklub/ui/core/widgets/text_input_fields/text_field_with_field_name.dart';
 import 'package:booklub/ui/login/widgets/cadastrar_clickable_text.dart';
 import 'package:booklub/ui/login/widgets/esqueceu_senha_clickable_text.dart';
 import 'package:flutter/material.dart';
@@ -10,31 +7,22 @@ import 'package:go_router/go_router.dart';
 class CheckYourEmailRecoverPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          _buildBackground(),
-          Center(
-            child: FractionallySizedBox(
-              widthFactor: 0.8,
-              child: _buildLoginForm(context),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBackground() {
-    return Positioned.fill(
-      child: Opacity(
-        opacity: 0.5,
-        child: Image.asset(
-          'assets/images/light-background.png',
-          fit: BoxFit.cover,
+    return SliverPadding(
+      padding: const EdgeInsets.all(24),
+      sliver: SliverFillRemaining(
+        hasScrollBody: false,
+        child: Column(
+          spacing: 24,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Builder(builder: _buildTextMessage),
+            Builder(builder: _buildButtons),
+          ],
         ),
       ),
     );
+  }
   }
 
   Widget _buildTextMessage(BuildContext context) {
@@ -46,7 +34,7 @@ class CheckYourEmailRecoverPage extends StatelessWidget {
         const SizedBox(height: 20),
         Text(
           "Cheque seu e-mail",
-          textAlign: TextAlign.left,
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: theme.colorScheme.primary,
             fontWeight: FontWeight.bold,
@@ -63,22 +51,11 @@ class CheckYourEmailRecoverPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLoginForm(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildTextMessage(context),
-        const SizedBox(height: 30),
-        _buildButtons(context),
-      ],
-    );
-  }
-
   Widget _buildButtons(BuildContext context) {
     return Column(
       children: [
         PurpleRoundedButton("Voltar pro login", () => context.push("/login")),
       ],
     );
-  }
 }
+

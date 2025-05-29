@@ -7,7 +7,16 @@ class BaseLayout extends StatelessWidget {
 
   final Widget child;
 
-  const BaseLayout({super.key, required this.child});
+  final bool appBarVisible;
+
+  final bool bottomBarVisible;
+
+  const BaseLayout({
+    super.key,
+    required this.child,
+    this.appBarVisible = true,
+    this.bottomBarVisible = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +33,7 @@ class BaseLayout extends StatelessWidget {
           child: Image.asset(
             'assets/images/light-background.png',
             fit: BoxFit.cover,
+            opacity: AlwaysStoppedAnimation(0.15),
           ),
         ),
         Padding(
@@ -36,14 +46,26 @@ class BaseLayout extends StatelessWidget {
       ],
     );
 
+    final appBar = appBarVisible
+      ? BaseAppBarWidget(height: appBarHeight)
+      : null;
+
+    final bottomBar = bottomBarVisible
+      ? BaseBottomBarWidget(height: bottomBarHeight)
+      : null;
+
+    final floatingActionButton = bottomBarVisible
+      ? BaseFloatingActionButtonWidget()
+      : null;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
-      appBar: BaseAppBarWidget(height: appBarHeight),
+      appBar: appBar,
       body: body,
-      bottomNavigationBar: BaseBottomBarWidget(height: bottomBarHeight),
+      bottomNavigationBar:bottomBar,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: BaseFloatingActionButtonWidget(),
+      floatingActionButton: floatingActionButton,
     );
   }
 

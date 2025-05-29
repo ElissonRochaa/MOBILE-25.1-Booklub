@@ -15,7 +15,7 @@ abstract final class Routes {
 
   static const String recoverPassword = '/recover-password'; 
 
-  static const String CheckYourEmailRecover = '/check-email-recover'; 
+  static const String checkYourEmailRecover = '/check-email-recover'; 
 
   static const String register = '/register';
 

@@ -16,22 +16,21 @@ class EsqueceuSenhaClickableText extends StatelessWidget {
     return Align(
       alignment: Alignment.centerRight,
       child: RichText(
-        textAlign: TextAlign.right,
-        text: TextSpan(
-          style: defaultStyle,
-          children: <TextSpan>[
-            TextSpan(
-              text: 'Esqueceu a senha?',
-              style: linkStyle,
-              recognizer:
-                  TapGestureRecognizer()
-                    ..onTap = () {
-                      context.push('/recover-password'); //Aqui eu vou fazer quando adicionar a página de registrar
-                    },
-            ),
-          ],
-        ),
+      text: TextSpan(
+        style: defaultStyle,
+        children: <TextSpan>[
+          TextSpan(
+            text: 'Esqueceu sua senha?',
+            style: linkStyle,
+            recognizer:
+                TapGestureRecognizer()
+                  ..onTap = () {
+                    context.push('/recover-password');
+                  },
+          ),
+        ],
       ),
+    ),
     );
   }
 }
