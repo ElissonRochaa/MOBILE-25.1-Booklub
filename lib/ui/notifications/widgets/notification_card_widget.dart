@@ -6,6 +6,7 @@ class NotificationCard extends StatelessWidget {
   final String time;
   final IconData icon;
   final bool isRead;
+  final Color? color;
 
   const NotificationCard({
     super.key,
@@ -13,48 +14,27 @@ class NotificationCard extends StatelessWidget {
     required this.message,
     required this.time,
     required this.icon,
-    this.isRead = false,
+    required this.isRead,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color:
-            isRead ? colorScheme.surface : colorScheme.primary.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: colorScheme.primary),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 4),
-                Text(message, style: Theme.of(context).textTheme.bodyMedium),
-                const SizedBox(height: 6),
-                Text(
-                  time,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: colorScheme.outline),
-                ),
-              ],
-            ),
-          ),
-        ],
+    return Material(
+      borderRadius: BorderRadius.circular(12),
+      color: Theme.of(context).colorScheme.surface,
+      elevation: 1,
+      child: ListTile(
+        leading: Icon(icon, color: color),
+        title: Text(
+          title,
+          style: TextStyle(fontWeight: FontWeight.bold, color: color),
+        ),
+        subtitle: Text(message),
+        trailing: Text(
+          time,
+          style: TextStyle(color: Colors.grey[600], fontSize: 12),
+        ),
       ),
     );
   }
