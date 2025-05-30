@@ -9,7 +9,6 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  // Mock notifications
   final List<Map<String, dynamic>> _allNotifications = [
     {
       "title": "New Review in 'Sci-Fi Lovers'",
@@ -34,12 +33,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
     },
   ];
 
-  String? _filter; // 'read', 'unread', or null
+  String? _filter;
 
   void _toggleFilter(String type) {
     setState(() {
       if (_filter == type) {
-        _filter = null; // Clear filter on second tap
+        _filter = null;
       } else {
         _filter = type;
       }
@@ -63,7 +62,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             return Container(
-              constraints: BoxConstraints(minHeight: screenHeight * 0.75),
+              constraints: BoxConstraints(minHeight: screenHeight * 0.74),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(16),
@@ -79,7 +78,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Filter buttons
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Row(
@@ -119,7 +117,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Notifications list
                   ...filteredNotifications.map(
                     (notif) => Padding(
                       padding: const EdgeInsets.symmetric(
