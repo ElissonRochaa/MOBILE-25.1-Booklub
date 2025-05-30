@@ -16,8 +16,8 @@ void main() {
     MultiProvider(
       providers: [
         Provider<AuthRepository>(
-          create: (context) => AuthRepository(apiUrl: 'http://10.0.2.2:8081'),
-          // create: (context) => AuthRepository(apiUrl: 'http://192.168.20.79:8081') //isso aqui é pra michael rodar local. usem o decima se forem usar o emulador
+          // create: (context) => AuthRepository(apiUrl: 'http://10.0.2.2:8081'),
+          create: (context) => AuthRepository(apiUrl: 'http://192.168.0.108:8081') //isso aqui é pra michael rodar local. usem o decima se forem usar o emulador
         ),
         ChangeNotifierProvider<AuthViewModel>(
           create: (context) => AuthViewModel(authRepository: context.read()),

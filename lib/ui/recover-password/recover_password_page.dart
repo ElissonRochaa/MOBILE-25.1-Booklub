@@ -32,11 +32,23 @@ class RecoverPasswordPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SafeArea(child: _buildBackButton(context)),
             Builder(builder: _buildTextMessage),
             Builder(builder: _buildForm),
             Builder(builder: _buildButtons),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildBackButton(BuildContext context) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        color: Theme.of(context).colorScheme.primary,
+        onPressed: () => context.pop(),
       ),
     );
   }
