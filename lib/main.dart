@@ -2,6 +2,7 @@ import 'package:booklub/config/theme/theme_context.dart';
 import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:booklub/infra/clubs/club_repository.dart';
 import 'package:booklub/infra/io/io_repository.dart';
+import 'package:booklub/infra/user/user_repository.dart';
 import 'package:booklub/ui/core/view_models/auth_view_model.dart';
 import 'package:booklub/ui/login/view_models/login_view_model.dart';
 import 'package:booklub/utils/validation/input_validators.dart';
@@ -17,7 +18,7 @@ void main() {
       providers: [
         Provider<AuthRepository>(
           // create: (context) => AuthRepository(apiUrl: 'http://10.0.2.2:8081'),
-          create: (context) => AuthRepository(apiUrl: 'http://192.168.0.108:8081') //isso aqui é pra michael rodar local. usem o decima se forem usar o emulador
+          create: (context) => AuthRepository(apiUrl: 'http://172.24.64.1:8081') //isso aqui é pra michael rodar local. usem o decima se forem usar o emulador
         ),
         ChangeNotifierProvider<AuthViewModel>(
           create: (context) => AuthViewModel(authRepository: context.read()),
@@ -30,6 +31,7 @@ void main() {
           create: (context) => RoutingConfig.createRouter(context.read()),
         ),
         Provider<ClubRepository>(create: (context) => ClubRepository()),
+        Provider<UserRepository>(create: (context) => UserRepository(apiUrl: 'http://172.24.64.1:8081', authRepository: context.read())),
         Provider<IORepository>(create: (context) => IORepository()),
       ],
       child: const MyApp(),

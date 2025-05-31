@@ -62,7 +62,7 @@ class _ClubsPageState extends State<ClubsPage> {
   Widget _buildClubsList(BuildContext context) {
     final clubsViewModel = context.watch<ClubsViewModel>();
     final scrollController = context.read<ScrollController>();
-    final clubs = section == ClubsPageSection.participating
+    final clubPaginatorFuture = section == ClubsPageSection.participating
       ? clubsViewModel.findMyClubs(4)
       : clubsViewModel.findManagedClubs(4);
 
@@ -81,7 +81,7 @@ class _ClubsPageState extends State<ClubsPage> {
     );
 
     final clubsList = AsyncBuilder(
-      future: clubs,
+      future: clubPaginatorFuture,
       onRetrieved: (paginator) => InfiniteGridWidget.sliver(
         paginator: paginator,
         controller: scrollController,
