@@ -8,9 +8,11 @@ import 'package:flutter/cupertino.dart';
 class ExploreViewModel extends ChangeNotifier {
 
   final UserRepository userRepository;
+  final ClubRepository clubRepository;
 
   ExploreViewModel({
     required this.userRepository,
+    required this.clubRepository,
   });
 
   Future<Paginator<User>> findByUsernameContaining(String username, int pageSize) async {
@@ -19,8 +21,8 @@ class ExploreViewModel extends ChangeNotifier {
   Future<Paginator<User>> findBooksByTitleContaining(String username, int pageSize) async {
     return userRepository.findByUsernameContaining(username, pageSize);
   }
-  Future<Paginator<User>> findClubByTitleContaining(String username, int pageSize) async {
-    return userRepository.findByUsernameContaining(username, pageSize);
+  Future<Paginator<Club>> searchClubByName(String name, int pageSize) async {
+    return clubRepository.searchClubByName(name, pageSize);
   }
   Future<Paginator<User>> findAllWithNameContaining(String username, int pageSize) async {
     return userRepository.findByUsernameContaining(username, pageSize);

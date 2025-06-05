@@ -1,5 +1,7 @@
 import 'package:booklub/config/theme/theme_config.dart';
+import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/domain/entities/users/user.dart';
+import 'package:booklub/ui/core/widgets/cards/horizontal_club_card_widget.dart';
 import 'package:booklub/ui/core/widgets/grids/base_grid_widget.dart';
 import 'package:booklub/ui/core/widgets/grids/infinite_grid_widget.dart';
 import 'package:booklub/ui/core/widgets/section_selector_widget.dart';
@@ -22,10 +24,9 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-  ExploreSection section = ExploreSection.readers;
+  ExploreSection section = ExploreSection.clubs;
   @override
   Widget build(BuildContext context) {
-
     return MultiSliver(
       children: [
         Builder(builder: _buildClubsPageSectionSelector),
@@ -75,24 +76,28 @@ class _ExplorePageState extends State<ExplorePage> {
 
     final query = context.watch<SearchQueryNotifier>().query;
 
-    var itemsList;  
+    Widget itemsList;
 
     switch (section) {
       case ExploreSection.all:
-        Future<Paginator<User>> futurePaginator = exploreViewModel.findAllWithNameContaining(query, 8);
-        itemsList = _handleFutureUserList(futurePaginator, scrollController);
+        Future<Paginator<User>> futurePaginator = exploreViewModel
+            .findAllWithNameContaining(query, 8);
+        itemsList = _handleFutureEntityList(futurePaginator, scrollController, (user) => UserHorizontalCardWidget(user: user));
         break;
       case ExploreSection.books:
-        Future<Paginator<User>> futurePaginator = exploreViewModel.findBooksByTitleContaining(query, 8);
-        itemsList = _handleFutureUserList(futurePaginator, scrollController);
+        Future<Paginator<User>> futurePaginator = exploreViewModel
+            .findBooksByTitleContaining(query, 8);
+        itemsList = _handleFutureEntityList(futurePaginator, scrollController, (user) => UserHorizontalCardWidget(user: user));
         break;
       case ExploreSection.clubs:
-        Future<Paginator<User>> futurePaginator = exploreViewModel.findClubByTitleContaining(query, 8);
-        itemsList = _handleFutureUserList(futurePaginator, scrollController);
+        Future<Paginator<Club>> futurePaginator = exploreViewModel
+            .searchClubByName(query, 8);
+        itemsList = _handleFutureEntityList(futurePaginator, scrollController, (club) => HorizontalClubCardWidget(club: club));
         break;
       case ExploreSection.readers:
-        Future<Paginator<User>> futurePaginator = exploreViewModel.findByUsernameContaining(query, 8);
-        itemsList = _handleFutureUserList(futurePaginator, scrollController);
+        Future<Paginator<User>> futurePaginator = exploreViewModel
+            .findByUsernameContaining(query, 8);
+        itemsList = _handleFutureEntityList(futurePaginator, scrollController, (user) => UserHorizontalCardWidget(user: user));
         break;
     }
 
@@ -102,9 +107,10 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  Widget _handleFutureUserList(
-    Future<Paginator<User>> futurePaginator,
+  Widget _handleFutureEntityList<T>(
+    Future<Paginator<T>> futurePaginator,
     ScrollController scrollController,
+    Widget Function(T item) cardWidgetBuilder
   ) {
     final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 1,
@@ -113,10 +119,10 @@ class _ExplorePageState extends State<ExplorePage> {
     );
 
     SliverChildBuilderDelegate childrenDelegateProvider(
-      List<User> items,
+      List<T> items,
       int totalItems,
     ) => SliverChildBuilderDelegate(
-      (context, index) => UserHorizontalCardWidget(user: items[index]),
+      (context, index) => cardWidgetBuilder(items[index]),
       childCount: totalItems,
     );
 
@@ -168,5 +174,4 @@ class _ExplorePageState extends State<ExplorePage> {
       ),
     );
   }
-
 }

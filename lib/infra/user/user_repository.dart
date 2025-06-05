@@ -43,22 +43,15 @@ class UserRepository {
     final accessToken = authData.token.accessToken;
 
     return Paginator.create(pageSize, (pageIdx, pageSize) async {
-      final uri = Uri.parse('$_apiUrl/api/v1/user/search').replace(
-        queryParameters: {
-          'username': username,
-          'page': pageIdx.toString(),
-          'size': pageSize.toString(),
-          'sort': 'username,asc',
-        },
-      );
       final response = await http.get(
-        uri,
+        Uri.parse(
+          '$_apiUrl/api/v1/user/search',
+        ).replace(queryParameters: {'username': username}),
         headers: {
           HttpHeaders.contentTypeHeader: ContentType.json.toString(),
           HttpHeaders.authorizationHeader: 'Bearer $accessToken',
         },
       );
-
       final json = jsonDecode(response.body);
       final page = Page<User>.fromJson(
         json,

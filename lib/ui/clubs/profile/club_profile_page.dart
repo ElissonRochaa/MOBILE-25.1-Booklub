@@ -95,7 +95,7 @@ class ClubProfilePage extends StatelessWidget {
           borderColor: colorScheme.primary,
           borderWidth: 2,
           decorationImage: DecorationImage(
-            image: NetworkImage(club.imageUrl),
+            image: NetworkImage(club.imageUrl!),
           ),
         ),
       ),
