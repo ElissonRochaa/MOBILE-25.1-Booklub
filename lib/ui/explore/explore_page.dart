@@ -80,24 +80,49 @@ class _ExplorePageState extends State<ExplorePage> {
 
     switch (section) {
       case ExploreSection.all:
-        Future<Paginator<User>> futurePaginator = exploreViewModel
-            .findAllWithNameContaining(query, 8);
-        itemsList = _handleFutureEntityList(futurePaginator, scrollController, (user) => UserHorizontalCardWidget(user: user));
+        final futurePaginator = exploreViewModel.findAllWithNameContaining(
+          query,
+          8,
+        );
+
+        itemsList = _handleFutureEntityList(
+          futurePaginator,
+          scrollController,
+          (item) =>
+              item is User
+                  ? UserHorizontalCardWidget(user: item)
+                  : item is Club
+                  ? HorizontalClubCardWidget(club: item) //isso aqui tá feio pra krl mas por enquanto ta funcionando
+                  : SizedBox.shrink(),
+        );
+
         break;
       case ExploreSection.books:
         Future<Paginator<User>> futurePaginator = exploreViewModel
             .findBooksByTitleContaining(query, 8);
-        itemsList = _handleFutureEntityList(futurePaginator, scrollController, (user) => UserHorizontalCardWidget(user: user));
+        itemsList = _handleFutureEntityList(
+          futurePaginator,
+          scrollController,
+          (user) => UserHorizontalCardWidget(user: user),
+        );
         break;
       case ExploreSection.clubs:
         Future<Paginator<Club>> futurePaginator = exploreViewModel
             .searchClubByName(query, 8);
-        itemsList = _handleFutureEntityList(futurePaginator, scrollController, (club) => HorizontalClubCardWidget(club: club));
+        itemsList = _handleFutureEntityList(
+          futurePaginator,
+          scrollController,
+          (club) => HorizontalClubCardWidget(club: club),
+        );
         break;
       case ExploreSection.readers:
         Future<Paginator<User>> futurePaginator = exploreViewModel
             .findByUsernameContaining(query, 8);
-        itemsList = _handleFutureEntityList(futurePaginator, scrollController, (user) => UserHorizontalCardWidget(user: user));
+        itemsList = _handleFutureEntityList(
+          futurePaginator,
+          scrollController,
+          (user) => UserHorizontalCardWidget(user: user),
+        );
         break;
     }
 
@@ -110,7 +135,7 @@ class _ExplorePageState extends State<ExplorePage> {
   Widget _handleFutureEntityList<T>(
     Future<Paginator<T>> futurePaginator,
     ScrollController scrollController,
-    Widget Function(T item) cardWidgetBuilder
+    Widget Function(T item) cardWidgetBuilder,
   ) {
     final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 1,
