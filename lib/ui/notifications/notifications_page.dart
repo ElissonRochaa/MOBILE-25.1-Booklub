@@ -11,23 +11,23 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
   final List<Map<String, dynamic>> _allNotifications = [
     {
-      "title": "New Review in 'Sci-Fi Lovers'",
-      "message": "Ana just reviewed 'Dune'. Check it out!",
-      "time": "2h ago",
+      "title": "Nova avaliação em 'clube das lindas'",
+      "message": "Ana avaliou 'Duna'. Veja!",
+      "time": "2h atrás",
       "icon": Icons.bookmark,
       "isRead": false,
     },
     {
-      "title": "Meeting Reminder",
-      "message": "‘Fantasy Readers’ meets tomorrow at 6pm!",
-      "time": "1d ago",
+      "title": "Lembre-se do encontro!",
+      "message": "‘clube do romance’ tem encontro amanhã às 19h.",
+      "time": "1d atrás",
       "icon": Icons.calendar_today,
       "isRead": true,
     },
     {
-      "title": "New Member!",
-      "message": "Liam just joined ‘Mystery Bookworms’. Say hi!",
-      "time": "3h ago",
+      "title": "Novo membro no clube!",
+      "message": "Michael entrou no 'clube dos aventureiros'. Diga 'olá'!",
+      "time": "3h atrás",
       "icon": Icons.person,
       "isRead": false,
     },
@@ -84,7 +84,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         FilterChip(
-                          label: const Text('Unread'),
+                          label: const Text('Não lidas'),
                           selected: _filter == 'unread',
                           onSelected: (_) => _toggleFilter('unread'),
                           selectedColor: Theme.of(
@@ -99,7 +99,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         ),
                         const SizedBox(width: 12),
                         FilterChip(
-                          label: const Text('Read'),
+                          label: const Text('Lidas'),
                           selected: _filter == 'read',
                           onSelected: (_) => _toggleFilter('read'),
                           selectedColor: Theme.of(
@@ -129,10 +129,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         time: notif['time'] as String,
                         icon: notif['icon'] as IconData,
                         isRead: notif['isRead'] as bool,
-                        color:
-                            notif['isRead']
-                                ? Colors.grey
-                                : Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),

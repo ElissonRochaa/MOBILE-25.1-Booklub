@@ -6,7 +6,7 @@ class NotificationCard extends StatelessWidget {
   final String time;
   final IconData icon;
   final bool isRead;
-  final Color? color;
+  final Color? color; // Still supported, but now optional
 
   const NotificationCard({
     super.key,
@@ -20,20 +20,33 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final Color purple = theme.colorScheme.secondary;
+    final Color lightGray = Colors.grey[350]!;
+
+    final Color backgroundColor = isRead ? lightGray : purple;
+    final Color textColor = isRead ? purple : lightGray;
+
     return Material(
       borderRadius: BorderRadius.circular(12),
-      color: Theme.of(context).colorScheme.surface,
+      color: backgroundColor,
       elevation: 1,
       child: ListTile(
-        leading: Icon(icon, color: color),
+        leading: Icon(icon, color: textColor),
         title: Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.bold, color: color),
+          style: TextStyle(
+            fontWeight: isRead ? FontWeight.normal : FontWeight.bold,
+            color: textColor,
+          ),
         ),
-        subtitle: Text(message),
+        subtitle: Text(
+          message,
+          style: TextStyle(color: textColor.withOpacity(isRead ? 0.8 : 1)),
+        ),
         trailing: Text(
           time,
-          style: TextStyle(color: Colors.grey[600], fontSize: 12),
+          style: TextStyle(color: textColor.withOpacity(0.7), fontSize: 12),
         ),
       ),
     );
