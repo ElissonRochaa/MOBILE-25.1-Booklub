@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/ui/register/view_models/input_field_validation.dart';
 import 'package:booklub/ui/core/widgets/buttons/purple_rounded_button.dart';
@@ -19,72 +21,62 @@ class _CreatePageState extends State<CreateClubPage> {
   final InputFieldValidation fieldValidatorModel = InputFieldValidation();
   bool hasParticipantLimit = false;
 
-@override
-Widget build(BuildContext context) {
-  final viewModel = Provider.of<CreateClubViewModel>(context);
-  ThemeData theme = Theme.of(context);
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = Provider.of<CreateClubViewModel>(context);
+    ThemeData theme = Theme.of(context);
 
-  return SliverPadding(
-    padding: EdgeInsets.all(30),
-    sliver: SliverToBoxAdapter(
-      child: Form(
-        key: viewModel.formKey,
-        child: Column(
-          spacing: 30,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildClubNameWidget(theme),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildPrivacityWidget(theme),
-                _buildParticipantsLimit(theme),
-              ],
-            ),
-            _buildUploadWidget(theme),
-            PurpleRoundedButton("Criar", () => viewModel.submitForm()),
-          ],
+    return SliverPadding(
+      padding: EdgeInsets.all(30),
+      sliver: SliverToBoxAdapter(
+        child: Form(
+          key: viewModel.formKey,
+          child: Column(
+            spacing: 30,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildClubNameWidget(theme),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildPrivacityWidget(theme),
+                  _buildParticipantsLimit(theme),
+                ],
+              ),
+              _buildUploadWidget(theme),
+              PurpleRoundedButton("Criar", () => viewModel.createClub()),
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildUploadWidget(ThemeData theme) {
     final viewModel = Provider.of<CreateClubViewModel>(context);
 
-    return Column(
-      children: [
-        _buildLabelText("Image da capa do clube", theme),
-        GestureDetector(
-          onTap: () async {
-            FilePickerResult? result = await FilePicker.platform.pickFiles(
-              type: FileType.image,
-            );
-
-            if (result != null && result.files.isNotEmpty) {
-              final fileBytes = result.files.first.bytes;
-              if (fileBytes != null) {
-                viewModel.updateClubCoverImageBytes(fileBytes);
-              }
-            }
-          },
-          child: Container(
-            height: 250,
-            width: 250,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.onPrimary,
-              boxShadow: [
-                BoxShadow(blurRadius: 5, color: theme.colorScheme.black),
-              ],
-            ),
-            child:
-                viewModel.coverImage != null
-                    ? Image.memory(viewModel.coverImage!, fit: BoxFit.cover)
-                    : _buildUploadSquare(theme),
-          ),
+    return InkWell(
+      onTap: () async {
+        await viewModel.pickCoverImage();
+      },
+      child: Container(
+        height: 250,
+        width: 250,
+        decoration: BoxDecoration(
+          color: theme.colorScheme.onPrimary,
+          boxShadow: [
+            BoxShadow(blurRadius: 5, color: theme.colorScheme.shadow),
+          ],
+          image:
+              viewModel.coverImage != null
+                  ? DecorationImage(
+                    image: FileImage(viewModel.coverImage!),
+                    fit: BoxFit.cover,
+                  )
+                  : null,
         ),
-      ],
+        child: viewModel.coverImage == null ? _buildUploadSquare(theme) : null,
+      ),
     );
   }
 

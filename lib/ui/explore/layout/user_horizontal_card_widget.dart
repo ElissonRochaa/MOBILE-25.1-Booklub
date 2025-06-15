@@ -1,22 +1,24 @@
 import 'package:booklub/config/routing/routes.dart';
-import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
+import 'package:booklub/domain/entities/users/user.dart';
 import 'package:booklub/ui/core/widgets/circle_image_widget.dart';
+import 'package:booklub/ui/core/widgets/vertical_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class HorizontalClubCardWidget extends StatelessWidget {
+class UserHorizontalCardWidget extends StatelessWidget {
+  final User user;
 
-  final Club club;
-
-  const HorizontalClubCardWidget({
-    super.key,
-    required this.club
-  });
+  const UserHorizontalCardWidget({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
+    final userProfileImage =
+        user.imageUrl == null
+            ? "https://i.imgur.com/Dtuoq5K.jpeg"
+            : user.imageUrl!;
 
     final borderRadius = BorderRadius.only(
       topLeft: Radius.circular(100),
@@ -26,13 +28,13 @@ class HorizontalClubCardWidget extends StatelessWidget {
     );
 
     final clubImage = CircleImageWidget.expanded(
-      backgroundColor: colorScheme.white,
+      backgroundColor: colorScheme.onPrimary,
       borderColor: colorScheme.primary,
       borderWidth: 2,
       decorationImage: DecorationImage(
-        image: NetworkImage(club.imageUrl!),
-        fit: BoxFit.cover
-      )
+        image: NetworkImage(userProfileImage),
+        fit: BoxFit.cover,
+      ),
     );
 
     final clubInfo = Expanded(
@@ -42,42 +44,23 @@ class HorizontalClubCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(club.name),
-            Row(
-              spacing: 8,
-              children: [
-                Icon(Icons.menu_book_rounded),
-                Text('The Civil War Book Club'),
-              ],
-            ),
-            Row(
-              spacing: 8,
-              children: [
-                Icon(Icons.groups),
-                Text('10'),
-              ],
-            ),
-          ],
-        ),
-      )
-    );
-
-    return InkWell(
-      onTap: () => context.push(Routes.clubProfile(clubId: club.id)),
-      borderRadius: borderRadius,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: borderRadius
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            clubImage,
-            clubInfo
+            Text(user.fullName),
+            Row(spacing: 8, children: [Icon(Icons.groups), Text('10')]),
           ],
         ),
       ),
     );
-  }
 
+    return InkWell(
+      onTap: () => (),
+      borderRadius: borderRadius,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: borderRadius),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [clubImage, clubInfo],
+        ),
+      ),
+    );
+  }
 }

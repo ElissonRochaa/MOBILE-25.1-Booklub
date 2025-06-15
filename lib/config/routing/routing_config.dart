@@ -11,6 +11,8 @@ import 'package:booklub/ui/create-club/create_club_page.dart';
 import 'package:booklub/ui/create-club/view_models/create_club_view_model.dart';
 import 'package:booklub/ui/explore/explore_page.dart';
 import 'package:booklub/ui/explore/layout/explore_layout.dart';
+import 'package:booklub/ui/explore/layout/view_model/search_bar_widget.dart';
+import 'package:booklub/ui/explore/view_model/explore_view_model.dart';
 import 'package:booklub/ui/recover-password/recover_password_page.dart';
 import 'package:booklub/ui/login/login_page.dart';
 import 'package:booklub/ui/login/view_models/login_view_model.dart';
@@ -30,12 +32,11 @@ abstract final class RoutingConfig {
     refreshListenable: authViewModel,
     redirect: (context, state) async {
       final isLoggedIn = await authViewModel.validateToken();
-      final isGoingToAuthPage = (
-        state.uri.path == Routes.register
-        || state.uri.path == Routes.login
-        || state.uri.path == Routes.recoverPassword
-        || state.uri.path == Routes.checkYourEmailRecover
-      );
+      final isGoingToAuthPage =
+          (state.uri.path == Routes.register ||
+              state.uri.path == Routes.login ||
+              state.uri.path == Routes.recoverPassword ||
+              state.uri.path == Routes.checkYourEmailRecover);
 
       if (!isLoggedIn && !isGoingToAuthPage) return Routes.login;
       if (isLoggedIn && isGoingToAuthPage) return Routes.home;
@@ -51,14 +52,12 @@ abstract final class RoutingConfig {
       GoRoute(
         name: 'Clubs',
         path: Routes.clubs,
-        builder: (context, state) => ChangeNotifierProvider(
-          create: (context) => ClubsViewModel(
-            clubRepository: context.read(),
-          ),
-          child: ScrollBaseLayout(
-            sliver: ClubsPage(title: 'Clubes')
-          ),
-        ),
+        builder:
+            (context, state) => ChangeNotifierProvider(
+              create:
+                  (context) => ClubsViewModel(clubRepository: context.read()),
+              child: ScrollBaseLayout(sliver: ClubsPage(title: 'Clubes')),
+            ),
       ),
       GoRoute(
         name: 'Club Profile',
@@ -66,12 +65,10 @@ abstract final class RoutingConfig {
         builder: (context, state) {
           final clubId = state.pathParameters['id'];
           return ChangeNotifierProvider(
-            create: (context) => ClubProfileViewModel(
-              clubRepository: context.read(),
-            ),
-            child: ScrollBaseLayout(
-              sliver: ClubProfilePage(clubId: clubId!)
-            )
+            create:
+                (context) =>
+                    ClubProfileViewModel(clubRepository: context.read()),
+            child: ScrollBaseLayout(sliver: ClubProfilePage(clubId: clubId!)),
           );
         },
       ),
@@ -106,7 +103,7 @@ abstract final class RoutingConfig {
         builder: (context, state) {
           return ScrollBaseLayout(
             sliver: ChangeNotifierProvider(
-              create: (_) => CreateClubViewModel(),
+              create: (_) => CreateClubViewModel(authRepository: context.read(), clubRepository: context.read(), ioRepository: context.read()),
               child: CreateClubPage(),
             ),
           );
@@ -115,57 +112,64 @@ abstract final class RoutingConfig {
       GoRoute(
         name: 'Login',
         path: Routes.login,
-        builder: (context, state) => ChangeNotifierProvider(
-          create: (context) => LoginViewModel(
-            authRepository: context.read(),
-            inputValidators: context.read(),
-          ),
-          child: ScrollBaseLayout(
-            appBarVisible: false,
-            bottomBarVisible: false,
-            sliver: LoginPage()
-          ),
-        ),
+        builder:
+            (context, state) => ChangeNotifierProvider(
+              create:
+                  (context) => LoginViewModel(
+                    authRepository: context.read(),
+                    inputValidators: context.read(),
+                  ),
+              child: ScrollBaseLayout(
+                appBarVisible: false,
+                bottomBarVisible: false,
+                sliver: LoginPage(),
+              ),
+            ),
       ),
       GoRoute(
         name: 'Recover password',
         path: Routes.recoverPassword,
-        builder: (context, state) => ChangeNotifierProvider(
-          create: (context) => RecoverPasswordViewModel(
-            authRepository: context.read(),
-            inputValidators: context.read(),
-          ),
-          child: ScrollBaseLayout(
-            appBarVisible: false,
-            bottomBarVisible: false,
-            sliver: RecoverPasswordPage()
-          ),
-        ),
+        builder:
+            (context, state) => ChangeNotifierProvider(
+              create:
+                  (context) => RecoverPasswordViewModel(
+                    authRepository: context.read(),
+                    inputValidators: context.read(),
+                  ),
+              child: ScrollBaseLayout(
+                appBarVisible: false,
+                bottomBarVisible: false,
+                sliver: RecoverPasswordPage(),
+              ),
+            ),
       ),
       GoRoute(
         name: 'Check your e-mail for recovery password link',
         path: Routes.checkYourEmailRecover,
-        builder: (context, state) => ScrollBaseLayout(
-            appBarVisible: false,
-            bottomBarVisible: false,
-            sliver: CheckYourEmailRecoverPage()
-          ),
+        builder:
+            (context, state) => ScrollBaseLayout(
+              appBarVisible: false,
+              bottomBarVisible: false,
+              sliver: CheckYourEmailRecoverPage(),
+            ),
       ),
       GoRoute(
         name: 'Register',
         path: Routes.register,
-        builder: (context, state) => ChangeNotifierProvider(
-          create: (context) => RegisterViewModel(
-            authRepository: context.read(),
-            inputValidators: context.read(),
-            ioRepository: context.read()
-          ),
-          child: ScrollBaseLayout(
-            appBarVisible: false,
-            bottomBarVisible: false,
-            sliver: RegisterPage()
-          ),
-        ),
+        builder:
+            (context, state) => ChangeNotifierProvider(
+              create:
+                  (context) => RegisterViewModel(
+                    authRepository: context.read(),
+                    inputValidators: context.read(),
+                    ioRepository: context.read(),
+                  ),
+              child: ScrollBaseLayout(
+                appBarVisible: false,
+                bottomBarVisible: false,
+                sliver: RegisterPage(),
+              ),
+            ),
       ),
       GoRoute(
         name: 'Individual Book',
@@ -178,9 +182,18 @@ abstract final class RoutingConfig {
       GoRoute(
         name: 'Explore',
         path: Routes.explore,
-        builder: (context, state) => ExploreLayout(sliver: ExplorePage()),
+        builder:
+            (context, state) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create:
+                      (_) => ExploreViewModel(userRepository: context.read(), clubRepository: context.read()),
+                ),
+                ChangeNotifierProvider(create: (_) => SearchQueryNotifier()),
+              ],
+              child: ExploreLayout(sliver: ExplorePage()),
+            ),
       ),
     ],
   );
-
 }

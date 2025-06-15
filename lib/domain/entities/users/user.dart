@@ -15,6 +15,8 @@ class User {
 
   final String lastName;
 
+  final String? imageUrl;
+
   String get fullName => '$firstName $lastName';
 
   const User({
@@ -23,6 +25,7 @@ class User {
     required this.email,
     required this.firstName,
     required this.lastName,
+    required this.imageUrl,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

@@ -9,7 +9,7 @@ class IORepository {
       allowMultiple: false,
       allowedExtensions: ['png', 'jpg', 'jpeg']
     );
-
+  
     if (result != null && result.files.single.path != null) {
       return File(result.files.single.path!);
     }
