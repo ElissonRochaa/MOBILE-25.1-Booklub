@@ -3,6 +3,9 @@ import 'dart:io';
 
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/domain/entities/clubs/club_creation_dto.dart';
+import 'package:booklub/domain/entities/users/auth_data.dart';
+import 'package:booklub/domain/entities/users/auth_token.dart';
+import 'package:booklub/domain/entities/users/user.dart';
 import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:booklub/utils/http/http_error_dto.dart';
 import 'package:booklub/utils/pagination/page.dart';
@@ -11,78 +14,38 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
 class CreateClubException implements Exception {
+
   final String message;
 
   CreateClubException(this.message);
 
   @override
   String toString() => 'CreateClubException: $message';
+
 }
 
 class ClubRepository {
+
   final _logger = Logger();
+
   final String _apiUrl;
+
   final AuthRepository authRepository;
 
   ClubRepository({required String apiUrl, required this.authRepository})
     : _apiUrl = apiUrl;
 
-  Club _dummy({String userId = '1', String ownerId = '1'}) => Club(
-    id: userId,
-    name: 'Civil War',
-    creationDate: DateTime(2025, 4, 25),
-    imageUrl:
-        'https://pt.quizur.com/_image?href=https://static.quizur.com/i/b/573e6c06640578.83502531573e6c06471173.49992186.png&w=1024&h=1024&f=webp',
-    isPrivate: false,
-    ownerId: ownerId,
-  );
+  Future<AuthData> get _authData async {
+    final authData = await authRepository.getAuthData();
 
-  Page<Club> _dummyPage({
-    required int page,
-    required int pageSize,
-    String userId = '1',
-    String ownerId = '1',
-  }) {
-    return Page(
-      content: List.generate(
-        pageSize,
-        (index) => _dummy(userId: userId, ownerId: ownerId),
-      ),
-      pageInfo: PageInfo(
-        size: pageSize,
-        number: page,
-        totalElements: pageSize * 4,
-        totalPages: 4,
-      ),
-    );
+    if (authData == null) {
+      throw Exception('O usuário não está autenticado');
+    }
+
+    return authData;
   }
 
-  Future<Paginator<Club>> findClubs(int pageSize) async {
-    Future.delayed(const Duration(seconds: 1));
-
-    return Paginator.create(pageSize, (page, pageSize) async {
-      await Future.delayed(const Duration(seconds: 1));
-      return _dummyPage(page: page, pageSize: pageSize);
-    });
-  }
-
-  Future<Club> findClubById(String clubId) async {
-    Future.delayed(const Duration(seconds: 5));
-    return _dummy();
-  }
-
-  Future<Paginator<Club>> findClubsByUserId(int pageSize, String userId) async {
-    Future.delayed(const Duration(seconds: 5));
-    return Paginator.create(pageSize, (page, pageSize) async {
-      await Future.delayed(const Duration(seconds: 1));
-      return _dummyPage(
-        page: page,
-        pageSize: pageSize,
-        userId: userId,
-        ownerId: userId,
-      );
-    });
-  }
+  Future<AuthToken> get _authToken async => (await _authData).token;
 
   Future<void> createClub(ClubCreationDTO club) async {
     final authData = await authRepository.getAuthData();
@@ -114,33 +77,189 @@ class ClubRepository {
     _logger.i('Club registrado com sucesso!');
   }
 
-  Future<Paginator<Club>> searchClubByName(String name, int pageSize) async {
-    print(name);
-    final authData = await authRepository.getAuthData();
+  Future<Paginator<Club>> findClubs(int pageSize) async {
+    final authToken = await _authToken;
 
-    if (authData == null) {
-      throw Exception('O usuário não está autenticado');
-    }
+    return Paginator.create(pageSize, (page, size) async {
+      final uri = Uri.parse(
+        '$_apiUrl/api/v1/clubs',
+      ).replace(
+          queryParameters: {
+            'page': page,
+            'size': size,
+          }
+      );
 
-    final accessToken = authData.token.accessToken;
-
-    return Paginator.create(pageSize, (pageIdx, pageSize) async {
       final response = await http.get(
-        Uri.parse(
-          '$_apiUrl/api/v1/clubs',
-        ).replace(queryParameters: {'name': name}),
+        uri,
         headers: {
           HttpHeaders.contentTypeHeader: ContentType.json.toString(),
-          HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+          HttpHeaders.authorizationHeader: authToken.toString(),
         },
       );
 
-      final json = jsonDecode(response.body);
-      final page = Page<Club>.fromJson(
-        json,
+      if (response.statusCode != 200) {
+        throw Exception('Erro ao buscar clubs');
+      }
+
+      return Page<Club>.fromJson(
+        jsonDecode(response.body),
         (json) => Club.fromJson(json as Map<String, dynamic>),
       );
-      return page;
     });
   }
+
+  Future<Club> findClubById(String clubId) async {
+    final authToken = await _authToken;
+
+    final uri = Uri.parse('$_apiUrl/api/v1/clubs/$clubId');
+
+    final response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+        HttpHeaders.authorizationHeader: authToken.toString(),
+      }
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Erro ao buscar club com ID $clubId');
+    }
+
+    return Club.fromJson(jsonDecode(response.body));
+  }
+
+  Future<Paginator<Club>> findClubsByUserId(int pageSize, String userId) async {
+    final authToken = await _authToken;
+
+    return Paginator.create(pageSize, (page, size) async {
+      final uri = Uri.parse(
+          '$_apiUrl/api/v1/users/$userId/clubs/participating'
+      ).replace(
+        queryParameters: {
+          'page': page.toString(),
+          'size': size.toString(),
+        }
+      );
+
+      final response = await http.get(
+        uri,
+        headers: {
+          HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+          HttpHeaders.authorizationHeader: authToken.toString(),
+        }
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Erro ao buscar clubs do usuário com ID $userId');
+      }
+
+      final result = Page<Club>.fromJson(
+        jsonDecode(response.body),
+        (json) => Club.fromJson(json as Map<String, dynamic>),
+      );
+
+      return result;
+    });
+  }
+
+  Future<Paginator<Club>> findClubsByOwnerId(int pageSize, String ownerId) async {
+    final authToken = await _authToken;
+
+    return Paginator.create(pageSize, (page, size) async {
+      final uri = Uri.parse(
+          '$_apiUrl/api/v1/users/$ownerId/clubs/owned'
+      ).replace(
+          queryParameters: {
+            'page': page.toString(),
+            'size': size.toString(),
+          }
+      );
+
+      final response = await http.get(
+          uri,
+          headers: {
+            HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+            HttpHeaders.authorizationHeader: authToken.toString(),
+          }
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Erro ao buscar clubs com dono com ID $ownerId');
+      }
+
+      final result = Page<Club>.fromJson(
+        jsonDecode(response.body),
+            (json) => Club.fromJson(json as Map<String, dynamic>),
+      );
+
+      return result;
+    });
+  }
+
+  Future<Paginator<Club>> searchClubByName(String name, int pageSize) async {
+    final authToken = await _authToken;
+
+    return Paginator.create(pageSize, (page, size) async {
+      final uri = Uri.parse(
+        '$_apiUrl/api/v1/clubs',
+      ).replace(
+          queryParameters: {
+            'name': name,
+            'page': page.toString(),
+            'size': size.toString(),
+          }
+      );
+
+      final response = await http.get(
+        uri,
+        headers: {
+          HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+          HttpHeaders.authorizationHeader: authToken.toString(),
+        },
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Erro ao buscar clubs com nome $name');
+      }
+
+      return Page<Club>.fromJson(
+        jsonDecode(response.body),
+            (json) => Club.fromJson(json as Map<String, dynamic>),
+      );
+    });
+  }
+
+  Future<Paginator<User>> findClubMembers(int pageSize, String clubId) async {
+    final authToken = await _authToken;
+
+    return Paginator.create(pageSize, (page, size) async {
+      final uri = Uri.parse(
+        '$_apiUrl/api/v1/clubs/$clubId/members'
+      ).replace(
+        queryParameters: {
+          'page': page.toString(),
+          'size': size.toString(),
+        }
+      );
+
+      final response = await http.get(
+        uri,
+        headers: {
+          HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+          HttpHeaders.authorizationHeader: authToken.toString(),
+        }
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Erro ao buscar membros do clube com ID $clubId');
+      }
+
+      return Page<User>.fromJson(
+        jsonDecode(response.body),
+        (json) => User.fromJson(json as Map<String, dynamic>),
+      );
+    });
+  }
+
 }

@@ -5,15 +5,32 @@ import 'package:booklub/domain/entities/clubs/activities/completed_reading.dart'
 import 'package:booklub/domain/entities/clubs/activities/new_meeting.dart';
 import 'package:booklub/domain/entities/clubs/activities/reading_goal.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
+import 'package:booklub/domain/entities/users/user.dart';
 import 'package:booklub/infra/clubs/club_repository.dart';
+import 'package:booklub/ui/core/view_models/async_change_notifier.dart';
+import 'package:booklub/ui/core/view_models/auth_view_model.dart';
 import 'package:booklub/utils/pagination/page.dart';
 import 'package:booklub/utils/pagination/paginator.dart';
-import 'package:flutter/material.dart' hide Page;
 
-class ClubProfileViewModel extends ChangeNotifier {
+class ClubProfileViewModel extends AsyncChangeNotifier {
 
+  // ### Dependencies
   final ClubRepository _clubRepository;
 
+  final AuthViewModel _authViewModel;
+
+  final String clubId;
+
+  // ### Constructors
+  ClubProfileViewModel({
+    required ClubRepository clubRepository,
+    required AuthViewModel authViewModel,
+    required this.clubId,
+  }): _clubRepository = clubRepository, _authViewModel = authViewModel {
+    _setClub(clubId);
+  }
+
+  // ### State
   final List<ClubActivity> _clubActivitiesDummies = [
     ReadingGoal(
         clubId: 'club123',
@@ -59,17 +76,32 @@ class ClubProfileViewModel extends ChangeNotifier {
 
   Club? _club;
 
-  Club? get club => _club;
+  @override
+  Club? get payload => _club;
 
-  Future<void> setClub(String clubId) async {
-    _club = await _clubRepository.findClubById(clubId);
+  Club? get club => payload;
+
+  Future<void> _setClub(String clubId) async {
+    clubId = clubId;
+    isLoading = true;
     notifyListeners();
+
+    try {
+      _club = await _clubRepository.findClubById(clubId);
+    } catch (e, trace) {
+      error = (object: e, stackTrace: trace);
+      _club = null;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
-  ClubProfileViewModel({
-    required ClubRepository clubRepository
-  }): _clubRepository = clubRepository;
+  void checkClubLoaded() {
+    if (club == null) throw StateError('Club with id $clubId was not loaded');
+  }
 
+  // ### Methods
   Future<Paginator<ClubActivity>> findClubActivities(
     int pageSize,
     [ClubActivityCategory? category]
@@ -98,6 +130,15 @@ class ClubProfileViewModel extends ChangeNotifier {
     Future.delayed(Duration(seconds: 2));
 
     return Paginator.create(pageSize, pageRetriever);
+  }
+
+  Future<Paginator<User>> getClubMembers(int pageSize) {
+    return _clubRepository.findClubMembers(pageSize, clubId);
+  }
+
+  Future<bool> isLoggedUserClubAdmin() async {
+    checkClubLoaded();
+    return club!.ownerId == (await _authViewModel.authData)!.user.id;
   }
 
 }

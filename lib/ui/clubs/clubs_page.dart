@@ -6,23 +6,28 @@ import 'package:booklub/ui/core/widgets/grids/infinite_grid_widget.dart';
 import 'package:booklub/ui/core/widgets/section_selector_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
 import 'package:flutter/material.dart' hide Page;
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 enum ClubsPageSection {participating, managed}
 
 class ClubsPage extends StatefulWidget {
+
   const ClubsPage({super.key, required this.title});
 
   final String title;
 
   @override
   State<ClubsPage> createState() => _ClubsPageState();
+
 }
 
 class _ClubsPageState extends State<ClubsPage> {
 
   ClubsPageSection section = ClubsPageSection.participating;
+
+  final Logger logger = Logger();
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +68,8 @@ class _ClubsPageState extends State<ClubsPage> {
     final clubsViewModel = context.watch<ClubsViewModel>();
     final scrollController = context.read<ScrollController>();
     final clubPaginatorFuture = section == ClubsPageSection.participating
-      ? clubsViewModel.findMyClubs(4)
-      : clubsViewModel.findManagedClubs(4);
+      ? clubsViewModel.findMyClubs(8)
+      : clubsViewModel.findManagedClubs(8);
 
     final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 1,
@@ -89,7 +94,9 @@ class _ClubsPageState extends State<ClubsPage> {
         childrenDelegateProvider: childrenDelegateProvider
       ),
       onLoading: () => Builder(builder: _buildLoadingPage),
-      onError: (_, _) => Builder(builder: _buildErrorPage),
+      onError: (e, trace) => Builder(
+          builder: (context) => _buildErrorPage(context, e, trace)
+      ),
     );
 
     return SliverPadding(
@@ -116,7 +123,13 @@ class _ClubsPageState extends State<ClubsPage> {
     );
   }
 
-  Widget _buildErrorPage(BuildContext context) {
+  Widget _buildErrorPage(
+      BuildContext context,
+      Object object,
+      StackTrace stackTrace
+  ) {
+    logger.e('Object: $object \n StackTrace: $stackTrace');
+
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 

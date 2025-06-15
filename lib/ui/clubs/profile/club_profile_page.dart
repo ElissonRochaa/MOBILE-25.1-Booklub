@@ -9,20 +9,17 @@ import 'package:sliver_tools/sliver_tools.dart';
 
 class ClubProfilePage extends StatelessWidget {
 
-  final String clubId;
-
   const ClubProfilePage({
     super.key,
-    required this.clubId,
   });
 
   @override
   Widget build(BuildContext context) {
     final viewModel = context.read<ClubProfileViewModel>();
 
-    return AsyncBuilder(
-      future: viewModel.setClub(clubId),
-      onRetrieved: (_) => Builder(builder: _buildPage),
+    return AsyncBuilder.fromAsyncChangeNotifier(
+      asyncChangeNotifier: viewModel,
+      onRetrieved: (club) => Builder(builder: _buildPage),
       onLoading: () => Builder(builder: _buildLoadingPage),
       onError: (_, _) => Builder(builder: _buildErrorPage),
     );
@@ -42,6 +39,7 @@ class ClubProfilePage extends StatelessWidget {
   }
 
   Widget _buildErrorPage(BuildContext context) {
+    final viewModel = context.read<ClubProfileViewModel>();
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -53,7 +51,7 @@ class ClubProfilePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'Club with id "${clubId}" not found! =(',
+              'Club with id "${viewModel.clubId}" not found! =(',
               style: textTheme.titleSmall!.copyWith(
                 color: colorScheme.error,
               ),
