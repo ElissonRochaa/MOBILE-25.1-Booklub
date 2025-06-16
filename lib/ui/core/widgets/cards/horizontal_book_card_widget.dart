@@ -71,7 +71,8 @@ class BookHorizontalCardWidget extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        //TODO: enviar para a página individual do livro
+        final isbn = book.isbn ?? 'sem-isbn';
+        context.push(Routes.individualBook(bookId: isbn));
       },
       borderRadius: borderRadius,
       child: Card(
