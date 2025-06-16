@@ -29,6 +29,7 @@ class BookSearchViewModel extends ChangeNotifier {
     return bookRepository.searchBooks(inpublisher: publisher, size: pageSize);
   }
 
+  //é assunto tema tipo "ficção", "terror"
   Future<Paginator<BookItem>> searchBooksBySubject(
     String subject,
     int pageSize,
