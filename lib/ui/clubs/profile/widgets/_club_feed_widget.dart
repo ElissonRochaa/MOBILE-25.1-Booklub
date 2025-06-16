@@ -51,7 +51,7 @@ class _ClubFeedWidgetState extends State<ClubFeedWidget> {
     final sections = [
       SectionSelectorItem(
         label: 'Atividades',
-        onSelect: () => setState(() => _FeedSection.activities),
+        onSelect: () => setState(() => section = _FeedSection.activities),
         isSelected: section == _FeedSection.activities,
       ),
       SectionSelectorItem(
