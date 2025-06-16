@@ -45,12 +45,13 @@ class _ClubProfilePageBodyWidgetState extends State<ClubProfilePageBodyWidget> {
 
   Widget _buildProfileInfo(BuildContext context) {
     final viewModel = context.watch<ClubProfileViewModel>();
+    final club = viewModel.club!;
 
     Widget onRetrieved(bool isLoggedUserClubAdmin) {
       final profileInfos = [
         ClubProfileInfoListItem(
           label: 'Membros',
-          number: 8,
+          number: club.totalMembers,
           onTap: () => _setSection(ProfileInfoSection.members),
           selected: selectedProfileInfoSection == ProfileInfoSection.members,
         ),
