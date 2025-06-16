@@ -10,7 +10,7 @@ Club _$ClubFromJson(Map<String, dynamic> json) => Club(
   id: json['id'] as String,
   name: json['name'] as String,
   creationDate: DateTime.parse(json['creationDate'] as String),
-  imageUrl: json['imageUrl'] as String,
+  imageUrl: json['imageUrl'] as String?,
   isPrivate: json['isPrivate'] as bool,
   ownerId: json['ownerId'] as String,
 );

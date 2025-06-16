@@ -1,10 +1,10 @@
 import 'package:booklub/domain/entities/clubs/activities/club_activity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'new_meeting.g.dart';
+part 'new_meeting_defined_activity.g.dart';
 
 @JsonSerializable()
-class NewMeeting extends ClubActivity {
+class NewMeetingDefinedActivity extends ClubActivity {
 
   final String bookId;
 
@@ -14,7 +14,7 @@ class NewMeeting extends ClubActivity {
 
   final DateTime date;
 
-  const NewMeeting({
+  const NewMeetingDefinedActivity({
     required super.clubId,
     required this.bookId,
     required this.location,
@@ -24,8 +24,8 @@ class NewMeeting extends ClubActivity {
     category: ClubActivityCategory.meetings
   );
 
-  factory NewMeeting.fromJson(Map<String, dynamic> json) => _$NewMeetingFromJson(json);
+  factory NewMeetingDefinedActivity.fromJson(Map<String, dynamic> json) => _$NewMeetingDefinedActivityFromJson(json);
 
-  Map<String, dynamic> toJson() => _$NewMeetingToJson(this);
+  Map<String, dynamic> toJson() => _$NewMeetingDefinedActivityToJson(this);
 
 }

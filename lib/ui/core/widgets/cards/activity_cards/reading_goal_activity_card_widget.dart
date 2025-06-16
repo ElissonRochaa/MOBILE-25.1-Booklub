@@ -1,4 +1,4 @@
-import 'package:booklub/domain/entities/clubs/activities/reading_goal.dart';
+import 'package:booklub/domain/entities/clubs/activities/new_reading_goal_defined_activity.dart';
 import 'package:booklub/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 
@@ -6,7 +6,7 @@ import 'activity_card_widget.dart';
 
 class ReadingGoalActivityCardWidget extends StatelessWidget {
 
-  final ReadingGoal readingGoal;
+  final NewReadingGoalDefinedActivity readingGoal;
 
   const ReadingGoalActivityCardWidget({
     super.key,
@@ -26,7 +26,7 @@ class ReadingGoalActivityCardWidget extends StatelessWidget {
             Icon(Icons.calendar_month_rounded),
             Text(DateFormatter.formatToDayMonthYear(readingGoal.startDate)),
             Icon(Icons.arrow_forward_rounded, size: 16),
-            Text(DateFormatter.formatToDayMonthYear(readingGoal.finishDate)),
+            Text(DateFormatter.formatToDayMonthYear(readingGoal.endDate)),
           ]
         ),
       ],

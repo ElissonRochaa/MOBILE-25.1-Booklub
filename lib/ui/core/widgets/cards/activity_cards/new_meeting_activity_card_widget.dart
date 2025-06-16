@@ -1,11 +1,11 @@
-import 'package:booklub/domain/entities/clubs/activities/new_meeting.dart';
+import 'package:booklub/domain/entities/clubs/activities/new_meeting_defined_activity.dart';
 import 'package:booklub/ui/core/widgets/cards/activity_cards/activity_card_widget.dart';
 import 'package:booklub/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 
 class NewMeetingActivityCardWidget extends StatelessWidget {
 
-  final NewMeeting newMeeting;
+  final NewMeetingDefinedActivity newMeeting;
 
   const NewMeetingActivityCardWidget({
     super.key,
