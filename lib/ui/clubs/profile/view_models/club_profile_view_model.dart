@@ -2,11 +2,13 @@ import 'dart:math';
 
 import 'package:booklub/domain/entities/clubs/activities/club_activity.dart';
 import 'package:booklub/domain/entities/clubs/activities/completed_reading.dart';
-import 'package:booklub/domain/entities/clubs/activities/new_meeting.dart';
-import 'package:booklub/domain/entities/clubs/activities/reading_goal.dart';
+import 'package:booklub/domain/entities/clubs/activities/new_meeting_defined_activity.dart';
+import 'package:booklub/domain/entities/clubs/activities/new_reading_goal_defined_activity.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/domain/entities/users/user.dart';
+import 'package:booklub/domain/reading_goals/entities/reading_goal.dart';
 import 'package:booklub/infra/clubs/club_repository.dart';
+import 'package:booklub/infra/reading_goals/reading_goals_repository.dart';
 import 'package:booklub/ui/core/view_models/async_change_notifier.dart';
 import 'package:booklub/ui/core/view_models/auth_view_model.dart';
 import 'package:booklub/utils/pagination/page.dart';
@@ -17,6 +19,8 @@ class ClubProfileViewModel extends AsyncChangeNotifier {
   // ### Dependencies
   final ClubRepository _clubRepository;
 
+  final ReadingGoalsRepository _readingGoalsRepository;
+
   final AuthViewModel _authViewModel;
 
   final String clubId;
@@ -24,21 +28,26 @@ class ClubProfileViewModel extends AsyncChangeNotifier {
   // ### Constructors
   ClubProfileViewModel({
     required ClubRepository clubRepository,
+    required ReadingGoalsRepository readingGoalsRepository,
     required AuthViewModel authViewModel,
     required this.clubId,
-  }): _clubRepository = clubRepository, _authViewModel = authViewModel {
+  }):
+    _clubRepository = clubRepository,
+    _readingGoalsRepository = readingGoalsRepository,
+    _authViewModel = authViewModel
+  {
     _setClub(clubId);
   }
 
   // ### State
   final List<ClubActivity> _clubActivitiesDummies = [
-    ReadingGoal(
+    NewReadingGoalDefinedActivity(
         clubId: 'club123',
         bookId: 'book456',
         startDate: DateTime(2023, 1, 15),
-        finishDate: DateTime(2023, 2, 28)
+        endDate: DateTime(2023, 2, 28)
     ),
-    NewMeeting(
+    NewMeetingDefinedActivity(
         clubId: 'club789',
         bookId: 'book012',
         location: 'Central Park Cafe',
@@ -52,13 +61,13 @@ class ClubProfileViewModel extends AsyncChangeNotifier {
         startDate: DateTime(2023, 2, 1),
         finishDate: DateTime(2023, 2, 20)
     ),
-    ReadingGoal(
+    NewReadingGoalDefinedActivity(
       clubId: 'clubXYZ',
       bookId: 'bookDEF',
       startDate: DateTime(2023, 4, 1),
-      finishDate: DateTime(2023, 5, 15),
+      endDate: DateTime(2023, 5, 15),
     ),
-    NewMeeting(
+    NewMeetingDefinedActivity(
         clubId: 'clubLMN',
         bookId: 'bookOPQ',
         location: 'Library Community Room',
@@ -139,6 +148,10 @@ class ClubProfileViewModel extends AsyncChangeNotifier {
   Future<bool> isLoggedUserClubAdmin() async {
     checkClubLoaded();
     return club!.ownerId == (await _authViewModel.authData)!.user.id;
+  }
+
+  Future<Paginator<ReadingGoal>> getClubReadingGoals(int pageSize) async {
+    return _readingGoalsRepository.findReadingGoalsByClubId(clubId, pageSize);
   }
 
 }

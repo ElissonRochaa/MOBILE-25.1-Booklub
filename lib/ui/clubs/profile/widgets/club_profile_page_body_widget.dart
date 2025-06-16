@@ -1,5 +1,5 @@
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
-import 'package:booklub/ui/clubs/profile/widgets/_club_feed.dart';
+import 'package:booklub/ui/clubs/profile/widgets/_club_feed_widget.dart';
 import 'package:booklub/ui/clubs/profile/widgets/_club_members_list_widget.dart';
 import 'package:booklub/ui/clubs/profile/widgets/_club_profile_info_list_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
@@ -33,7 +33,7 @@ class _ClubProfilePageBodyWidgetState extends State<ClubProfilePageBodyWidget> {
   Widget build(BuildContext context) {
     final pageBody = selectedProfileInfoSection != null
       ? Builder(builder: _buildProfileInfoDetails)
-      : ClubActivitiesListWidget();
+      : ClubFeedWidget();
 
     return MultiSliver(
       children: [
