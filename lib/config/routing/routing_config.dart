@@ -69,6 +69,7 @@ abstract final class RoutingConfig {
           return ChangeNotifierProvider(
             create: (context) => ClubProfileViewModel(
               clubRepository: context.read(),
+              readingGoalsRepository: context.read(),
               authViewModel: context.read(),
               clubId: clubId!,
             ),
@@ -191,7 +192,11 @@ abstract final class RoutingConfig {
               providers: [
                 ChangeNotifierProvider(
                   create:
-                      (_) => ExploreViewModel(userRepository: context.read(), clubRepository: context.read()),
+                      (_) => ExploreViewModel(
+                        userRepository: context.read(),
+                        bookApiRepository: context.read(),
+                        clubRepository: context.read()
+                      ),
                 ),
                 ChangeNotifierProvider(create: (_) => SearchQueryNotifier()),
               ],
