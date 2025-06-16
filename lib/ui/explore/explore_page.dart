@@ -94,7 +94,9 @@ class _ExplorePageState extends State<ExplorePage> {
               item is User
                   ? UserHorizontalCardWidget(user: item)
                   : item is Club
-                  ? HorizontalClubCardWidget(club: item) //isso aqui tá feio pra krl mas por enquanto ta funcionando
+                  ? HorizontalClubCardWidget(
+                    club: item,
+                  ) //isso aqui tá feio pra krl mas por enquanto ta funcionando
                   : SizedBox.shrink(),
         );
 
@@ -108,7 +110,7 @@ class _ExplorePageState extends State<ExplorePage> {
           (book) => BookHorizontalCardWidget(book: book),
         );
         break;
-        
+
       case ExploreSection.clubs:
         Future<Paginator<Club>> futurePaginator = exploreViewModel
             .searchClubByName(query, 8);

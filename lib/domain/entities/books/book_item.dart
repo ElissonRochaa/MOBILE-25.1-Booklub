@@ -15,11 +15,10 @@ class BookItem {
     this.isbn,
   });
 
-// a api vai me mandar um json com um mapa chave-valor. 
-// o dart vai receber como um map e a factory fromJson vai converter esse mapa ao criar um bookItem usando os valores do mapa json.
+  // a api vai me mandar um json com um mapa chave-valor.
+  // o dart vai receber como um map e a factory fromJson vai converter esse mapa ao criar um bookItem usando os valores do mapa json.
 
-
-// o construtor normal é quando monta do 0. o factory já sabe como vai montar a partir do que recebe (algo diferente).
+  // o construtor normal é quando monta do 0. o factory já sabe como vai montar a partir do que recebe (algo diferente).
 
   factory BookItem.fromJson(Map<String, dynamic> json) {
     return BookItem(

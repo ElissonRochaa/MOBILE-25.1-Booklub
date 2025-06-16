@@ -103,7 +103,12 @@ abstract final class RoutingConfig {
         builder: (context, state) {
           return ScrollBaseLayout(
             sliver: ChangeNotifierProvider(
-              create: (_) => CreateClubViewModel(authRepository: context.read(), clubRepository: context.read(), ioRepository: context.read()),
+              create:
+                  (_) => CreateClubViewModel(
+                    authRepository: context.read(),
+                    clubRepository: context.read(),
+                    ioRepository: context.read(),
+                  ),
               child: CreateClubPage(),
             ),
           );
@@ -187,9 +192,13 @@ abstract final class RoutingConfig {
               providers: [
                 ChangeNotifierProvider(
                   create:
-                      (_) => ExploreViewModel(userRepository: context.read(), clubRepository: context.read()),
+                      (_) => ExploreViewModel(
+                        userRepository: context.read(),
+                        clubRepository: context.read(),
+                        bookApiRepository: context.read(),
+                      ),
+                  ChangeNotifierProvider(create: (_) => SearchQueryNotifier()),
                 ),
-                ChangeNotifierProvider(create: (_) => SearchQueryNotifier()),
               ],
               child: ExploreLayout(sliver: ExplorePage()),
             ),
