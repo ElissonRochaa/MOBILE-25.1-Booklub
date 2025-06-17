@@ -17,6 +17,8 @@ class Club {
 
   final String ownerId;
 
+  final int totalMembers;
+
 
   const Club({
     required this.id,
@@ -25,6 +27,7 @@ class Club {
     required this.imageUrl,
     required this.isPrivate,
     required this.ownerId,
+    required this.totalMembers
   });
 
   factory Club.fromJson(Map<String, dynamic> json) => _$ClubFromJson(json);

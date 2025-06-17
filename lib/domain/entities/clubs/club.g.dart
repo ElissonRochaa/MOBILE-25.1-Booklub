@@ -10,9 +10,10 @@ Club _$ClubFromJson(Map<String, dynamic> json) => Club(
   id: json['id'] as String,
   name: json['name'] as String,
   creationDate: DateTime.parse(json['creationDate'] as String),
-  imageUrl: json['imageUrl'] as String,
+  imageUrl: json['imageUrl'] as String?,
   isPrivate: json['isPrivate'] as bool,
   ownerId: json['ownerId'] as String,
+  totalMembers: (json['totalMembers'] as num).toInt(),
 );
 
 Map<String, dynamic> _$ClubToJson(Club instance) => <String, dynamic>{
@@ -22,4 +23,5 @@ Map<String, dynamic> _$ClubToJson(Club instance) => <String, dynamic>{
   'imageUrl': instance.imageUrl,
   'isPrivate': instance.isPrivate,
   'ownerId': instance.ownerId,
+  'totalMembers': instance.totalMembers,
 };

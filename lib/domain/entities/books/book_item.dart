@@ -1,10 +1,19 @@
 import 'package:flutter/widgets.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'book_item.g.dart';
+
+@JsonSerializable()
 class BookItem {
+
   final String? title;
+
   final String? authors;
+
   final String? description;
+
   final String? thumbnail;
+
   final String? isbn;
 
   BookItem({
@@ -15,18 +24,8 @@ class BookItem {
     this.isbn,
   });
 
-  // a api vai me mandar um json com um mapa chave-valor.
-  // o dart vai receber como um map e a factory fromJson vai converter esse mapa ao criar um bookItem usando os valores do mapa json.
+  factory BookItem.fromJson(Map<String, dynamic> json) => _$BookItemFromJson(json);
 
-  // o construtor normal é quando monta do 0. o factory já sabe como vai montar a partir do que recebe (algo diferente).
+  Map<String, dynamic> toJson() => _$BookItemToJson(this);
 
-  factory BookItem.fromJson(Map<String, dynamic> json) {
-    return BookItem(
-      title: json['title'],
-      authors: json['authors'],
-      description: json['description'],
-      thumbnail: json['thumbnail'],
-      isbn: json['isbn'],
-    );
-  }
 }

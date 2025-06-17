@@ -1,4 +1,6 @@
 import 'dart:io';
+
+import 'package:booklub/utils/http/http_utils.dart';
 import 'package:http/http.dart' as http;
 
 class UserCreationDTO {
@@ -31,15 +33,13 @@ class UserCreationDTO {
     request.fields['lastName'] = lastName;
     request.fields['password'] = password;
 
-    if (image != null) {
-      print(image!.path!);
+    if (image != null && HttpUtils.isImage(image!)) {
       request.files.add(await http.MultipartFile.fromPath(
         'image',
-        image!.path
+        image!.path,
+        contentType: HttpUtils.resolveMediaType(image!)
       ));
     }
-
-
   }
 
 }
