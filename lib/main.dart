@@ -3,6 +3,7 @@ import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:booklub/infra/clubs/club_repository.dart';
 import 'package:booklub/infra/io/io_repository.dart';
 import 'package:booklub/infra/user/user_repository.dart';
+import 'package:booklub/ui/core/splash_animations/splash_wrapper.dart';
 import 'package:booklub/ui/core/view_models/auth_view_model.dart';
 import 'package:booklub/ui/login/view_models/login_view_model.dart';
 import 'package:booklub/utils/validation/input_validators.dart';
@@ -48,11 +49,13 @@ class MyApp extends StatelessWidget {
     final themeContext = context.watch<ThemeContext>();
     final router = context.read<GoRouter>();
 
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: 'Booklub',
-      theme: themeContext.activeTheme.themeData,
-      routerConfig: router,
+    return SplashWrapper(
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: 'Booklub',
+        theme: themeContext.activeTheme.themeData,
+        routerConfig: router,
+      ),
     );
   }
 }
