@@ -1,5 +1,5 @@
-import 'package:booklub/domain/activities/activity.dart';
-import 'package:booklub/domain/activities/club_activities/club_activity.dart';
+import 'package:booklub/domain/activities/entities/activity.dart';
+import 'package:booklub/domain/activities/club_activities/entities/club_activity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'meeting_defined_activity.g.dart';

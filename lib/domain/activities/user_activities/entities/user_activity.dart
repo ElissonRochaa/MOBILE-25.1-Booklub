@@ -1,4 +1,4 @@
-import 'package:booklub/domain/activities/activity.dart';
+import 'package:booklub/domain/activities/entities/activity.dart';
 
 abstract class UserActivity extends Activity {
 

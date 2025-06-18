@@ -1,5 +1,5 @@
-import 'package:booklub/domain/activities/activity.dart';
-import 'package:booklub/domain/activities/user_activities/user_activity.dart';
+import 'package:booklub/domain/activities/entities/activity.dart';
+import 'package:booklub/domain/activities/user_activities/entities/user_activity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_completed_reading_activity.g.dart';

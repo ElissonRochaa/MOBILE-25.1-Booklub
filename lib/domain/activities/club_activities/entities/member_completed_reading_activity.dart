@@ -1,4 +1,4 @@
-import 'package:booklub/domain/activities/activity.dart';
+import 'package:booklub/domain/activities/entities/activity.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'club_activity.dart';

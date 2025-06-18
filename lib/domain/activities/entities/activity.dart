@@ -1,15 +1,14 @@
-import 'package:booklub/domain/activities/club_activities/meeting_defined_activity.dart';
-import 'package:booklub/domain/activities/club_activities/member_completed_reading_activity.dart';
-import 'package:booklub/domain/activities/club_activities/reading_goal_defined_activity.dart';
+import 'package:booklub/domain/activities/club_activities/entities/meeting_defined_activity.dart';
+import 'package:booklub/domain/activities/club_activities/entities/member_completed_reading_activity.dart';
+import 'package:booklub/domain/activities/club_activities/entities/reading_goal_defined_activity.dart';
+import 'package:booklub/domain/activities/user_activities/entities/user_completed_reading_activity.dart';
 import 'package:json_annotation/json_annotation.dart';
-
-import 'user_activities/user_completed_reading_activity.dart';
 
 part 'activity.g.dart';
 
 @JsonEnum(alwaysCreate: true)
 enum ActivityType {
-  
+
   @JsonValue('MEETING_DEFINED')
   meetingDefined,
 
@@ -21,7 +20,7 @@ enum ActivityType {
 
   @JsonValue('USER_COMPLETED_READING')
   userCompletedReading,
-  
+
 }
 
 abstract class Activity {
