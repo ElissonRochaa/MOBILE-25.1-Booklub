@@ -25,6 +25,7 @@ import 'package:provider/provider.dart';
 import 'package:booklub/ui/book/individual_book_page.dart';
 import 'package:booklub/ui/user/profile_page.dart';
 import 'package:booklub/ui/user/edit/edit_profile_page.dart';
+import 'package:booklub/ui/notifications/notifications_page.dart';
 
 abstract final class RoutingConfig {
   static GoRouter createRouter(AuthViewModel authViewModel) => GoRouter(
@@ -87,6 +88,13 @@ abstract final class RoutingConfig {
             ),
           );
         },
+      ),
+      GoRoute(
+        name: 'Notifications',
+        path: Routes.notifications,
+        builder:
+            (context, state) =>
+                const ScrollBaseLayout(sliver: NotificationsPage()),
       ),
       GoRoute(
         name: 'Edit Profile',
