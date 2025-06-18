@@ -25,7 +25,11 @@ abstract final class ThemeConfig {
     labelMedium: TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 16
-    )
+    ),
+    labelSmall: TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 14
+    ),
   );
 
   static AppTheme get lightTheme => AppTheme(
@@ -35,7 +39,7 @@ abstract final class ThemeConfig {
         primary: CustomColors.violet,
         onPrimary: CustomColors.white,
         secondary: CustomColors.violetBlue,
-        onSecondary: CustomColors.darkWhite,
+        onSecondary: CustomColors.white,
         error: CustomColors.red,
         onError: CustomColors.white,
         surface: CustomColors.white,

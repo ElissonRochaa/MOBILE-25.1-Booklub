@@ -9,9 +9,9 @@ class Club {
 
   final String name;
 
-  final DateTime creationTime;
+  final DateTime creationDate;
 
-  final String imageUrl;
+  final String? imageUrl;
 
   final bool isPrivate;
 
@@ -21,7 +21,7 @@ class Club {
   const Club({
     required this.id,
     required this.name,
-    required this.creationTime,
+    required this.creationDate,
     required this.imageUrl,
     required this.isPrivate,
     required this.ownerId,

@@ -3,19 +3,19 @@ import 'package:booklub/config/theme/theme_config.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class ActivityCard extends StatelessWidget {
+class ActivityCardWidget extends StatelessWidget {
 
   final String activity;
 
   final String title;
 
-  final DateTime date;
+  final Widget additionalContent;
 
-  const ActivityCard({
+  const ActivityCardWidget({
     super.key,
     required this.activity,
     required this.title,
-    required this.date,
+    required this.additionalContent,
   });
 
   @override
@@ -35,7 +35,7 @@ class ActivityCard extends StatelessWidget {
       ),
     );
 
-    final labels = [
+    final content = [
       Text(activity),
       Text(
         title,
@@ -45,23 +45,21 @@ class ActivityCard extends StatelessWidget {
           color: colorScheme.primary
         ),
       ),
-      Text(
-        '${date.day.toString().padLeft(2, '0')}/'
-        '${date.month.toString().padLeft(2, '0')}/${date.year}'
-      )
+      additionalContent
     ];
 
     return Card(
       color: colorScheme.white,
       elevation: 4,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
             Expanded(
               child: Column(
+                spacing: 4,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: labels,
+                children: content,
               ),
             ),
             AspectRatio(

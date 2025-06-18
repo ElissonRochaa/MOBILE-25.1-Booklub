@@ -5,21 +5,27 @@ import 'package:provider/provider.dart';
 import '../widgets/bottom_bars/base_bottom_bar_widget.dart';
 
 class ScrollBaseLayout extends StatefulWidget {
+
   final Widget sliver;
+
+  final bool appBarVisible;
 
   final bool bottomBarVisible;
 
   const ScrollBaseLayout({
     super.key,
     required this.sliver,
+    this.appBarVisible = true,
     this.bottomBarVisible = true,
   });
 
   @override
   State<ScrollBaseLayout> createState() => _ScrollBaseLayoutState();
+
 }
 
 class _ScrollBaseLayoutState extends State<ScrollBaseLayout> {
+
   late final ScrollController _scrollController;
 
   @override
@@ -39,8 +45,9 @@ class _ScrollBaseLayoutState extends State<ScrollBaseLayout> {
     final screenHeight = MediaQuery.of(context).size.height;
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final appBarHeight = screenHeight * 0.064;
-    final bottomBarHeight =
-        (screenHeight - statusBarHeight - appBarHeight) * 0.08;
+    final bottomBarHeight = widget.bottomBarVisible
+      ? (screenHeight - statusBarHeight - appBarHeight) * 0.08
+      : 0.0;
     final systemNavBarHeight = MediaQuery.of(context).padding.bottom;
 
     final body = Stack(
@@ -49,12 +56,15 @@ class _ScrollBaseLayoutState extends State<ScrollBaseLayout> {
           child: Image.asset(
             'assets/images/light-background.png',
             fit: BoxFit.cover,
+            opacity:  const AlwaysStoppedAnimation(0.15),
           ),
         ),
         CustomScrollView(
           controller: _scrollController,
           slivers: [
-            BaseAppBarWidget.sliver(),
+            if (widget.appBarVisible) BaseAppBarWidget.sliver(
+              height: appBarHeight
+            ),
             SliverPadding(
               padding: EdgeInsets.only(
                 bottom: systemNavBarHeight + bottomBarHeight,
@@ -66,13 +76,13 @@ class _ScrollBaseLayoutState extends State<ScrollBaseLayout> {
       ],
     );
 
-    final bottomBar =
-        widget.bottomBarVisible
-            ? BaseBottomBarWidget(height: bottomBarHeight)
-            : null;
+    final bottomBar = widget.bottomBarVisible
+      ? BaseBottomBarWidget(height: bottomBarHeight)
+      : null;
 
-    final floatingActionButton =
-        widget.bottomBarVisible ? BaseFloatingActionButtonWidget() : null;
+    final floatingActionButton = widget.bottomBarVisible
+      ? BaseFloatingActionButtonWidget()
+      : null;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -83,4 +93,5 @@ class _ScrollBaseLayoutState extends State<ScrollBaseLayout> {
       floatingActionButton: floatingActionButton,
     );
   }
+
 }

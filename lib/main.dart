@@ -1,38 +1,43 @@
 import 'package:booklub/config/theme/theme_context.dart';
+import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:booklub/infra/clubs/club_repository.dart';
-import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
+import 'package:booklub/infra/io/io_repository.dart';
+import 'package:booklub/infra/user/user_repository.dart';
+import 'package:booklub/ui/core/view_models/auth_view_model.dart';
+import 'package:booklub/ui/login/view_models/login_view_model.dart';
+import 'package:booklub/utils/validation/input_validators.dart';
 import 'package:flutter/material.dart';
 import 'package:booklub/config/routing/routing_config.dart';
 import 'package:go_router/go_router.dart' show GoRouter;
 import 'package:provider/provider.dart';
 import 'config/theme/theme_config.dart';
-import 'ui/clubs/view_models/clubs_view_model.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider<ThemeContext>.value(
-          value: ThemeConfig.themeContext
-      ),
-      Provider<GoRouter>.value(
-        value: RoutingConfig.router,
-      ),
-      Provider<ClubRepository>(
-        create: (context) => ClubRepository(),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => ClubsViewModel(
-          clubRepository: context.read(),
+  final apiUrl = 'http://172.24.64.1:8081';
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<AuthRepository>(
+          // create: (context) => AuthRepository(apiUrl: apiUrl),
+          create: (context) => AuthRepository(apiUrl: apiUrl)
         ),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => ClubProfileViewModel(
-          clubRepository: context.read(),
+        ChangeNotifierProvider<AuthViewModel>(
+          create: (context) => AuthViewModel(authRepository: context.read()),
         ),
-      )
-    ],
-    child: const MyApp(),
-  ));
+        Provider<InputValidators>(create: (context) => InputValidators()),
+        ChangeNotifierProvider<ThemeContext>.value(
+          value: ThemeConfig.themeContext,
+        ),
+        Provider<GoRouter>(
+          create: (context) => RoutingConfig.createRouter(context.read()),
+        ),
+        Provider<ClubRepository>(create: (context) => ClubRepository(apiUrl: apiUrl, authRepository: context.read())),
+        Provider<UserRepository>(create: (context) => UserRepository(apiUrl: apiUrl, authRepository: context.read())),
+        Provider<IORepository>(create: (context) => IORepository()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -51,5 +56,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

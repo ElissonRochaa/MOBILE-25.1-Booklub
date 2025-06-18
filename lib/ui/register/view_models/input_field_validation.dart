@@ -1,5 +1,5 @@
 class InputFieldValidation {
-  //essa classe aqui tá abertissima pra mudança, pq as logicas de validação aqui foram bem básicas. mas é bem fácil mudar. então tá de boa por enquanto
+
   String? validatePassword(String password) {
     if (password.isEmpty) {
       return "O campo de senha não pode ser vázio!";

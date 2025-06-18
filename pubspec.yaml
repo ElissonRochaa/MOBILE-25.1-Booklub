@@ -16,6 +16,11 @@ dependencies:
   provider: ^6.1.4
   sliver_tools: ^0.2.12
   json_annotation: ^4.9.0
+  file_picker: ^10.1.9
+  http: ^1.4.0
+  logger: ^2.5.0
+  intl: ^0.20.2
+  flutter_secure_storage: ^9.2.4
 
 dev_dependencies:
   flutter_test:

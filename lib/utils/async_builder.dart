@@ -1,5 +1,16 @@
 import 'package:flutter/material.dart';
 
+class AsyncBuilderException implements Exception {
+
+  final String message;
+
+  const AsyncBuilderException(this.message);
+
+  @override
+  String toString() => 'AsyncBuilderException: $message';
+
+}
+
 class AsyncBuilder<T> extends StatelessWidget {
 
   final Future<T> future;
@@ -24,14 +35,16 @@ class AsyncBuilder<T> extends StatelessWidget {
       future: future,
       builder: (context, snapshot) => switch (snapshot.connectionState) {
         ConnectionState.waiting => onLoading(),
-        ConnectionState.done when snapshot.hasError => onError(
-            snapshot.error!,
-            snapshot.stackTrace!
+        ConnectionState.done => (snapshot.hasError
+          ? onError(
+              snapshot.error!,
+              snapshot.stackTrace!
+            )
+          : onRetrieved(
+              snapshot.data as T
+            )
         ),
-        ConnectionState.done when snapshot.hasData => onRetrieved(
-          snapshot.data as T
-        ),
-        _ => SizedBox.shrink(),
+        _ => throw AsyncBuilderException('Could not resolve future.'),
       },
     );
   }

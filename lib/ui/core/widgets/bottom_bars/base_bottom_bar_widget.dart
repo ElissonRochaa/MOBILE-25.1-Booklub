@@ -31,6 +31,18 @@ class BaseBottomBarWidget extends StatelessWidget {
 
     final navigationIcons = [
       buildNavIcon(
+        icon: Icons.home_rounded,
+        selected: currentRoute == Routes.home,
+        destination: Routes.home,
+      ),
+      Spacer(flex: 1),
+      buildNavIcon(
+        icon: Icons.search_rounded,
+        selected: currentRoute == Routes.explore,
+        destination: Routes.explore,
+      ),
+      Spacer(flex: 2),
+      buildNavIcon(
         icon: Icons.group,
         selected: currentRoute == Routes.clubs,
         destination: Routes.clubs,

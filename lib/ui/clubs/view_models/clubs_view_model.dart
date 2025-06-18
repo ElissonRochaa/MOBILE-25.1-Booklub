@@ -15,6 +15,10 @@ class ClubsViewModel extends ChangeNotifier {
     return clubRepository.findClubsByUserId(pageSize, '1');
   }
 
+  Future<Paginator<Club>> findManagedClubs(int pageSize) async {
+    return clubRepository.findClubsByUserId(pageSize, '1');
+  }
+
   Future<Paginator<Club>> findRecentClubs(int pageSize) async {
     return clubRepository.findClubsByUserId(pageSize, '1');
   }
