@@ -20,7 +20,7 @@ abstract final class Routes {
 
   static const String book = '/book';
 
-  static String individualBook({String? bookId = ':id'}) => '$book/$bookId';
+  static String individualBook({String bookId = ':id'}) => '$book/$bookId';
 
   static String explore = '/explore';
 

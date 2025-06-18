@@ -64,6 +64,16 @@ class BookHorizontalCardWidget extends StatelessWidget {
                 ),
               ],
             ),
+            if (book.datePublished != null && book.datePublished!.length >= 4)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  book.datePublished!.substring(0, 4), // mostra só o ano
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurface.withOpacity(0.6),
+                      ),
+                ),
+              ),
           ],
         ),
       ),
@@ -71,8 +81,8 @@ class BookHorizontalCardWidget extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        final isbn = book.isbn ?? 'sem-isbn';
-        context.push(Routes.individualBook(bookId: isbn));
+        final id = book.id ?? 'sem-volumeId';
+        context.push(Routes.individualBook(bookId: id));
       },
       borderRadius: borderRadius,
       child: Card(
