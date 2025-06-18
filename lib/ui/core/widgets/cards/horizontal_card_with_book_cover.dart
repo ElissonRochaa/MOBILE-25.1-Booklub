@@ -26,10 +26,11 @@ class HorizontalCardWithBookCover extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     final cardTitle = Text(
-        'Meta de Leitura',
+        title,
         style: textTheme.labelLarge!.copyWith(
-            fontFamily: 'Navicula',
-            color: colorScheme.primary
+          fontFamily: 'Navicula',
+          color: colorScheme.primary,
+          fontWeight: FontWeight.w700
         )
     );
 
@@ -43,15 +44,20 @@ class HorizontalCardWithBookCover extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                spacing: 8,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  cardTitle,
-                  ...?children
-                ],
+              Expanded(
+                child: Column(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    cardTitle,
+                    ...?children
+                  ],
+                ),
               ),
-              Builder(builder: _buildBookCover)
+              SizedBox(
+                height: double.infinity,
+                child: Builder(builder: _buildBookCover),
+              )
             ],
           ),
         ),

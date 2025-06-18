@@ -70,6 +70,7 @@ abstract final class RoutingConfig {
             create: (context) => ClubProfileViewModel(
               clubRepository: context.read(),
               readingGoalsRepository: context.read(),
+              meetingsRepository: context.read(),
               authViewModel: context.read(),
               clubId: clubId!,
             ),

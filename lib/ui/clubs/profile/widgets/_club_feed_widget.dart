@@ -2,6 +2,7 @@ import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/books/book_item.dart';
 import 'package:booklub/domain/entities/clubs/activities/club_activity.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
+import 'package:booklub/ui/core/widgets/cards/horizontal_meeting_card_widget.dart';
 import 'package:booklub/ui/core/widgets/cards/horizontal_reading_goal_card_widget.dart';
 import 'package:booklub/ui/core/widgets/grids/infinite_grid_widget.dart';
 import 'package:booklub/ui/core/widgets/section_selector_widget.dart';
@@ -39,7 +40,7 @@ class _ClubFeedWidgetState extends State<ClubFeedWidget> {
         switch (section) {
           _FeedSection.activities => Placeholder(),
           _FeedSection.readingGoals => _buildReadingGoalsList(),
-          _FeedSection.meetings => Placeholder(),
+          _FeedSection.meetings => _buildMeetingsList(),
         },
       ],
     );
@@ -98,7 +99,6 @@ class _ClubFeedWidgetState extends State<ClubFeedWidget> {
             readingGoal: item,
             club: viewModel.club!,
             bookItem: BookItem(), // TODO Implementar busca por livro
-            showClubHeader: true
           ),
         )
       ),
@@ -107,6 +107,34 @@ class _ClubFeedWidgetState extends State<ClubFeedWidget> {
         builder: (context) => _buildOnErrorList(
           context,
           'Erro ao buscar leituras',
+          e,
+          trace
+        )
+      )
+    );
+  }
+
+  Widget _buildMeetingsList() {
+    final viewModel = context.read<ClubProfileViewModel>();
+
+    return AsyncBuilder(
+      future: viewModel.getClubMeetings(10),
+      onRetrieved: (paginator) => Builder(
+        builder: (context) => _buildList(
+          context,
+        paginator,
+          (item) => HorizontalMeetingCardWidget(
+          meeting: item,
+          club: viewModel.club!,
+          book: BookItem(title: 'O Mundo de Sopheia'), // TODO Implementar busca por livro
+          ),
+        )
+      ),
+      onLoading: () => Builder(builder: _buildOnLoadingList),
+      onError: (e, trace) => Builder(
+        builder: (context) => _buildOnErrorList(
+          context,
+          'Erro ao buscar encontros',
           e,
           trace
         )
