@@ -1,3 +1,4 @@
+import 'package:booklub/config/env/env_config.dart';
 import 'package:booklub/config/providers/providers_config.dart';
 import 'package:booklub/config/theme/theme_context.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,8 @@ import 'package:go_router/go_router.dart' show GoRouter;
 import 'package:provider/provider.dart';
 
 void main() {
+  EnvConfig.checkEnvVars();
+
   runApp(
     MultiProvider(
       providers: ProvidersConfig.providers,
