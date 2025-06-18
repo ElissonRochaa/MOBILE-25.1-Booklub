@@ -12,13 +12,9 @@ class BookProfileViewModel extends ChangeNotifier {
   BookProfileViewModel({required BookApiRepository bookRepository})
       : _bookRepository = bookRepository;
 
-  Future<void> setBook(String isbn) async {
-    final paginator = await _bookRepository.searchBooks(isbn: isbn, size: 1);
-    if (paginator.content.isNotEmpty) {
-      _book = paginator.content.first;
-    } else {
-      _book = null;
-    }
-    notifyListeners();
-  }
+Future<void> setBook(String volumeId) async {
+  _book = await _bookRepository.getBookById(volumeId);
+  notifyListeners();
+}
+
 }

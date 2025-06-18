@@ -8,7 +8,7 @@ import 'package:booklub/ui/book/widgets/stats_card_widget.dart';
 class IndividualBookPage extends StatelessWidget {
   const IndividualBookPage({super.key, required this.bookId});
 
-  final String bookId; // o isbn
+  final String bookId; // o volumeId do livro
 
   @override
   Widget build(BuildContext context) {

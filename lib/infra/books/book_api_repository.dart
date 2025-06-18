@@ -19,11 +19,13 @@ class BookApiRepository {
   }) : _apiUrl = apiUrl, _authRepository = authRepository;
 
   Future<Paginator<BookItem>> searchBooks({
-    String? intitle,
+    String? id,
+    required String intitle,
     String? inauthor,
     String? inpublisher,
     String? subject,
     String? isbn,
+    String? publishedDate,
     int page = 0,
     int size = 10,
   }) async {
@@ -34,11 +36,13 @@ class BookApiRepository {
         '$_apiUrl/api/v1/books/search',
       ).replace(
         queryParameters: {
-          if (intitle != null && intitle.isNotEmpty) 'intitle': intitle,
+          if (id != null && id.isNotEmpty) 'id': id,
+          if (intitle.isNotEmpty) 'intitle': intitle,
           if (inauthor != null && inauthor.isNotEmpty) 'inauthor': inauthor,
           if (inpublisher != null && inpublisher.isNotEmpty) 'inpublisher': inpublisher,
           if (subject != null && subject.isNotEmpty) 'subject': subject,
           if (isbn != null && isbn.isNotEmpty) 'isbn': isbn,
+          if (publishedDate != null && publishedDate.isNotEmpty) 'publishedDate': publishedDate,
           'page': page.toString(),
           'size': pageSize.toString(),
         }
@@ -62,4 +66,26 @@ class BookApiRepository {
       );
     });
   }
+
+  Future<BookItem> getBookById(String volumeId) async {
+  final authToken = (await _authRepository.getAuthData())!.token;
+
+  final uri = Uri.parse('$_apiUrl/api/v1/books/$volumeId');
+
+  final response = await http.get(
+    uri,
+    headers: {
+      HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+      HttpHeaders.authorizationHeader: authToken.toString(),
+    },
+  );
+
+  if (response.statusCode != 200) {
+    throw Exception('Erro ao buscar livro por ID: ${response.statusCode}');
+  }
+
+  final json = jsonDecode(response.body);
+  return BookItem.fromJson(json);
+}
+
 }
