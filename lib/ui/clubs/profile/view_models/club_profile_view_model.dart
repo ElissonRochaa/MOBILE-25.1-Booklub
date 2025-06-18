@@ -6,8 +6,10 @@ import 'package:booklub/domain/entities/clubs/activities/new_meeting_defined_act
 import 'package:booklub/domain/entities/clubs/activities/new_reading_goal_defined_activity.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/domain/entities/users/user.dart';
+import 'package:booklub/domain/meetings/entities/meeting.dart';
 import 'package:booklub/domain/reading_goals/entities/reading_goal.dart';
 import 'package:booklub/infra/clubs/club_repository.dart';
+import 'package:booklub/infra/meetings/meetings_repository.dart';
 import 'package:booklub/infra/reading_goals/reading_goals_repository.dart';
 import 'package:booklub/ui/core/view_models/async_change_notifier.dart';
 import 'package:booklub/ui/core/view_models/auth_view_model.dart';
@@ -21,6 +23,8 @@ class ClubProfileViewModel extends AsyncChangeNotifier {
 
   final ReadingGoalsRepository _readingGoalsRepository;
 
+  final MeetingsRepository _meetingsRepository;
+
   final AuthViewModel _authViewModel;
 
   final String clubId;
@@ -29,11 +33,13 @@ class ClubProfileViewModel extends AsyncChangeNotifier {
   ClubProfileViewModel({
     required ClubRepository clubRepository,
     required ReadingGoalsRepository readingGoalsRepository,
+    required MeetingsRepository meetingsRepository,
     required AuthViewModel authViewModel,
     required this.clubId,
   }):
     _clubRepository = clubRepository,
     _readingGoalsRepository = readingGoalsRepository,
+    _meetingsRepository = meetingsRepository,
     _authViewModel = authViewModel
   {
     _setClub(clubId);
@@ -152,6 +158,10 @@ class ClubProfileViewModel extends AsyncChangeNotifier {
 
   Future<Paginator<ReadingGoal>> getClubReadingGoals(int pageSize) async {
     return _readingGoalsRepository.findReadingGoalsByClubId(clubId, pageSize);
+  }
+
+  Future<Paginator<Meeting>> getClubMeetings(int pageSize) async {
+    return _meetingsRepository.findMeetingsByClubId(clubId, pageSize);
   }
 
 }

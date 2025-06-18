@@ -5,6 +5,7 @@ import 'package:booklub/config/theme/theme_context.dart';
 import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:booklub/infra/clubs/club_repository.dart';
 import 'package:booklub/infra/io/io_repository.dart';
+import 'package:booklub/infra/meetings/meetings_repository.dart';
 import 'package:booklub/infra/reading_goals/reading_goals_repository.dart';
 import 'package:booklub/infra/user/user_repository.dart';
 import 'package:booklub/ui/core/view_models/auth_view_model.dart';
@@ -40,6 +41,10 @@ abstract final class ProvidersConfig {
     )),
     Provider<IORepository>(create: (context) => IORepository()),
     Provider<ReadingGoalsRepository>(create: (context) => ReadingGoalsRepository(
+      authRepository: context.read(),
+      apiUrl: env.apiUrl,
+    )),
+    Provider<MeetingsRepository>(create: (context) => MeetingsRepository(
       authRepository: context.read(),
       apiUrl: env.apiUrl,
     )),

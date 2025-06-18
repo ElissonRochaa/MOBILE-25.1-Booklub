@@ -29,7 +29,12 @@ class HorizontalReadingGoalCardWidget extends StatelessWidget {
       spacing: 8,
       children: [
         Icon(Icons.menu_book_rounded),
-        Text(readingGoal.bookId),
+        Expanded(
+          child: Text(
+            readingGoal.bookId,
+            overflow: TextOverflow.clip,
+          )
+        ),
       ],
     );
 
