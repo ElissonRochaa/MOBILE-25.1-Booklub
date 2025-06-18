@@ -89,18 +89,38 @@ class ActivitiesRepository {
     });
   }
 
-  Future<Paginator<Activity>> findActivitiesForUser(
+Future<Paginator<Activity>> findActivitiesForUser(
     String userId,
     int pageSize,
   ) async {
+    final authToken = (await _authRepository.getAuthData())!.token;
 
+    return Paginator.create(pageSize, (page, pageSize) async {
+      final uri = Uri.parse('$_apiUrl/api/v1/activities').replace(
+        queryParameters: {
+          'userId': userId,
+          'page': page.toString(),
+          'size': pageSize.toString(),
+        },
+      );
+
+      final response = await http.get(
+        uri,
+        headers: {
+          HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+          HttpHeaders.authorizationHeader: authToken.toString(),
+        },
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Erro ao buscar atividades do usuário $userId');
+      }
+
+      return Page<Activity>.fromJson(
+        jsonDecode(response.body),
+        (json) => Activity.fromJson(json as Map<String, dynamic>),
+      );
+    });
   }
-
-
-  Future<Activity> findById(String activityId) async {
-
-  }
-
-
 
 }

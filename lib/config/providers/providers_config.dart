@@ -8,7 +8,6 @@ import 'package:booklub/infra/io/io_repository.dart';
 import 'package:booklub/infra/meetings/meetings_repository.dart';
 import 'package:booklub/infra/reading_goals/reading_goals_repository.dart';
 import 'package:booklub/infra/user/user_repository.dart';
-import 'package:booklub/ui/core/view_models/activity_view_model.dart';
 import 'package:booklub/ui/core/view_models/auth_view_model.dart';
 import 'package:booklub/ui/core/view_models/book_view_model.dart';
 import 'package:booklub/ui/core/view_models/club_view_model.dart';
@@ -62,9 +61,6 @@ abstract final class ProvidersConfig {
     )),
     Provider<MeetingViewModel>(create: (context) => MeetingViewModel(
       repository: context.read(),
-    )),
-    Provider<ActivityViewModel>(create: (context) => ActivityViewModel(
-      activitiesRepository: context.read(),
     )),
     Provider<ReadingGoalViewModel>(create: (context) => ReadingGoalViewModel(
       readingGoalsRepository: context.read(),
