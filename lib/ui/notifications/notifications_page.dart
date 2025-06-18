@@ -90,6 +90,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           selectedColor: Theme.of(
                             context,
                           ).colorScheme.primary.withOpacity(0.2),
+                          checkmarkColor: Theme.of(context).colorScheme.primary,
                           labelStyle: TextStyle(
                             color:
                                 _filter == 'unread'
@@ -105,6 +106,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           selectedColor: Theme.of(
                             context,
                           ).colorScheme.primary.withOpacity(0.2),
+                          checkmarkColor: Theme.of(context).colorScheme.primary,
                           labelStyle: TextStyle(
                             color:
                                 _filter == 'read'
