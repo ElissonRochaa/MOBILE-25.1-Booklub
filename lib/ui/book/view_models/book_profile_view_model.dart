@@ -5,36 +5,50 @@ import 'package:booklub/infra/books/book_api_repository.dart';
 
 class BookProfileViewModel extends AsyncChangeNotifier<BookItem> {
   final BookApiRepository _bookRepository;
+  final String volumeId;
+
+  BookProfileViewModel({
+    required BookApiRepository bookRepository,
+    required this.volumeId,
+  }) : _bookRepository = bookRepository {
+    _setBook(volumeId);
+  }
 
   BookItem? _book;
-
-  BookItem? get book => _book;
-
-  BookProfileViewModel({required BookApiRepository bookRepository})
-      : _bookRepository = bookRepository;
 
   @override
   BookItem? get payload => _book;
 
-  Future<void> setBook(String volumeId) async {
+  BookItem? get book => payload;
+
+  Future<void> _setBook(String volumeId) async {
     isLoading = true;
     notifyListeners();
-
+    print('entrou no setBook com volumeId: $volumeId');
     try {
-      _book = await _bookRepository.getBookById(volumeId);
+      print('entrou no try do setBook');
+      final bookData = await _bookRepository.getBookById(volumeId);
+      _book = bookData;
       error = null;
     } catch (e, trace) {
+      print('Erro ao carregar livro: $e\nStack trace: $trace');
       error = (object: e, stackTrace: trace);
       _book = null;
     } finally {
+      print('Finalizando o carregamento do livro');
       isLoading = false;
+      print('Book loaded: $_book');
       notifyListeners();
     }
   }
 
   void checkBookLoaded() {
     if (_book == null) {
-      throw StateError('Book not loaded');
+      throw StateError(
+        'Book id '
+        ' $volumeId '
+        ' not loaded',
+      );
     }
   }
 }
