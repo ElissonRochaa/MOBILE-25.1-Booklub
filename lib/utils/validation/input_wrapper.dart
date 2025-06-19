@@ -63,13 +63,13 @@ class InputWrapper extends ChangeNotifier implements TextEditingController {
   void clearComposing() => controller.clearComposing();
 
   @override
-  void addListener(VoidCallback callback) {
-    controller.addListener(callback);
+  void addListener(VoidCallback listener) {
+    controller.addListener(listener);
   }
 
   @override
-  void removeListener(VoidCallback callback) {
-    controller.removeListener(callback);
+  void removeListener(VoidCallback listener) {
+    controller.removeListener(listener);
   }
 
 }

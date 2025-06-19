@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:booklub/config/theme/theme_config.dart';
 
 class ItemCircle extends StatelessWidget {
   final String imageUrl;

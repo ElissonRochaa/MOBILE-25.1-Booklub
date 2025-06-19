@@ -53,4 +53,25 @@ class ReadingGoalsRepository {
     });
   }
 
+  Future<ReadingGoal> findById(String readingGoalId) async {
+    final authToken = (await _authRepository.getAuthData())!.token;
+
+    final uri = Uri.parse('$_apiUrl/api/v1/reading-goals/$readingGoalId');
+
+    final response = await http.get(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+        HttpHeaders.authorizationHeader: authToken.toString(),
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Erro ao buscar reading goal com ID $readingGoalId');
+    }
+
+    return ReadingGoal.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+  }
+
+
 }

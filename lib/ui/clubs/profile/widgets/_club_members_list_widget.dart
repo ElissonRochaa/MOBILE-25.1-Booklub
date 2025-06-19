@@ -90,7 +90,6 @@ class _ClubMemberCard extends StatelessWidget {
   final User member;
 
   const _ClubMemberCard({
-    super.key,
     required this.member
   });
 

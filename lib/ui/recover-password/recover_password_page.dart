@@ -1,9 +1,6 @@
 import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/ui/core/widgets/buttons/purple_rounded_button.dart';
 import 'package:booklub/ui/core/widgets/input_fields/named_text_field_widget.dart';
-import 'package:booklub/ui/login/view_models/login_view_model.dart';
-import 'package:booklub/ui/login/widgets/cadastrar_clickable_text.dart';
-import 'package:booklub/ui/login/widgets/esqueceu_senha_clickable_text.dart';
 import 'package:booklub/ui/recover-password/view_models/recover_password_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

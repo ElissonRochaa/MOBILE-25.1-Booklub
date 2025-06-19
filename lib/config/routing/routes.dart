@@ -24,5 +24,7 @@ abstract final class Routes {
 
   static String explore = '/explore';
 
+  static const String notifications = '/notifications';
+  
   static const String createClub = '/create-club';
 }
