@@ -26,13 +26,12 @@ class ExploreViewModel extends ChangeNotifier {
     return userRepository.findByUsernameContaining(username, pageSize);
   }
 
-  Future<Paginator<BookItem>> findBooksByTitleOrAuthorContaining(
+  Future<Paginator<BookItem>> findBooksByTitleContaining(
     String query,
     int pageSize,
   ) async {
     return bookApiRepository.searchBooks(
       intitle: query,
-      inauthor: query,
       page: pageSize,
     );
   }

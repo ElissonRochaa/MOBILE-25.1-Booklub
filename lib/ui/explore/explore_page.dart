@@ -104,7 +104,7 @@ class _ExplorePageState extends State<ExplorePage> {
         break;
       case ExploreSection.books:
         Future<Paginator<BookItem>> futurePaginator = exploreViewModel
-            .findBooksByTitleOrAuthorContaining(query, 8);
+            .findBooksByTitleContaining(query, 8);
         itemsList = _handleFutureEntityList(
           futurePaginator,
           scrollController,
@@ -167,7 +167,10 @@ class _ExplorePageState extends State<ExplorePage> {
             childrenDelegateProvider: childrenDelegateProvider,
           ),
       onLoading: () => Builder(builder: _buildLoadingPage),
-      onError: (_, __) => Builder(builder: _buildErrorPage),
+      onError: (e, trace) {
+        print('Error: $e \n Trace: $trace');
+        return Builder(builder: _buildErrorPage);
+      },
     );
   }
 
