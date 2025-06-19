@@ -1,4 +1,4 @@
-package com.example.booklub
+package br.upe.sophtware.booklub
 
 import io.flutter.embedding.android.FlutterActivity
 
