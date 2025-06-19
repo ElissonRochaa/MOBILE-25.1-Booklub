@@ -1,4 +1,7 @@
+import 'package:booklub/ui/core/view_models/auth_view_model.dart';
+import 'package:booklub/utils/async_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../../config/routing/routes.dart';
 import '../../../../utils/routing/routing_utils.dart';
 import '../navigation_icon_widget.dart';
@@ -15,6 +18,7 @@ class BaseBottomBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentRoute = RoutingUtils.getRoute(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final authViewModel = context.watch<AuthViewModel>();
 
     Widget buildNavIcon({
       required IconData icon,
@@ -48,10 +52,30 @@ class BaseBottomBarWidget extends StatelessWidget {
         destination: Routes.clubs,
       ),
       Spacer(flex: 1),
-      buildNavIcon(
-        icon: Icons.person,
-        selected: currentRoute == Routes.userProfile(userId: 'abc123'), //se mudar de id não vai mais estar selecionado. isso aqui é só para meu perfil ent não pode mudar o id
-        destination: Routes.userProfile(userId: 'abc123'),
+      AsyncBuilder(
+        future: authViewModel.getAuthData(),
+        onRetrieved:
+            (authData) => buildNavIcon(
+              icon: Icons.person,
+              selected:
+                  currentRoute ==
+                  Routes.userProfile(
+                    userId: authData.user.id,
+                  ), //se mudar de id não vai mais estar selecionado. isso aqui é só para meu perfil ent não pode mudar o id
+              destination: Routes.userProfile(userId: authData.user.id),
+            ),
+        onLoading:
+            () => buildNavIcon(
+              icon: Icons.person,
+              selected: false,
+              destination: currentRoute,
+            ),
+        onError:
+            (_, _) => buildNavIcon(
+              icon: Icons.person,
+              selected: false,
+              destination: currentRoute,
+            ),
       ),
     ];
 

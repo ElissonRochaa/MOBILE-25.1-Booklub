@@ -70,5 +70,11 @@ class AuthViewModel extends ChangeNotifier {
     _setAuthToken(null, notify: true);
   }
 
+  Future<AuthData> getAuthData() async {
+    final authData = await _authRepository.getAuthData();
+
+    return authData!;
+  }
+
 
 }

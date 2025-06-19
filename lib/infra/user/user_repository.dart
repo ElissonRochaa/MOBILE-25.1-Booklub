@@ -37,6 +37,8 @@ class UserRepository {
       throw Exception('O usuário não está autenticado');
     }
 
+    print(username);
+
     final accessToken = authData.token.accessToken;
 
     return Paginator.create(pageSize, (pageIdx, pageSize) async {
