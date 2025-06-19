@@ -41,9 +41,11 @@ class _HomePageState extends State<HomePage> {
             controller: scrollController,
             slivers: [
               SliverPadding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
+                padding: EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  top: 12,
+                  bottom: 36,
                 ),
                 sliver: SliverToBoxAdapter(
                   child: const SectionTitle(
@@ -82,7 +84,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-
               SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 sliver: SliverToBoxAdapter(
@@ -92,57 +93,49 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-
-              SliverPadding(
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 12,
-                  bottom: 36,
-                ),
-                sliver: FutureBuilder<Paginator<Activity>>(
-                  future: viewModel.getRecentActivitiesPaginator(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: Center(child: CircularProgressIndicator()),
-                      );
-                    }
-
-                    if (snapshot.hasError) {
-                      return SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: Center(
-                          child: Text(
-                            "Erro ao carregar atividades: ${snapshot.error}",
-                          ),
-                        ),
-                      );
-                    }
-
-                    final paginator = snapshot.data!;
-                    return InfiniteGridWidget.sliver(
-                      paginator: paginator,
-                      controller: scrollController,
-                      gridDelegate: gridDelegate,
-                      childrenDelegateProvider: (activities, total) {
-                        return SliverChildBuilderDelegate((context, index) {
-                          final activity = activities[index];
-                          try {
-                            return ActivityCardBuilder(
-                              activity: activity,
-                              showAuthorHeader: true,
-                            );
-                          } catch (e) {
-                            debugPrint("Skipping invalid activity: $e");
-                            return const SizedBox.shrink();
-                          }
-                        }, childCount: total);
-                      },
+              FutureBuilder<Paginator<Activity>>(
+                future: viewModel.getRecentActivitiesPaginator(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(child: CircularProgressIndicator()),
                     );
-                  },
-                ),
+                  }
+
+                  if (snapshot.hasError) {
+                    return SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Text(
+                          "Erro ao carregar atividades: ${snapshot.error}",
+                        ),
+                      ),
+                    );
+                  }
+
+                  final paginator = snapshot.data!;
+                  return InfiniteGridWidget.sliver(
+                    paginator: paginator,
+                    controller: scrollController,
+                    gridDelegate: gridDelegate,
+                    childrenDelegateProvider: (activities, total) {
+                      print('Tem $total atividades');
+                      return SliverChildBuilderDelegate((context, index) {
+                        final activity = activities[index];
+                        try {
+                          return ActivityCardBuilder(
+                            activity: activity,
+                            showAuthorHeader: true,
+                          );
+                        } catch (e) {
+                          debugPrint("Skipping invalid activity: $e");
+                          return const SizedBox.shrink();
+                        }
+                      }, childCount: total);
+                    },
+                  );
+                },
               ),
             ],
           ),

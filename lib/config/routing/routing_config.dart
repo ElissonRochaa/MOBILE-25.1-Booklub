@@ -50,15 +50,15 @@ abstract final class RoutingConfig {
         name: 'Home',
         path: Routes.home,
         builder:
-            (context, state) => ChangeNotifierProvider(
-              create:
-                  (_) => HomeViewModel(
-                    clubRepository: context.read(),
-                    authRepository: context.read(),
-                    activitiesRepository: context.read(),
-                  ),
-              child: BaseLayout(child: const HomePage()),
-            ),
+          (context, state) => ChangeNotifierProvider(
+            create:
+              (_) => HomeViewModel(
+                clubRepository: context.read(),
+                authRepository: context.read(),
+                activitiesRepository: context.read(),
+              ),
+            child: BaseLayout(child: const HomePage()),
+          ),
       ),
       GoRoute(
         name: 'Clubs',
