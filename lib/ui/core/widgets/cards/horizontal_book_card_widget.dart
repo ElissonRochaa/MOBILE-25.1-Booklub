@@ -4,10 +4,10 @@ import 'package:booklub/domain/entities/books/book_item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class BookHorizontalCardWidget extends StatelessWidget {
+class HorizontalBookCardWidget extends StatelessWidget {
   final BookItem book;
 
-  const BookHorizontalCardWidget({super.key, required this.book});
+  const HorizontalBookCardWidget({super.key, required this.book});
 
   @override
   Widget build(BuildContext context) {
@@ -70,8 +70,8 @@ class BookHorizontalCardWidget extends StatelessWidget {
                 child: Text(
                   book.datePublished!.substring(0, 4), // mostra só o ano
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSurface.withOpacity(0.6),
-                      ),
+                    color: colorScheme.onSurface.withOpacity(0.6),
+                  ),
                 ),
               ),
           ],
