@@ -21,5 +21,7 @@ class AuthToken {
 
   Map<String, dynamic> toJson() => _$AuthTokenToJson(this);
 
+  @override
+  String toString() => '$tokenType $accessToken';
 
 }

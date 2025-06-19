@@ -1,6 +1,8 @@
 import 'package:booklub/config/theme/theme_config.dart';
+import 'package:booklub/domain/entities/books/book_item.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/domain/entities/users/user.dart';
+import 'package:booklub/ui/core/widgets/cards/horizontal_book_card_widget.dart';
 import 'package:booklub/ui/core/widgets/cards/horizontal_club_card_widget.dart';
 import 'package:booklub/ui/core/widgets/grids/base_grid_widget.dart';
 import 'package:booklub/ui/core/widgets/grids/infinite_grid_widget.dart';
@@ -98,14 +100,15 @@ class _ExplorePageState extends State<ExplorePage> {
 
         break;
       case ExploreSection.books:
-        Future<Paginator<User>> futurePaginator = exploreViewModel
+        Future<Paginator<BookItem>> futurePaginator = exploreViewModel
             .findBooksByTitleContaining(query, 8);
         itemsList = _handleFutureEntityList(
           futurePaginator,
           scrollController,
-          (user) => UserHorizontalCardWidget(user: user),
+          (book) => BookHorizontalCardWidget(book: book),
         );
         break;
+        
       case ExploreSection.clubs:
         Future<Paginator<Club>> futurePaginator = exploreViewModel
             .searchClubByName(query, 8);

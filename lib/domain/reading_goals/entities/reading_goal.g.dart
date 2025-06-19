@@ -7,16 +7,20 @@ part of 'reading_goal.dart';
 // **************************************************************************
 
 ReadingGoal _$ReadingGoalFromJson(Map<String, dynamic> json) => ReadingGoal(
-  clubId: json['clubId'] as String,
+  id: json['id'] as String,
   bookId: json['bookId'] as String,
+  clubId: json['clubId'] as String,
   startDate: DateTime.parse(json['startDate'] as String),
-  finishDate: DateTime.parse(json['finishDate'] as String),
+  endDate: DateTime.parse(json['endDate'] as String),
+  createdAt: DateTime.parse(json['createdAt'] as String),
 );
 
 Map<String, dynamic> _$ReadingGoalToJson(ReadingGoal instance) =>
     <String, dynamic>{
-      'clubId': instance.clubId,
+      'id': instance.id,
       'bookId': instance.bookId,
+      'clubId': instance.clubId,
       'startDate': instance.startDate.toIso8601String(),
-      'finishDate': instance.finishDate.toIso8601String(),
+      'endDate': instance.endDate.toIso8601String(),
+      'createdAt': instance.createdAt.toIso8601String(),
     };

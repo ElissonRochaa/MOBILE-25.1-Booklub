@@ -1,6 +1,10 @@
-import 'package:booklub/ui/clubs/profile/widgets/_club_activities_list_widget.dart';
+import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
+import 'package:booklub/ui/clubs/profile/widgets/_club_feed_widget.dart';
+import 'package:booklub/ui/clubs/profile/widgets/_club_members_list_widget.dart';
 import 'package:booklub/ui/clubs/profile/widgets/_club_profile_info_list_widget.dart';
+import 'package:booklub/utils/async_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
 class ClubProfilePageBodyWidget extends StatefulWidget {
@@ -29,7 +33,7 @@ class _ClubProfilePageBodyWidgetState extends State<ClubProfilePageBodyWidget> {
   Widget build(BuildContext context) {
     final pageBody = selectedProfileInfoSection != null
       ? Builder(builder: _buildProfileInfoDetails)
-      : ClubActivitiesListWidget();
+      : ClubFeedWidget();
 
     return MultiSliver(
       children: [
@@ -40,35 +44,45 @@ class _ClubProfilePageBodyWidgetState extends State<ClubProfilePageBodyWidget> {
   }
 
   Widget _buildProfileInfo(BuildContext context) {
-    final profileInfos = [
-      ClubProfileInfoListItem(
-        label: 'Membros',
-        number: 8,
-        onTap: () => _setSection(ProfileInfoSection.members),
-        selected: selectedProfileInfoSection == ProfileInfoSection.members,
-      ),
-      ClubProfileInfoListItem(
-        label: 'Leituras',
-        number: 3,
-        onTap: () => _setSection(ProfileInfoSection.readings),
-        selected: selectedProfileInfoSection == ProfileInfoSection.readings,
-      ),
-      ClubProfileInfoListItem(
-        label: 'Badges',
-        number: 1,
-        onTap: () => _setSection(ProfileInfoSection.badges),
-        selected: selectedProfileInfoSection == ProfileInfoSection.badges,
-      ),
-      ClubProfileInfoListItem(
-        label: 'Solicitações',
-        number: 4,
-        onTap: () => _setSection(ProfileInfoSection.requests),
-        selected: selectedProfileInfoSection == ProfileInfoSection.requests,
-      ),
-    ];
+    final viewModel = context.watch<ClubProfileViewModel>();
+    final club = viewModel.club!;
 
-    return ClubProfileInfoListWidget(
-      infoItems: profileInfos,
+    Widget onRetrieved(bool isLoggedUserClubAdmin) {
+      final profileInfos = [
+        ClubProfileInfoListItem(
+          label: 'Membros',
+          number: club.totalMembers,
+          onTap: () => _setSection(ProfileInfoSection.members),
+          selected: selectedProfileInfoSection == ProfileInfoSection.members,
+        ),
+        ClubProfileInfoListItem(
+          label: 'Leituras',
+          number: 3,
+          onTap: () => _setSection(ProfileInfoSection.readings),
+          selected: selectedProfileInfoSection == ProfileInfoSection.readings,
+        ),
+        ClubProfileInfoListItem(
+          label: 'Badges',
+          number: 1,
+          onTap: () => _setSection(ProfileInfoSection.badges),
+          selected: selectedProfileInfoSection == ProfileInfoSection.badges,
+        ),
+        if (isLoggedUserClubAdmin) ClubProfileInfoListItem(
+          label: 'Solicitações',
+          number: 4,
+          onTap: () => _setSection(ProfileInfoSection.requests),
+          selected: selectedProfileInfoSection == ProfileInfoSection.requests,
+        ),
+      ];
+
+      return ClubProfileInfoListWidget(infoItems: profileInfos);
+    }
+
+    return AsyncBuilder(
+      future: viewModel.isLoggedUserClubAdmin(),
+      onRetrieved: onRetrieved,
+      onLoading: () => const SizedBox.shrink(),
+      onError: (_, _) => const SizedBox.shrink(),
     );
   }
 
@@ -81,7 +95,7 @@ class _ClubProfilePageBodyWidgetState extends State<ClubProfilePageBodyWidget> {
     );
 
     return switch (selectedProfileInfoSection) {
-      ProfileInfoSection.members => placeholder,
+      ProfileInfoSection.members => const ClubMembersListWidget(),
       ProfileInfoSection.readings => placeholder,
       ProfileInfoSection.badges => placeholder,
       ProfileInfoSection.requests => placeholder,

@@ -21,6 +21,9 @@ dependencies:
   logger: ^2.5.0
   intl: ^0.20.2
   flutter_secure_storage: ^9.2.4
+  mime: ^2.0.0
+  http_parser: ^4.1.2
+  lottie: ^2.7.0
 
 dev_dependencies:
   flutter_test:
@@ -28,6 +31,22 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   json_serializable: ^6.9.5
   build_runner: ^2.4.15
+  flutter_native_splash: ^2.4.0
+
+flutter_native_splash:
+  android: true
+  ios: true
+  web: true
+
+  color: "#ffffff"
+  color_dark: "#042a49"
+  fullscreen: true
+
+  android_12:
+    color: "#ffffff"
+    color_dark: "#042a49"
+
+
 
 flutter:
   uses-material-design: true
@@ -38,6 +57,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/animations/
 
 json_serializable:
   generic_argument_factories: true

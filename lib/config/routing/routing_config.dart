@@ -64,11 +64,13 @@ abstract final class RoutingConfig {
         name: 'Clubs',
         path: Routes.clubs,
         builder:
-            (context, state) => ChangeNotifierProvider(
-              create:
-                  (context) => ClubsViewModel(clubRepository: context.read()),
-              child: ScrollBaseLayout(sliver: ClubsPage(title: 'Clubes')),
+          (context, state) => ChangeNotifierProvider(
+            create: (context) => ClubsViewModel(
+              clubRepository: context.read(),
+              authViewModel: context.read(),
             ),
+            child: ScrollBaseLayout(sliver: ClubsPage(title: 'Clubes')),
+          ),
       ),
       GoRoute(
         name: 'Club Profile',
@@ -76,10 +78,14 @@ abstract final class RoutingConfig {
         builder: (context, state) {
           final clubId = state.pathParameters['id'];
           return ChangeNotifierProvider(
-            create:
-                (context) =>
-                    ClubProfileViewModel(clubRepository: context.read()),
-            child: ScrollBaseLayout(sliver: ClubProfilePage(clubId: clubId!)),
+            create: (context) => ClubProfileViewModel(
+              clubRepository: context.read(),
+              readingGoalsRepository: context.read(),
+              meetingsRepository: context.read(),
+              authViewModel: context.read(),
+              clubId: clubId!,
+            ),
+            child: ScrollBaseLayout(sliver: ClubProfilePage()),
           );
         },
       ),
@@ -205,7 +211,11 @@ abstract final class RoutingConfig {
               providers: [
                 ChangeNotifierProvider(
                   create:
-                      (_) => ExploreViewModel(userRepository: context.read(), clubRepository: context.read()),
+                      (_) => ExploreViewModel(
+                        userRepository: context.read(),
+                        bookApiRepository: context.read(),
+                        clubRepository: context.read()
+                      ),
                 ),
                 ChangeNotifierProvider(create: (_) => SearchQueryNotifier()),
               ],

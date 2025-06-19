@@ -54,7 +54,7 @@ class HorizontalClubCardWidget extends StatelessWidget {
               spacing: 8,
               children: [
                 Icon(Icons.groups),
-                Text('10'),
+                Text(club.totalMembers.toString()),
               ],
             ),
           ],

@@ -1,3 +1,4 @@
+import 'package:booklub/domain/entities/users/auth_data.dart';
 import 'package:booklub/domain/entities/users/auth_token.dart';
 import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +8,7 @@ class AuthViewModel extends ChangeNotifier {
 
   final logger = Logger();
 
-  final AuthRepository authRepository;
+  final AuthRepository _authRepository;
 
   bool _isValidating = false;
 
@@ -17,8 +18,12 @@ class AuthViewModel extends ChangeNotifier {
 
   String get fullAccessToken => '$_authToken.tokenType $_authToken.accessToken';
 
-  AuthViewModel({required this.authRepository}) {
-    authRepository.getAuthData().then(
+  Future<AuthData?> get authData async => await _authRepository.getAuthData();
+
+  AuthViewModel({
+    required AuthRepository authRepository
+  }) : _authRepository = authRepository {
+    _authRepository.getAuthData().then(
       (authData) => _setAuthToken(authData?.token, notify: false)
     );
   }
@@ -56,12 +61,12 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<void> _refresh() async {
-    final authData = await authRepository.getAuthData();
+    final authData = await _authRepository.getAuthData();
     _setAuthToken(authData?.token, notify: false);
   }
 
   Future<void> logout() async {
-    authRepository.clearAuthData();
+    _authRepository.clearAuthData();
     _setAuthToken(null, notify: true);
   }
 
