@@ -1,9 +1,7 @@
 import 'package:booklub/config/theme/theme_config.dart';
-import 'package:booklub/ui/core/widgets/app_bars/base_app_bar_widget.dart';
 import 'package:booklub/ui/core/widgets/bottom_bars/base_bottom_bar_widget.dart';
-import 'package:booklub/ui/core/widgets/buttons/selectable_button.dart';
 import 'package:booklub/ui/core/widgets/floating_action_buttons/base_floating_action_button_widget.dart';
-import 'package:booklub/ui/explore/layout/view_model/search_bar_widget.dart';
+import 'package:booklub/ui/explore/widget/search_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

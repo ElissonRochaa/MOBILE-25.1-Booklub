@@ -8,16 +8,20 @@ class BaseAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   final double height;
 
+  final String label;
+
   final bool sliver;
 
   const BaseAppBarWidget({
     super.key,
-    this.height=kToolbarHeight
+    this.height = kToolbarHeight,
+    this.label = 'Booklub',
   }): sliver=false;
 
   const BaseAppBarWidget.sliver({
     super.key,
-    this.height=kToolbarHeight
+    this.height = kToolbarHeight,
+    this.label = 'Booklub',
   }): sliver=true;
 
   @override
@@ -28,14 +32,14 @@ class BaseAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget _buidAppBar(BuildContext context) => PreferredSize(
     preferredSize: Size.fromHeight(height),
     child: AppBar(
-      title: Text('Booklub'),
+      title: Text(label),
       actions: _getActions(context),
     ),
   );
 
   Widget _buildSliverAppBar(BuildContext context) => SliverAppBar(
     floating: true,
-    title: Text('Booklub'),
+    title: Text(label),
     actions: _getActions(context),
   );
 

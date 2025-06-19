@@ -31,7 +31,7 @@ class MemberCompletedReadingActivityCardWidget extends StatelessWidget {
       onRetrieved: (data) => Builder(
         builder: (context) => _buildCard(context, data),
       ),
-      onLoading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
+      onLoading: () => const Card(),
       onError: (_, __) => const Card(),
     );
   }

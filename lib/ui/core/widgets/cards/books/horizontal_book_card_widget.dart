@@ -1,5 +1,4 @@
 import 'package:booklub/config/routing/routes.dart';
-import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/books/book_item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -11,8 +10,6 @@ class BookHorizontalCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     final borderRadius = BorderRadius.only(
       topLeft: Radius.circular(100),
       topRight: Radius.circular(36),

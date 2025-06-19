@@ -61,12 +61,6 @@ class _ClubProfilePageBodyWidgetState extends State<ClubProfilePageBodyWidget> {
           onTap: () => _setSection(ProfileInfoSection.readings),
           selected: selectedProfileInfoSection == ProfileInfoSection.readings,
         ),
-        ClubProfileInfoListItem(
-          label: 'Badges',
-          number: 1,
-          onTap: () => _setSection(ProfileInfoSection.badges),
-          selected: selectedProfileInfoSection == ProfileInfoSection.badges,
-        ),
         if (isLoggedUserClubAdmin) ClubProfileInfoListItem(
           label: 'Solicitações',
           number: 4,

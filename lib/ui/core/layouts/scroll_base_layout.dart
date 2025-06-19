@@ -12,9 +12,12 @@ class ScrollBaseLayout extends StatefulWidget {
 
   final bool bottomBarVisible;
 
+  final String label;
+
   const ScrollBaseLayout({
     super.key,
     required this.sliver,
+    this.label = 'Booklub',
     this.appBarVisible = true,
     this.bottomBarVisible = true,
   });
@@ -63,6 +66,7 @@ class _ScrollBaseLayoutState extends State<ScrollBaseLayout> {
           controller: _scrollController,
           slivers: [
             if (widget.appBarVisible) BaseAppBarWidget.sliver(
+              label: widget.label,
               height: appBarHeight
             ),
             SliverPadding(
