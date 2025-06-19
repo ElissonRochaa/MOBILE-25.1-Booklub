@@ -32,8 +32,8 @@ class MeetingDefinedActivityCardWidget extends StatelessWidget {
       onRetrieved: (data) => Builder(
         builder: (context) => _buildCard(context, data)
       ),
-      onLoading: () => SliverToBoxAdapter(child: SizedBox.shrink()),
-      onError: (_, _) => Card()
+      onLoading: () => const Card(),
+      onError: (_, _) => const Card()
     );
   }
 

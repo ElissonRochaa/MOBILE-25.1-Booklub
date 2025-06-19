@@ -1,4 +1,5 @@
 import 'package:booklub/config/routing/routes.dart';
+import 'package:booklub/ui/book/individual_book_page.dart';
 import 'package:booklub/ui/check-your-email-recover/check_your_email_recover_page.dart';
 import 'package:booklub/ui/clubs/clubs_page.dart';
 import 'package:booklub/ui/clubs/profile/club_profile_page.dart';
@@ -13,21 +14,19 @@ import 'package:booklub/ui/explore/explore_page.dart';
 import 'package:booklub/ui/explore/layout/explore_layout.dart';
 import 'package:booklub/ui/explore/layout/view_model/search_bar_widget.dart';
 import 'package:booklub/ui/explore/view_model/explore_view_model.dart';
-import 'package:booklub/ui/recover-password/recover_password_page.dart';
+import 'package:booklub/ui/homepage/home_page.dart';
+import 'package:booklub/ui/homepage/view_model/home_view_model.dart';
 import 'package:booklub/ui/login/login_page.dart';
 import 'package:booklub/ui/login/view_models/login_view_model.dart';
+import 'package:booklub/ui/notifications/notifications_page.dart';
+import 'package:booklub/ui/recover-password/recover_password_page.dart';
 import 'package:booklub/ui/recover-password/view_models/recover_password_view_model.dart';
 import 'package:booklub/ui/register/register_page.dart';
 import 'package:booklub/ui/register/view_models/register_view_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:booklub/ui/user/edit/edit_profile_page.dart';
+import 'package:booklub/ui/user/profile_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:booklub/ui/book/individual_book_page.dart';
-import 'package:booklub/ui/user/profile_page.dart';
-import 'package:booklub/ui/user/edit/edit_profile_page.dart';
-import 'package:booklub/ui/notifications/notifications_page.dart';
-import 'package:booklub/ui/homepage/home_page.dart';
-import 'package:booklub/ui/homepage/view_model/home_view_model.dart';
 
 abstract final class RoutingConfig {
   static GoRouter createRouter(AuthViewModel authViewModel) => GoRouter(
@@ -82,6 +81,7 @@ abstract final class RoutingConfig {
               clubRepository: context.read(),
               readingGoalsRepository: context.read(),
               meetingsRepository: context.read(),
+              activityRepository: context.read(),
               authViewModel: context.read(),
               clubId: clubId!,
             ),

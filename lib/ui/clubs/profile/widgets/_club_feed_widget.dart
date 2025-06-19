@@ -2,6 +2,7 @@ import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/books/book_item.dart';
 import 'package:booklub/domain/entities/clubs/activities/club_activity.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
+import 'package:booklub/ui/core/widgets/cards/activity_cards/activity_card_builder.dart';
 import 'package:booklub/ui/core/widgets/cards/horizontal_meeting_card_widget.dart';
 import 'package:booklub/ui/core/widgets/cards/horizontal_reading_goal_card_widget.dart';
 import 'package:booklub/ui/core/widgets/grids/infinite_grid_widget.dart';
@@ -38,7 +39,7 @@ class _ClubFeedWidgetState extends State<ClubFeedWidget> {
       children: [
         Builder(builder: _buildFeedSectionSelector),
         switch (section) {
-          _FeedSection.activities => Placeholder(),
+          _FeedSection.activities => _buildActivitiesList(),
           _FeedSection.readingGoals => _buildReadingGoalsList(),
           _FeedSection.meetings => _buildMeetingsList(),
         },
@@ -122,13 +123,40 @@ class _ClubFeedWidgetState extends State<ClubFeedWidget> {
       onRetrieved: (paginator) => Builder(
         builder: (context) => _buildList(
           context,
-        paginator,
+          paginator,
           (item) => HorizontalMeetingCardWidget(
-          meeting: item,
-          club: viewModel.club!,
-          book: BookItem(title: 'O Mundo de Sopheia'), // TODO Implementar busca por livro
+            meeting: item,
+            club: viewModel.club!,
+            book: BookItem(title: 'O Mundo de Sopheia'), // TODO Implementar busca por livro
           ),
         )
+      ),
+      onLoading: () => Builder(builder: _buildOnLoadingList),
+      onError: (e, trace) => Builder(
+        builder: (context) => _buildOnErrorList(
+          context,
+          'Erro ao buscar encontros',
+          e,
+          trace
+        )
+      )
+    );
+  }
+
+  Widget _buildActivitiesList() {
+    final viewModel = context.read<ClubProfileViewModel>();
+
+    return AsyncBuilder(
+      future: viewModel.getClubActivities(10),
+      onRetrieved: (paginator) => Builder(
+        builder: (context) => _buildList(
+          context,
+          paginator,
+          (item) => ActivityCardBuilder(
+            activity: item,
+            showAuthorHeader: false,
+          ),
+        ),
       ),
       onLoading: () => Builder(builder: _buildOnLoadingList),
       onError: (e, trace) => Builder(
