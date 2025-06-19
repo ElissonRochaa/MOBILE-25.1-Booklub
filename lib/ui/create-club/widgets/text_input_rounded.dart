@@ -1,4 +1,3 @@
-import 'package:booklub/ui/core/widgets/top_inner_shadow.dart/top_inner_shadow.dart';
 import 'package:flutter/material.dart';
 
 class TextFieldRounded extends StatefulWidget {

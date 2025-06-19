@@ -12,7 +12,7 @@ import 'package:booklub/ui/create-club/create_club_page.dart';
 import 'package:booklub/ui/create-club/view_models/create_club_view_model.dart';
 import 'package:booklub/ui/explore/explore_page.dart';
 import 'package:booklub/ui/explore/layout/explore_layout.dart';
-import 'package:booklub/ui/explore/layout/view_model/search_bar_widget.dart';
+import 'package:booklub/ui/explore/widget/search_bar_widget.dart';
 import 'package:booklub/ui/explore/view_model/explore_view_model.dart';
 import 'package:booklub/ui/homepage/home_page.dart';
 import 'package:booklub/ui/homepage/view_model/home_view_model.dart';

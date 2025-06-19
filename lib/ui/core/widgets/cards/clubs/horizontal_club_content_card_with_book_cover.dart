@@ -1,7 +1,7 @@
 import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/books/book_item.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
-import 'package:booklub/ui/core/widgets/cards/horizontal_card_with_book_cover.dart';
+import 'package:booklub/ui/core/widgets/cards/books/horizontal_card_with_book_cover.dart';
 import 'package:booklub/ui/core/widgets/circle_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

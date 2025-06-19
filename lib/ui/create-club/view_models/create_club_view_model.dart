@@ -1,10 +1,9 @@
 import 'dart:io';
-import 'dart:typed_data';
+
 import 'package:booklub/domain/entities/clubs/club_creation_dto.dart';
 import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:booklub/infra/clubs/club_repository.dart';
 import 'package:booklub/infra/io/io_repository.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class CreateClubViewModel extends ChangeNotifier {

@@ -1,7 +1,7 @@
 import 'package:booklub/domain/activities/entities/activity.dart';
 import 'package:booklub/domain/entities/books/book_item.dart';
 import 'package:booklub/domain/entities/users/user.dart';
-import 'package:booklub/ui/core/widgets/cards/horizontal_user_content_card_with_book_cover.dart';
+import 'package:booklub/ui/core/widgets/cards/users/horizontal_user_content_card_with_book_cover.dart';
 import 'package:flutter/material.dart';
 
 class UserActivityCardWidget extends StatelessWidget {

@@ -1,10 +1,11 @@
 import 'package:booklub/ui/core/widgets/buttons/purple_rounded_button.dart';
-import 'package:booklub/ui/login/widgets/cadastrar_clickable_text.dart';
-import 'package:booklub/ui/login/widgets/esqueceu_senha_clickable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CheckYourEmailRecoverPage extends StatelessWidget {
+
+  const CheckYourEmailRecoverPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SliverPadding(

@@ -1,7 +1,7 @@
 import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/ui/clubs/view_models/clubs_view_model.dart';
-import 'package:booklub/ui/core/widgets/cards/horizontal_club_card_widget.dart';
+import 'package:booklub/ui/core/widgets/cards/clubs/horizontal_club_card_widget.dart';
 import 'package:booklub/ui/core/widgets/grids/infinite_grid_widget.dart';
 import 'package:booklub/ui/core/widgets/section_selector_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
