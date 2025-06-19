@@ -8,8 +8,8 @@ import 'package:booklub/ui/clubs/view_models/clubs_view_model.dart';
 import 'package:booklub/ui/core/layouts/base_layout.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
 import 'package:booklub/ui/core/view_models/auth_view_model.dart';
-import 'package:booklub/ui/create-club/create_club_page.dart';
-import 'package:booklub/ui/create-club/view_models/create_club_view_model.dart';
+import 'package:booklub/ui/create_club/create_club_page.dart';
+import 'package:booklub/ui/create_club/view_models/create_club_view_model.dart';
 import 'package:booklub/ui/explore/explore_page.dart';
 import 'package:booklub/ui/explore/layout/explore_layout.dart';
 import 'package:booklub/ui/explore/widget/search_bar_widget.dart';
@@ -124,14 +124,18 @@ abstract final class RoutingConfig {
       GoRoute(
         name: 'Create Club',
         path: Routes.createClub,
-        builder: (context, state) {
-          return ScrollBaseLayout(
-            sliver: ChangeNotifierProvider(
-              create: (_) => CreateClubViewModel(authRepository: context.read(), clubRepository: context.read(), ioRepository: context.read()),
-              child: CreateClubPage(),
+        builder: (context, state) => ScrollBaseLayout(
+          label: 'Criar Clube',
+          bottomBarVisible: false,
+          sliver: ChangeNotifierProvider(
+            create: (_) => CreateClubViewModel(
+              authRepository: context.read(),
+              clubRepository: context.read(),
+              ioRepository: context.read()
             ),
-          );
-        },
+            child: CreateClubPage(),
+          ),
+        ),
       ),
       GoRoute(
         name: 'Login',
