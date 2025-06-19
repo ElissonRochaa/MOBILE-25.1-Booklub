@@ -33,7 +33,7 @@ class ClubCardWidget extends StatelessWidget {
               top: 35,
               child: Container(
                 width: 100,
-                height: 110,
+                height: 120,
                 decoration: BoxDecoration(
                   color: colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),

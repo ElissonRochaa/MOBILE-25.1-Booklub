@@ -24,19 +24,20 @@ class HomePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SectionTitle(
+            title: 'Meus Clubes',
+            icon: Icons.menu_book_outlined,
+          ),
+
           if (viewModel.myClubs.isEmpty) ...[
             const Padding(
-              padding: EdgeInsets.only(top: 24),
+              padding: EdgeInsets.only(top: 8),
               child: Text(
                 'Você ainda não participa de nenhum clube.',
                 style: TextStyle(fontSize: 16),
               ),
             ),
           ] else ...[
-            const SectionTitle(
-              title: 'Meus Clubes',
-              icon: Icons.menu_book_outlined,
-            ),
             SizedBox(
               height: 170,
               child: ListView.separated(
