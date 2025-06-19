@@ -42,7 +42,7 @@ class BaseAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   List<Widget> _getActions(BuildContext context) => [
     IconButton(
       icon: Icon(Icons.notifications_rounded),
-      onPressed: () {},
+      onPressed: () => context.push(Routes.notifications),
     ),
     PopupMenuButton(
       icon: Icon(Icons.more_vert),
