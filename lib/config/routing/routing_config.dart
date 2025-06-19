@@ -55,6 +55,7 @@ abstract final class RoutingConfig {
                   (_) => HomeViewModel(
                     clubRepository: context.read(),
                     authRepository: context.read(),
+                    activitiesRepository: context.read(),
                   ),
               child: BaseLayout(child: const HomePage()),
             ),
@@ -124,18 +125,20 @@ abstract final class RoutingConfig {
       GoRoute(
         name: 'Create Club',
         path: Routes.createClub,
-        builder: (context, state) => ScrollBaseLayout(
-          label: 'Criar Clube',
-          bottomBarVisible: false,
-          sliver: ChangeNotifierProvider(
-            create: (_) => CreateClubViewModel(
-              authRepository: context.read(),
-              clubRepository: context.read(),
-              ioRepository: context.read()
+        builder:
+            (context, state) => ScrollBaseLayout(
+              label: 'Criar Clube',
+              bottomBarVisible: false,
+              sliver: ChangeNotifierProvider(
+                create:
+                    (_) => CreateClubViewModel(
+                      authRepository: context.read(),
+                      clubRepository: context.read(),
+                      ioRepository: context.read(),
+                    ),
+                child: CreateClubPage(),
+              ),
             ),
-            child: CreateClubPage(),
-          ),
-        ),
       ),
       GoRoute(
         name: 'Login',
@@ -218,7 +221,7 @@ abstract final class RoutingConfig {
                       (_) => ExploreViewModel(
                         userRepository: context.read(),
                         bookApiRepository: context.read(),
-                        clubRepository: context.read()
+                        clubRepository: context.read(),
                       ),
                 ),
                 ChangeNotifierProvider(create: (_) => SearchQueryNotifier()),
