@@ -1,5 +1,6 @@
 import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/ui/book/individual_book_page.dart';
+import 'package:booklub/domain/entities/users/auth_data.dart';
 import 'package:booklub/ui/book/view_models/book_profile_view_model.dart';
 import 'package:booklub/ui/check-your-email-recover/check_your_email_recover_page.dart';
 import 'package:booklub/ui/clubs/clubs_page.dart';
@@ -26,6 +27,9 @@ import 'package:booklub/ui/register/register_page.dart';
 import 'package:booklub/ui/register/view_models/register_view_model.dart';
 import 'package:booklub/ui/user/edit/edit_profile_page.dart';
 import 'package:booklub/ui/user/profile_page.dart';
+import 'package:booklub/ui/user/view_models/user_profile_view_model.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -97,14 +101,32 @@ abstract final class RoutingConfig {
         path: Routes.userProfile(),
         builder: (context, state) {
           final userIdFromRoute = state.pathParameters['id'];
-          final currentUserId = 'abc123';
-          final isMyOwnProfile = (userIdFromRoute == currentUserId);
 
-          return ScrollBaseLayout(
-            sliver: ProfilePage(
-              userId: userIdFromRoute!,
-              isMyOwnUserProfile: isMyOwnProfile,
-            ),
+          return FutureBuilder<AuthData>(
+            future: context.read<AuthViewModel>().getAuthData(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              final currentUserId = snapshot.data!.user.id;
+              final isMyOwnProfile = userIdFromRoute == currentUserId;
+
+              return ChangeNotifierProvider(
+                create:
+                    (context) => UserProfileViewModel(
+                      authRepository: context.read(),
+                      userRepository: context.read(),
+                      clubRepository: context.read(),
+                    ),
+                child: ScrollBaseLayout(
+                  sliver: ProfilePage(
+                    userId: userIdFromRoute!,
+                    isMyOwnUserProfile: isMyOwnProfile,
+                  ),
+                ),
+              );
+            },
           );
         },
       ),
