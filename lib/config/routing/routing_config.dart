@@ -26,6 +26,8 @@ import 'package:booklub/ui/book/individual_book_page.dart';
 import 'package:booklub/ui/user/profile_page.dart';
 import 'package:booklub/ui/user/edit/edit_profile_page.dart';
 import 'package:booklub/ui/notifications/notifications_page.dart';
+import 'package:booklub/ui/homepage/home_page.dart';
+import 'package:booklub/ui/homepage/view_model/home_view_model.dart';
 
 abstract final class RoutingConfig {
   static GoRouter createRouter(AuthViewModel authViewModel) => GoRouter(
@@ -48,7 +50,15 @@ abstract final class RoutingConfig {
       GoRoute(
         name: 'Home',
         path: Routes.home,
-        builder: (context, state) => BaseLayout(child: Placeholder()),
+        builder:
+            (context, state) => ChangeNotifierProvider(
+              create:
+                  (_) => HomeViewModel(
+                    clubRepository: context.read(),
+                    authRepository: context.read(),
+                  ),
+              child: BaseLayout(child: const HomePage()),
+            ),
       ),
       GoRoute(
         name: 'Clubs',
