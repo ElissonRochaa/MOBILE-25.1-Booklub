@@ -40,6 +40,8 @@ class UserRepository {
       throw Exception('O usuário não está autenticado');
     }
 
+    print(username);
+
     final accessToken = authData.token.accessToken;
 
     return Paginator.create(pageSize, (pageIdx, pageSize) async {
@@ -60,5 +62,27 @@ class UserRepository {
 
       return page;
     });
+  }
+
+  Future<User> getUserById(String id) async {
+    final authData = await authRepository.getAuthData();
+
+    if (authData == null) {
+      throw Exception('O usuário não está autenticado');
+    }
+
+    final accessToken = authData.token.accessToken;
+    final response = await http.get(
+        Uri.parse(
+          '$_apiUrl/api/v1/user/$id',
+        ),
+        headers: {
+          HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+          HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+        },
+      );
+
+      final json = jsonDecode(response.body);
+      return User.fromJson(json);
   }
 }

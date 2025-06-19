@@ -72,15 +72,34 @@ class ClubRepository {
   }
 
   Future<Paginator<Club>> findClubsByUserId(int pageSize, String userId) async {
-    Future.delayed(const Duration(seconds: 5));
-    return Paginator.create(pageSize, (page, pageSize) async {
-      await Future.delayed(const Duration(seconds: 1));
-      return _dummyPage(
-        page: page,
-        pageSize: pageSize,
-        userId: userId,
-        ownerId: userId,
+    final authData = await authRepository.getAuthData();
+
+    if (authData == null) {
+      throw Exception('O usuário não está autenticado');
+    }
+
+    final accessToken = authData.token.accessToken;
+
+    return Paginator.create(pageSize, (pageIdx, pageSize) async {
+      final response = await http.get(
+        Uri.parse('$_apiUrl/api/v1/users/$userId/clubs/participating').replace(
+          queryParameters: {
+            'page': pageIdx.toString(),
+            'size': pageSize.toString(),
+          },
+        ),
+        headers: {
+          HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+          HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+        },
       );
+
+      final json = jsonDecode(response.body);
+      final page = Page<Club>.fromJson(
+        json,
+        (json) => Club.fromJson(json as Map<String, dynamic>),
+      );
+      return page;
     });
   }
 
@@ -115,8 +134,8 @@ class ClubRepository {
   }
 
   Future<Paginator<Club>> searchClubByName(String name, int pageSize) async {
-    print(name);
     final authData = await authRepository.getAuthData();
+    print(name);
 
     if (authData == null) {
       throw Exception('O usuário não está autenticado');
@@ -126,9 +145,13 @@ class ClubRepository {
 
     return Paginator.create(pageSize, (pageIdx, pageSize) async {
       final response = await http.get(
-        Uri.parse(
-          '$_apiUrl/api/v1/clubs',
-        ).replace(queryParameters: {'name': name}),
+        Uri.parse('$_apiUrl/api/v1/clubs').replace(
+          queryParameters: {
+            'page': pageIdx.toString(),
+            'size': pageSize.toString(),
+            'name': name,
+          },
+        ),
         headers: {
           HttpHeaders.contentTypeHeader: ContentType.json.toString(),
           HttpHeaders.authorizationHeader: 'Bearer $accessToken',

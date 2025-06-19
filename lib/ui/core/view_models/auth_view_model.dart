@@ -1,3 +1,4 @@
+import 'package:booklub/domain/entities/users/auth_data.dart';
 import 'package:booklub/domain/entities/users/auth_token.dart';
 import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:flutter/cupertino.dart';
@@ -63,6 +64,12 @@ class AuthViewModel extends ChangeNotifier {
   Future<void> logout() async {
     authRepository.clearAuthData();
     _setAuthToken(null, notify: true);
+  }
+
+  Future<AuthData> getAuthData() async {
+    final authData = await authRepository.getAuthData();
+
+    return authData!;
   }
 
 
