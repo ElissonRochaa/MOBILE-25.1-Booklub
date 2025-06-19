@@ -3,22 +3,15 @@ import 'package:booklub/config/env/env.dart';
 abstract final class EnvConfig {
 
   static const env = Env(
-    apiUrl: String.fromEnvironment("API_URL")
+    apiUrl: String.fromEnvironment("API_URL", defaultValue: '')
   );
 
   static void checkEnvVars() {
-    final requiredEnvVars = [
-      "API_URL"
-    ];
+    final missingEnvVars = [];
 
-    final missingEnvVars = requiredEnvVars
-      .where(
-        (envVar) => String.fromEnvironment(
-          envVar,
-          defaultValue: ''
-        ).isEmpty
-      )
-      .toList();
+    if (env.apiUrl.isEmpty) {
+      missingEnvVars.add('API_URL');
+    }
 
     if (missingEnvVars.isNotEmpty) {
       throw Exception(
