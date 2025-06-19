@@ -63,7 +63,7 @@ class MemberCompletedReadingActivityCardWidget extends StatelessWidget {
         Icon(Icons.menu_book_rounded),
         Expanded(
           child: Text(
-            book.title!,
+            book.title,
             overflow: TextOverflow.clip,
           )
         ),

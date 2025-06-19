@@ -10,6 +10,9 @@ class HorizontalBookCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final colorScheme = Theme.of(context).colorScheme;
+
     final borderRadius = BorderRadius.only(
       topLeft: Radius.circular(100),
       topRight: Radius.circular(36),
@@ -42,7 +45,7 @@ class HorizontalBookCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              book.title ?? 'Título desconhecido',
+              book.title,
               style: Theme.of(context).textTheme.titleMedium,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
