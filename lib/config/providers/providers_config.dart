@@ -3,6 +3,7 @@ import 'package:booklub/config/routing/routing_config.dart';
 import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/config/theme/theme_context.dart';
 import 'package:booklub/infra/auth/auth_repository.dart';
+import 'package:booklub/infra/books/book_api_repository.dart';
 import 'package:booklub/infra/clubs/club_repository.dart';
 import 'package:booklub/infra/io/io_repository.dart';
 import 'package:booklub/infra/meetings/meetings_repository.dart';
@@ -14,6 +15,7 @@ import 'package:booklub/ui/core/view_models/club_view_model.dart';
 import 'package:booklub/ui/core/view_models/meeting_view_model.dart';
 import 'package:booklub/ui/core/view_models/reading_goal_view_model.dart';
 import 'package:booklub/ui/core/view_models/user_view_model.dart';
+import 'package:booklub/ui/explore/view_model/explore_view_model.dart';
 import 'package:booklub/utils/validation/input_validators.dart';
 import 'package:go_router/go_router.dart' hide RoutingConfig;
 import 'package:provider/provider.dart';
@@ -53,6 +55,10 @@ abstract final class ProvidersConfig {
       authRepository: context.read(),
       apiUrl: env.apiUrl,
     )),
+    Provider<BookApiRepository>(create: (context) => BookApiRepository(
+      apiUrl: env.apiUrl,
+      authRepository: context.read(),
+    )),
     Provider<BookViewModel>(create: (context) => BookViewModel(
       repository: context.read(),
     )),
@@ -67,6 +73,11 @@ abstract final class ProvidersConfig {
     )),
     Provider<UserViewModel>(create: (context) => UserViewModel(
       repository: context.read(),
+    )),
+    Provider<ExploreViewModel>(create: (context) => ExploreViewModel(
+      userRepository: context.read(),
+      clubRepository: context.read(),
+      bookApiRepository: context.read(),
     )),
   ];
 
