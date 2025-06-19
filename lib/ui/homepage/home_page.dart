@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'view_model/home_view_model.dart';
 import 'package:booklub/ui/user/widgets/section_title.dart';
+import 'widgets/club_card_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -37,33 +38,14 @@ class HomePage extends StatelessWidget {
               icon: Icons.menu_book_outlined,
             ),
             SizedBox(
-              height: 120,
+              height: 170,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.only(bottom: 8),
                 itemCount: viewModel.myClubs.length,
                 itemBuilder: (context, index) {
                   final club = viewModel.myClubs[index];
-                  return Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 35,
-                        backgroundImage:
-                            club.imageUrl != null
-                                ? NetworkImage(club.imageUrl!)
-                                : const AssetImage(
-                                      'assets/images/default_club.png',
-                                    )
-                                    as ImageProvider,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        club.name,
-                        style: const TextStyle(fontSize: 12),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  );
+                  return ClubCardWidget(club: club);
                 },
                 separatorBuilder: (_, __) => const SizedBox(width: 12),
               ),
