@@ -5,12 +5,16 @@ import 'package:booklub/ui/book/view_models/book_profile_view_model.dart';
 import 'package:booklub/ui/check-your-email-recover/check_your_email_recover_page.dart';
 import 'package:booklub/ui/clubs/clubs_page.dart';
 import 'package:booklub/ui/clubs/create_content/club_create_content_page.dart';
+import 'package:booklub/ui/clubs/meetings/create_meeting_page.dart';
 import 'package:booklub/ui/clubs/profile/club_profile_page.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
+import 'package:booklub/ui/clubs/readinggoals/create_reading_goal_page.dart';
 import 'package:booklub/ui/clubs/view_models/clubs_view_model.dart';
 import 'package:booklub/ui/core/layouts/base_layout.dart';
 import 'package:booklub/ui/core/layouts/scroll_base_layout.dart';
 import 'package:booklub/ui/core/view_models/auth_view_model.dart';
+import 'package:booklub/ui/core/view_models/create_reading_goal_view_model.dart';
+import 'package:booklub/ui/core/view_models/creating_meeting_view_model.dart';
 import 'package:booklub/ui/create_club/create_club_page.dart';
 import 'package:booklub/ui/create_club/view_models/create_club_view_model.dart';
 import 'package:booklub/ui/explore/explore_page.dart';
@@ -35,7 +39,6 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 abstract final class RoutingConfig {
-
   static final Logger logger = Logger(printer: SimplePrinter());
 
   static GoRouter createRouter(AuthViewModel authViewModel) => GoRouter(
@@ -59,15 +62,15 @@ abstract final class RoutingConfig {
         name: 'Home',
         path: Routes.home,
         builder:
-          (context, state) => ChangeNotifierProvider(
-            create:
-              (_) => HomeViewModel(
-                clubRepository: context.read(),
-                authRepository: context.read(),
-                activitiesRepository: context.read(),
-              ),
-            child: BaseLayout(child: const HomePage()),
-          ),
+            (context, state) => ChangeNotifierProvider(
+              create:
+                  (_) => HomeViewModel(
+                    clubRepository: context.read(),
+                    authRepository: context.read(),
+                    activitiesRepository: context.read(),
+                  ),
+              child: BaseLayout(child: const HomePage()),
+            ),
       ),
       GoRoute(
         name: 'Clubs',
@@ -81,7 +84,7 @@ abstract final class RoutingConfig {
                   ),
               child: ScrollBaseLayout(
                 label: 'Clubes',
-                sliver: ClubsPage(title: 'Clubes')
+                sliver: ClubsPage(title: 'Clubes'),
               ),
             ),
       ),
@@ -92,21 +95,19 @@ abstract final class RoutingConfig {
           final clubId = state.pathParameters['id'];
 
           void onCreateButtonClicked() {
-            context.push(
-                Routes.createClubContent(clubId: clubId),
-            );
+            context.push(Routes.createClubContent(clubId: clubId));
           }
 
           return ChangeNotifierProvider(
             create:
-              (context) => ClubProfileViewModel(
-                clubRepository: context.read(),
-                readingGoalsRepository: context.read(),
-                meetingsRepository: context.read(),
-                activityRepository: context.read(),
-                authViewModel: context.read(),
-                clubId: clubId!,
-              ),
+                (context) => ClubProfileViewModel(
+                  clubRepository: context.read(),
+                  readingGoalsRepository: context.read(),
+                  meetingsRepository: context.read(),
+                  activityRepository: context.read(),
+                  authViewModel: context.read(),
+                  clubId: clubId!,
+                ),
             child: ScrollBaseLayout(
               label: 'Clube',
               sliver: ClubProfilePage(),
@@ -290,12 +291,51 @@ abstract final class RoutingConfig {
           final clubId = state.pathParameters['id'];
 
           return ScrollBaseLayout(
-            sliver: ClubCreateContentPage(
-              clubId: clubId!,
-            )
+            sliver: ClubCreateContentPage(clubId: clubId!),
           );
-        }
-      )
+        },
+      ),
+      GoRoute(
+        name: 'Create Reading Goal',
+        path: Routes.createReadingGoal(),
+        builder: (context, state) {
+          final clubId = state.pathParameters['clubId']!;
+          return ChangeNotifierProvider(
+            create:
+                (context) => CreateReadingGoalViewModel(
+                  authRepository: context.read(),
+                  readingGoalsRepository: context.read(),
+                  bookApiRepository: context.read(),
+                  clubId: clubId,
+                ),
+            child: ScrollBaseLayout(
+              appBarVisible: true,
+              bottomBarVisible: false,
+              sliver: CreateReadingGoalPage(clubId: clubId),
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        name: 'Create Meeting',
+        path: Routes.createMeeting(),
+        builder: (context, state) {
+          final clubId = state.pathParameters['clubId']!;
+          return ChangeNotifierProvider(
+            create:
+                (context) => CreateMeetingViewModel(
+                  authRepository: context.read(),
+                  meetingsRepository: context.read(),
+                  bookApiRepository: context.read(),
+                ),
+            child: ScrollBaseLayout(
+              appBarVisible: true,
+              bottomBarVisible: false,
+              sliver: CreateMeetingPage(clubId: clubId),
+            ),
+          );
+        },
+      ),
     ],
   );
 }

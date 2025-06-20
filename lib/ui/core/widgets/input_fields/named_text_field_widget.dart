@@ -4,27 +4,27 @@ import 'package:booklub/utils/validation/input_wrapper.dart';
 import 'package:flutter/material.dart';
 
 class NamedTextFieldWidget extends StatefulWidget {
-
   final String label;
 
   final InputWrapper inputWrapper;
 
   final bool hidable;
 
+  final Widget? suffixIcon;
+
   const NamedTextFieldWidget({
     super.key,
     required this.label,
     required this.inputWrapper,
     this.hidable = false,
+    this.suffixIcon,
   });
 
   @override
   State<NamedTextFieldWidget> createState() => _NamedTextFieldWidgetState();
-
 }
 
 class _NamedTextFieldWidgetState extends State<NamedTextFieldWidget> {
-
   late bool _hideText;
 
   @override
@@ -42,10 +42,7 @@ class _NamedTextFieldWidgetState extends State<NamedTextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
-        Builder(builder: _buildTextField),
-        TopInnerShadow(),
-      ],
+      children: [Builder(builder: _buildTextField), TopInnerShadow()],
     );
   }
 
@@ -66,21 +63,22 @@ class _NamedTextFieldWidgetState extends State<NamedTextFieldWidget> {
 
     final errorBorder = OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.error),
-      borderRadius: borderRadius
+      borderRadius: borderRadius,
     );
 
-    final hideIcon = (widget.hidable
-      ? IconButton(
-          icon: Icon(
-            _hideText
-              ? Icons.visibility_off_outlined
-              : Icons.visibility_outlined,
-            color: colorScheme.secondary,
-          ),
-          onPressed: _toggleTextVisibility,
-        )
-      : null
-    );
+    final suffixIcon =
+        widget.suffixIcon ??
+        (widget.hidable
+            ? IconButton(
+              icon: Icon(
+                _hideText
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
+                color: colorScheme.secondary,
+              ),
+              onPressed: _toggleTextVisibility,
+            )
+            : null);
 
     return TextFormField(
       obscureText: _hideText,
@@ -95,7 +93,7 @@ class _NamedTextFieldWidgetState extends State<NamedTextFieldWidget> {
         enabledBorder: enabledBorder,
         focusedBorder: focusedBorder,
         errorBorder: errorBorder,
-        suffixIcon: hideIcon,
+        suffixIcon: suffixIcon,
         contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       ),
     );

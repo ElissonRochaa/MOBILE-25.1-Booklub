@@ -8,6 +8,7 @@ import 'package:booklub/utils/geo/types/latlng.dart';
 import 'package:booklub/utils/validation/input_validators.dart';
 import 'package:booklub/utils/validation/input_wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
 class CreateMeetingViewModel extends AsyncChangeNotifier<void> {
@@ -21,6 +22,9 @@ class CreateMeetingViewModel extends AsyncChangeNotifier<void> {
 
   late final InputWrapper addressInput;
   late final InputWrapper bookTitleInput;
+  late final InputWrapper dateTextInput;
+  late final InputWrapper timeTextInput;
+
   late final ValueNotifier<DateTime?> dateInput;
   late final ValueNotifier<LatLng?> latlngInput;
   late final ValueNotifier<TimeOfDay?> timeInput;
@@ -51,14 +55,21 @@ class CreateMeetingViewModel extends AsyncChangeNotifier<void> {
     );
     bookTitleInput.addListener(notifyListeners);
 
-    dateInput = ValueNotifier(null);
-    dateInput.addListener(notifyListeners);
+    dateTextInput = InputWrapper(
+      controller: TextEditingController(),
+      validator: inputValidators.validateBasicTextField,
+    )..addListener(notifyListeners);
+
+    timeTextInput = InputWrapper(
+      controller: TextEditingController(),
+      validator: inputValidators.validateBasicTextField,
+    )..addListener(notifyListeners);
 
     latlngInput = ValueNotifier(null);
     latlngInput.addListener(notifyListeners);
 
-    timeInput = ValueNotifier(null);
-    timeInput.addListener(notifyListeners);
+    dateInput = ValueNotifier(null)..addListener(notifyListeners);
+    timeInput = ValueNotifier(null)..addListener(notifyListeners);
   }
 
   void updateLatLng(LatLng? latlng) {
@@ -66,11 +77,17 @@ class CreateMeetingViewModel extends AsyncChangeNotifier<void> {
   }
 
   void setDate(DateTime? selectedDate) {
-    dateInput.value = selectedDate;
+    if (selectedDate != null) {
+      dateInput.value = selectedDate;
+      dateTextInput.text = DateFormat('dd/MM/yyyy').format(selectedDate);
+    }
   }
 
-  void setTime(TimeOfDay? selectedTime) {
-    timeInput.value = selectedTime;
+  void setTime(TimeOfDay? selectedTime, BuildContext context) {
+    if (selectedTime != null) {
+      timeInput.value = selectedTime;
+      timeTextInput.text = selectedTime.format(context);
+    }
   }
 
   bool get isValid {
@@ -124,13 +141,14 @@ class CreateMeetingViewModel extends AsyncChangeNotifier<void> {
 
     bool completed;
 
+    this.readingGoalId = readingGoalId;
     if (isValid) {
       try {
         final meetingCreationDto = MeetingCreationDto(
           address: addressInput.text.trim(),
           date: scheduledDateTime,
           bookId: selectedBookItem!.id ?? (throw Exception('Livro sem ID')),
-          latlng: latlngInput.value!,
+          latlng: LatLng(latitude: 0.1, longitude: 0.2),
         );
 
         final meeting = await meetingsRepository.createMeeting(
@@ -138,7 +156,7 @@ class CreateMeetingViewModel extends AsyncChangeNotifier<void> {
           readingGoalId,
         );
 
-        log.i('Meeting created successfully with ID: ${meeting.id}');
+        log.i('Encontro criado: ${meeting.id}');
         created = true;
         completed = true;
       } catch (e, stackTrace) {

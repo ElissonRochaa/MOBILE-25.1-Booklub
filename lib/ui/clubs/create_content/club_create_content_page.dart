@@ -1,4 +1,6 @@
+import 'package:booklub/config/routing/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ClubCreateContentPage extends StatelessWidget {
 
@@ -6,7 +8,7 @@ class ClubCreateContentPage extends StatelessWidget {
 
   const ClubCreateContentPage({
     super.key,
-    required this.clubId
+    required this.clubId,
   });
 
   @override
@@ -14,10 +16,15 @@ class ClubCreateContentPage extends StatelessWidget {
     final tiles = [
       ListTile(
         title: Text('Criar meta de leitura'),
-
+        onTap: (){
+          context.push(Routes.createReadingGoal(clubId: clubId));
+        }
       ),
       ListTile(
-        title: Text('Criar meta de leitura'),
+        title: Text('Criar encontro'),
+        onTap: (){
+          context.push(Routes.createMeeting(clubId: clubId));
+        }
       ),
     ];
 

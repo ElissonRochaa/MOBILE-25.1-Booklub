@@ -25,9 +25,15 @@ abstract final class Routes {
   static String explore = '/explore';
 
   static const String notifications = '/notifications';
-  
+
   static const String createClub = '/create-club';
 
-  static String createClubContent({String? clubId = ':id'}) => '/clubs/$clubId/create-content';
+  static String createClubContent({String? clubId = ':id'}) =>
+      '/clubs/$clubId/create-content';
 
+  static String createReadingGoal({String? clubId = ':clubId'}) =>
+      '/clubs/$clubId/create-reading-goal';
+
+  static String createMeeting({String? clubId = ':clubId'}) =>
+      '/clubs/$clubId/create-meeting';
 }

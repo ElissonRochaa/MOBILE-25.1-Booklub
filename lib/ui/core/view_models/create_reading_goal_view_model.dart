@@ -9,6 +9,7 @@ import 'package:booklub/ui/core/view_models/async_change_notifier.dart';
 import 'package:booklub/utils/validation/input_validators.dart';
 import 'package:booklub/utils/validation/input_wrapper.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
 class CreateReadingGoalViewModel extends AsyncChangeNotifier<void> {
@@ -20,6 +21,9 @@ class CreateReadingGoalViewModel extends AsyncChangeNotifier<void> {
   final String clubId;
 
   late final InputWrapper bookTitleInput;
+  late final InputWrapper startDateTextInput;
+  late final InputWrapper endDateTextInput;
+
   late final ValueNotifier<DateTime?> startDateInput;
   late final ValueNotifier<DateTime?> endDateInput;
 
@@ -38,24 +42,37 @@ class CreateReadingGoalViewModel extends AsyncChangeNotifier<void> {
     );
     bookTitleInput.addListener(notifyListeners);
 
-    startDateInput = ValueNotifier(null);
-    startDateInput.addListener(notifyListeners);
+    startDateTextInput = InputWrapper(
+      controller: TextEditingController(),
+      validator: inputValidators.validateBasicTextField,
+    )..addListener(notifyListeners);
 
-    endDateInput = ValueNotifier(null);
-    endDateInput.addListener(notifyListeners);
+    endDateTextInput = InputWrapper(
+      controller: TextEditingController(),
+      validator: inputValidators.validateBasicTextField,
+    )..addListener(notifyListeners);
+
+    startDateInput = ValueNotifier(null)..addListener(notifyListeners);
+    endDateInput = ValueNotifier(null)..addListener(notifyListeners);
+  }
+
+  void setStartDate(DateTime? date) {
+    if (date != null) {
+      startDateInput.value = date;
+      startDateTextInput.text = DateFormat('dd/MM/yyyy').format(date);
+    }
+  }
+
+  void setEndDate(DateTime? date) {
+    if (date != null) {
+      endDateInput.value = date;
+      endDateTextInput.text = DateFormat('dd/MM/yyyy').format(date);
+    }
   }
 
   @override
   void get payload {
     return;
-  }
-
-  void setStartDate(DateTime? date) {
-    startDateInput.value = date;
-  }
-
-  void setEndDate(DateTime? date) {
-    endDateInput.value = date;
   }
 
   bool get isValid {
