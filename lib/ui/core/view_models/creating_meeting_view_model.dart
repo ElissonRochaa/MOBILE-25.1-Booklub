@@ -107,7 +107,7 @@ class CreateMeetingViewModel extends AsyncChangeNotifier<void> {
   }
 
   Future<void> searchBookByTitle() async {
-    final title = bookTitleInput.text.trim();
+    final title = bookTitleInput.text;
     if (title.isEmpty) return;
 
     try {
