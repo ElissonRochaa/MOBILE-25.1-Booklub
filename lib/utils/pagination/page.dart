@@ -5,15 +5,15 @@ part 'page.g.dart';
 @JsonSerializable(genericArgumentFactories: true)
 class Page<T> {
 
-  final List<T> _content;
+  final List<T> content;
 
   @JsonKey(name: 'page')
   final PageInfo pageInfo;
 
   Page({
-    required List<T> content,
+    required this.content,
     required this.pageInfo,
-  }) : _content = content;
+  });
 
   bool get isLastPage => pageInfo.number == pageInfo.totalPages - 1;
 
@@ -23,10 +23,10 @@ class Page<T> {
 
   bool get hasPreviousPage => !isFirstPage;
 
-  bool get isEmpty => _content.isEmpty;
+  bool get isEmpty => content.isEmpty;
 
   List<T> toList() {
-    return List.from(_content, growable: false);
+    return List.from(content, growable: false);
   }
 
   factory Page.fromJson(

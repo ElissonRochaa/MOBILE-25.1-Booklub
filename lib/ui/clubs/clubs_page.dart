@@ -1,115 +1,157 @@
+import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/ui/clubs/view_models/clubs_view_model.dart';
-import 'package:booklub/ui/clubs/widgets/club_vertical_card_widget.dart';
-import 'package:booklub/ui/core/widgets/carousel/named_section_carousel_widget.dart';
-import 'package:booklub/ui/core/widgets/grids/named_section_grid_widget.dart';
-import 'package:booklub/ui/core/widgets/vertical_card_widget.dart';
+import 'package:booklub/ui/core/widgets/cards/clubs/horizontal_club_card_widget.dart';
+import 'package:booklub/ui/core/widgets/grids/infinite_grid_widget.dart';
+import 'package:booklub/ui/core/widgets/section_selector_widget.dart';
 import 'package:booklub/utils/async_builder.dart';
-import 'package:booklub/utils/pagination/page.dart';
 import 'package:flutter/material.dart' hide Page;
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
+enum ClubsPageSection {participating, managed}
+
 class ClubsPage extends StatefulWidget {
+
   const ClubsPage({super.key, required this.title});
 
   final String title;
 
   @override
   State<ClubsPage> createState() => _ClubsPageState();
+
 }
 
 class _ClubsPageState extends State<ClubsPage> {
 
+  ClubsPageSection section = ClubsPageSection.participating;
+
+  final Logger logger = Logger();
+
   @override
   Widget build(BuildContext context) {
-    final cardHeight = _getCardHeight(context);
-    final cardAspectRatio = _getCardAspectRatio();
-
-    final cards = List.generate(10, (i) => VerticalCardWidget(
-      imageProvider: NetworkImage('https://pt.quizur.com/_image?href=https://static.quizur.com/i/b/573e6c06640578.83502531573e6c06471173.49992186.png&w=1024&h=1024&f=webp'),
-      child: Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'The Civil War',
-            ),
-          ],
-        ),
-      ),
-    ));
-    
     return MultiSliver(
       children: [
-        Builder(builder: _buildMyClubsSection),
-        SliverPadding(
-            padding: const EdgeInsets.all(16),
-        ),
-        NamedSectionCarouselWidget.sliver(
-          name: 'Recentes',
-          height: cardHeight,
-          aspectRatio: cardAspectRatio,
-          showSeeMore: true,
-          itemBuilder: (context, index) => cards[index],
-          itemCount: cards.length,
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.all(16),
-        ),
-        NamedSectionGridWidget.sliver(
-          name: 'Explorar',
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: cardHeight * cardAspectRatio,
-            mainAxisExtent: cardHeight
-          ),
-          childrenDelegate: SliverChildBuilderDelegate(
-            (context, index) => cards[index],
-            childCount: cards.length
-          ),
-        ),
+        Builder(builder: _buildClubsPageSectionSelector),
+        Builder(builder: _buildClubsList)
       ],
     );
   }
 
-  double _getCardHeight(BuildContext context) {
-    return MediaQuery.of(context).size.height * 0.2;
-  }
+  Widget _buildClubsPageSectionSelector(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
 
-  double _getCardAspectRatio() => 3/4;
-
-  Widget _buildMyClubsSection(BuildContext context) {
-    final clubsViewModel = context.watch<ClubsViewModel>();
-    final cardHeight = _getCardHeight(context);
-    final cardAspectRatio = _getCardAspectRatio();
-
-    final myClubs = clubsViewModel.findMyClubs(10);
-
-    return NamedSectionCarouselWidget.sliver(
-      name: 'Meus Clubes',
-      height: cardHeight,
-      aspectRatio: cardAspectRatio,
-      showSeeMore: true,
-      itemBuilder: (context, index) => AsyncBuilder(
-        future: myClubs,
-        onRetrieved: (paginator) => _buildClubCard(paginator[index], index),
-        onLoading: () => const Center(child: CircularProgressIndicator()),
-        onError: (_, _) => Placeholder(),
+    final sections = [
+      SectionSelectorItem(
+        label: 'Participando',
+        onSelect: () => setState(() => section = ClubsPageSection.participating),
+        isSelected: section == ClubsPageSection.participating
       ),
-      itemCount: 10,
+      SectionSelectorItem(
+        label: 'Administrados',
+        onSelect: () => setState(() => section = ClubsPageSection.managed),
+        isSelected: section == ClubsPageSection.managed
+      ),
+    ];
+
+    return SliverToBoxAdapter(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(color: colorScheme.white),
+        child: SectionSelectorWidget(sections: sections)
+      )
     );
   }
 
-  Widget _buildClubCard(Future<Page<Club>> page, int index) {
-    return AsyncBuilder(
-      future: page,
-      onRetrieved: (data) => ClubVerticalCardWidget(
-        club: data.toList()[index],
+  Widget _buildClubsList(BuildContext context) {
+    final clubsViewModel = context.watch<ClubsViewModel>();
+    final scrollController = context.read<ScrollController>();
+    final clubPaginatorFuture = section == ClubsPageSection.participating
+      ? clubsViewModel.findMyClubs(8)
+      : clubsViewModel.findManagedClubs(8);
+
+    final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 1,
+      childAspectRatio: 7/2,
+      mainAxisSpacing: 12
+    );
+
+    SliverChildBuilderDelegate childrenDelegateProvider(
+      List<Club> clubs,
+      int totalClubs
+    ) => SliverChildBuilderDelegate(
+      (context, index) => HorizontalClubCardWidget(club: clubs[index]),
+      childCount: totalClubs,
+    );
+
+    final clubsList = AsyncBuilder(
+      future: clubPaginatorFuture,
+      onRetrieved: (paginator) => InfiniteGridWidget.sliver(
+        paginator: paginator,
+        controller: scrollController,
+        gridDelegate: gridDelegate,
+        childrenDelegateProvider: childrenDelegateProvider
       ),
-      onLoading: () => Center(
-        child: CircularProgressIndicator()
+      onLoading: () => Builder(builder: _buildLoadingPage),
+      onError: (e, trace) => Builder(
+          builder: (context) => _buildErrorPage(context, e, trace)
       ),
-      onError: (_, _) => VerticalCardWidget()
+    );
+
+    return SliverPadding(
+      padding: EdgeInsets.only(
+        right: 12,
+        left: 12,
+        top: 12,
+        bottom: 36,
+      ),
+      sliver: clubsList,
+    );
+  }
+
+  Widget _buildLoadingPage(BuildContext context) {
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircularProgressIndicator()
+        ]
+      ),
+    );
+  }
+
+  Widget _buildErrorPage(
+      BuildContext context,
+      Object object,
+      StackTrace stackTrace
+  ) {
+    logger.e('Object: $object \n StackTrace: $stackTrace');
+
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final errorMessage = 'Falha ao carregar clubes';
+
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              errorMessage,
+              style: textTheme.titleSmall!.copyWith(
+                color: colorScheme.error
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ]
+        ),
+      ),
     );
   }
 

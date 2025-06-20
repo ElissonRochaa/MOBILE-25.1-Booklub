@@ -19,11 +19,13 @@ migrate_working_dir/
 *.iml
 *.ipr
 *.iws
-.idea/
+.idea/*
+!.idea/runConfigurations
 devtools_options.yaml
 
 # Vscode related
-.vscode/
+.vscode/*
+!.vscode/launch.json
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -93,3 +95,6 @@ app.*.map.json
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+# Env
+.env

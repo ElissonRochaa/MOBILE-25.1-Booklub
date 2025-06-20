@@ -14,6 +14,9 @@ services:
       - S3_URL=http://host.docker.internal:9000
       - S3_ACCESS_NAME=minio
       - S3_ACCESS_SECRET=12345678
+      - S3_REGION=sa-east-1
+      - GOOGLE_BOOKS_API_BASE_URL=https://www.googleapis.com/books/v1
+      - GOOGLE_BOOKS_API_KEY=AIzaSyAGwdrx-Izy4MUY-qjLtgJJwSlViD1IgxI
     ports:
       - "8081:8081"
     depends_on:
@@ -48,7 +51,7 @@ services:
       - booklub-network
 
   postgresql:
-    image: postgres:16
+    image: postgis/postgis:16-master
     container_name: booklub-flutter-postgres
     environment:
       POSTGRES_USER: postgres

@@ -16,7 +16,7 @@ class ClubVerticalCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return VerticalCardWidget(
-      imageProvider: NetworkImage(club.imageUrl),
+      imageProvider: NetworkImage(club.imageUrl!),
       child: Expanded(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

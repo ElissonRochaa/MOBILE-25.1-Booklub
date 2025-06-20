@@ -46,15 +46,26 @@ class _InfiniteGridWidgetState<T> extends State<InfiniteGridWidget<T>> {
 
   bool get _hasMore => _currentPage < widget.paginator.totalPages;
 
-  void _fetchNextPage() async {
-    setState(() => _isLoading = true);
+  bool get isScrollable {
+    final maxScrollExtent = widget.controller.position.maxScrollExtent;
+    final viewPortExtent = widget.controller.position.viewportDimension;
+
+    return maxScrollExtent > viewPortExtent;
+  }
+
+  Future<void> _fetchNextPage() async {
+    if (mounted) {
+      setState(() => _isLoading = true);
+    }
 
     try {
       final nextPage = await widget.paginator[_currentPage];
       _items.addAll(nextPage.toList());
       _currentPage++;
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -70,7 +81,6 @@ class _InfiniteGridWidgetState<T> extends State<InfiniteGridWidget<T>> {
     ? _buildSliverPaginatedGridWidget()
     : _buildPaginatedGridWidget();
 
-
   void _onScroll() {
     final preloadOffset = widget.controller.position.maxScrollExtent - 200;
     final scrollPosition = widget.controller.position.pixels;
@@ -78,12 +88,15 @@ class _InfiniteGridWidgetState<T> extends State<InfiniteGridWidget<T>> {
       scrollPosition >= preloadOffset
       && !_isLoading
       && _hasMore
+      && mounted
     ) {
       _fetchNextPage();
     }
   }
 
   Widget _buildPaginatedGridWidget() {
+    if (_hasMore && !_isLoading && !isScrollable) _fetchNextPage();
+
     return Column(
       children: [
         Expanded(
@@ -102,6 +115,8 @@ class _InfiniteGridWidgetState<T> extends State<InfiniteGridWidget<T>> {
   }
 
   Widget _buildSliverPaginatedGridWidget() {
+    if (_hasMore && !_isLoading && !isScrollable && mounted) _fetchNextPage();
+
     return MultiSliver(
       children: [
         SliverGrid(
