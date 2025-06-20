@@ -77,7 +77,7 @@ class MeetingDefinedActivityCardWidget extends StatelessWidget {
       spacing: 8,
       children: [
         Icon(Icons.menu_book_rounded),
-        Text(book.title!),
+        Text(book.title),
       ],
     );
 

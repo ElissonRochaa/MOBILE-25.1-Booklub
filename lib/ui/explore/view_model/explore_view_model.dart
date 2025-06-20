@@ -27,10 +27,13 @@ class ExploreViewModel extends ChangeNotifier {
   }
 
   Future<Paginator<BookItem>> findBooksByTitleContaining(
-    String title,
+    String query,
     int pageSize,
   ) async {
-    return bookApiRepository.searchBooks(intitle: title, page: pageSize);
+    return bookApiRepository.searchBooks(
+      intitle: query,
+      page: pageSize,
+    );
   }
 
   Future<Paginator<Club>> searchClubByName(String name, int pageSize) async {

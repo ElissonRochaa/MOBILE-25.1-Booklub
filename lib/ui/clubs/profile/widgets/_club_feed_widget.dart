@@ -99,7 +99,7 @@ class _ClubFeedWidgetState extends State<ClubFeedWidget> {
           (item) => HorizontalReadingGoalCardWidget(
             readingGoal: item,
             club: viewModel.club!,
-            bookItem: BookItem(), // TODO Implementar busca por livro
+            bookItem: BookItem(title: 'str'), // TODO Implementar busca por livro
           ),
         )
       ),

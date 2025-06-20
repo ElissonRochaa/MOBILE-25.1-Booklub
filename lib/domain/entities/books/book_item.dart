@@ -4,8 +4,9 @@ part 'book_item.g.dart';
 
 @JsonSerializable()
 class BookItem {
+  final String? id;
 
-  final String? title;
+  final String title;
 
   final String? authors;
 
@@ -15,16 +16,20 @@ class BookItem {
 
   final String? isbn;
 
+  final String? datePublished;
+
   BookItem({
-    this.title,
+    this.id,
+    required this.title,
     this.authors,
     this.description,
     this.thumbnail,
     this.isbn,
+    this.datePublished,
   });
 
-  factory BookItem.fromJson(Map<String, dynamic> json) => _$BookItemFromJson(json);
+  factory BookItem.fromJson(Map<String, dynamic> json) =>
+      _$BookItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$BookItemToJson(this);
-
 }

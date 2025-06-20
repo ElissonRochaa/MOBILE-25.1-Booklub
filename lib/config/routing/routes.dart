@@ -1,5 +1,4 @@
 abstract final class Routes {
-
   static const String home = '/';
 
   static const String clubs = '/clubs';
@@ -11,17 +10,17 @@ abstract final class Routes {
 
   static String userProfile({String? userId = ':id'}) => '/user/$userId';
 
-  static const String login = '/login'; 
+  static const String login = '/login';
 
-  static const String recoverPassword = '/recover-password'; 
+  static const String recoverPassword = '/recover-password';
 
-  static const String checkYourEmailRecover = '/check-email-recover'; 
+  static const String checkYourEmailRecover = '/check-email-recover';
 
   static const String register = '/register';
 
   static const String book = '/book';
 
-  static String individualBook({String? bookId = ':id'}) => '$book/$bookId';
+  static String individualBook({String bookId = ':id'}) => '$book/$bookId';
 
   static String explore = '/explore';
 
