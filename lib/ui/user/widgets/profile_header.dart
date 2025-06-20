@@ -1,5 +1,6 @@
 import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/config/theme/theme_config.dart';
+import 'package:booklub/ui/core/widgets/circle_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -28,6 +29,12 @@ class ProfileHeader extends StatelessWidget {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
+    final profilePic = DecorationImage(
+      image: NetworkImage(avatarUrl)
+    );
+
+    print(avatarUrl);
+
     return Column(
       children: [
         Text(
@@ -39,7 +46,13 @@ class ProfileHeader extends StatelessWidget {
           ),
         ),
         SizedBox(height: 8),
-        CircleAvatar(radius: 80, backgroundImage: NetworkImage(avatarUrl)),
+        CircleImageWidget(
+          radius: 160,
+          borderWidth: 2,
+          decorationImage: profilePic,
+          backgroundColor: colorScheme.primary,
+          borderColor: colorScheme.primary,
+        ),
         Text(
           name,
           style: textTheme.titleMedium!.copyWith(
