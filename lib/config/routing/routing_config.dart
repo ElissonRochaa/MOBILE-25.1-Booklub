@@ -1,6 +1,7 @@
 import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/ui/book/individual_book_page.dart';
 import 'package:booklub/domain/entities/users/auth_data.dart';
+import 'package:booklub/ui/book/view_models/book_profile_view_model.dart';
 import 'package:booklub/ui/check-your-email-recover/check_your_email_recover_page.dart';
 import 'package:booklub/ui/clubs/clubs_page.dart';
 import 'package:booklub/ui/clubs/profile/club_profile_page.dart';
@@ -67,13 +68,14 @@ abstract final class RoutingConfig {
         name: 'Clubs',
         path: Routes.clubs,
         builder:
-          (context, state) => ChangeNotifierProvider(
-            create: (context) => ClubsViewModel(
-              clubRepository: context.read(),
-              authViewModel: context.read(),
+            (context, state) => ChangeNotifierProvider(
+              create:
+                  (context) => ClubsViewModel(
+                    clubRepository: context.read(),
+                    authViewModel: context.read(),
+                  ),
+              child: ScrollBaseLayout(sliver: ClubsPage(title: 'Clubes')),
             ),
-            child: ScrollBaseLayout(sliver: ClubsPage(title: 'Clubes')),
-          ),
       ),
       GoRoute(
         name: 'Club Profile',
@@ -81,14 +83,15 @@ abstract final class RoutingConfig {
         builder: (context, state) {
           final clubId = state.pathParameters['id'];
           return ChangeNotifierProvider(
-            create: (context) => ClubProfileViewModel(
-              clubRepository: context.read(),
-              readingGoalsRepository: context.read(),
-              meetingsRepository: context.read(),
-              activityRepository: context.read(),
-              authViewModel: context.read(),
-              clubId: clubId!,
-            ),
+            create:
+                (context) => ClubProfileViewModel(
+                  clubRepository: context.read(),
+                  readingGoalsRepository: context.read(),
+                  meetingsRepository: context.read(),
+                  activityRepository: context.read(),
+                  authViewModel: context.read(),
+                  clubId: clubId!,
+                ),
             child: ScrollBaseLayout(sliver: ClubProfilePage()),
           );
         },
@@ -146,18 +149,20 @@ abstract final class RoutingConfig {
       GoRoute(
         name: 'Create Club',
         path: Routes.createClub,
-        builder: (context, state) => ScrollBaseLayout(
-          label: 'Criar Clube',
-          bottomBarVisible: false,
-          sliver: ChangeNotifierProvider(
-            create: (_) => CreateClubViewModel(
-              authRepository: context.read(),
-              clubRepository: context.read(),
-              ioRepository: context.read()
+        builder:
+            (context, state) => ScrollBaseLayout(
+              label: 'Criar Clube',
+              bottomBarVisible: false,
+              sliver: ChangeNotifierProvider(
+                create:
+                    (_) => CreateClubViewModel(
+                      authRepository: context.read(),
+                      clubRepository: context.read(),
+                      ioRepository: context.read(),
+                    ),
+                child: CreateClubPage(),
+              ),
             ),
-            child: CreateClubPage(),
-          ),
-        ),
       ),
       GoRoute(
         name: 'Login',
@@ -226,7 +231,19 @@ abstract final class RoutingConfig {
         path: Routes.individualBook(),
         builder: (context, state) {
           final bookId = state.pathParameters['id'];
-          return IndividualBookPage(bookId: bookId!);
+          print('Book ID from route: $bookId');
+          return ChangeNotifierProvider(
+            create:
+                (context) => BookProfileViewModel(
+                  bookRepository: context.read(),
+                  volumeId: bookId!,
+                ),
+            child: ScrollBaseLayout(
+              appBarVisible: true,
+              bottomBarVisible: true,
+              sliver: IndividualBookPage(bookId: bookId!),
+            ),
+          );
         },
       ),
       GoRoute(
@@ -240,7 +257,7 @@ abstract final class RoutingConfig {
                       (_) => ExploreViewModel(
                         userRepository: context.read(),
                         bookApiRepository: context.read(),
-                        clubRepository: context.read()
+                        clubRepository: context.read(),
                       ),
                 ),
                 ChangeNotifierProvider(create: (_) => SearchQueryNotifier()),
