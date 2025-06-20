@@ -18,6 +18,27 @@ class ReadingGoalsRepository {
     required String apiUrl
   }): _authRepository = authRepository, _apiUrl = apiUrl;
 
+  Future<ReadingGoal> createReadingGoal(ReadingGoal readingGoal, String clubId) async {
+    final authToken = (await _authRepository.getAuthData())!.token;
+
+    final uri = Uri.parse('$_apiUrl/api/v1/clubs/$clubId/reading-goals');
+
+    final response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+        HttpHeaders.authorizationHeader: authToken.toString(),
+      },
+      body: jsonEncode(readingGoal.toJson()),
+    );
+
+    if (response.statusCode != 201) {
+      throw Exception('Erro ao criar reading goal');
+    }
+
+    return ReadingGoal.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+  }
+
   Future<Paginator<ReadingGoal>> findReadingGoalsByClubId(
     String clubId,
     int pageSize,
