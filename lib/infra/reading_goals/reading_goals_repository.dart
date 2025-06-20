@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:booklub/domain/reading_goals/entities/reading_goal.dart';
+import 'package:booklub/domain/reading_goals/entities/reading_goal_creation_dto.dart';
 import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:booklub/utils/pagination/page.dart';
 import 'package:booklub/utils/pagination/paginator.dart';
@@ -17,6 +18,27 @@ class ReadingGoalsRepository {
     required AuthRepository authRepository,
     required String apiUrl
   }): _authRepository = authRepository, _apiUrl = apiUrl;
+
+  Future<ReadingGoal> createReadingGoal(CreateReadingGoalDto readingGoal, String clubId) async {
+    final authToken = (await _authRepository.getAuthData())!.token;
+
+    final uri = Uri.parse('$_apiUrl/api/v1/clubs/$clubId/reading-goals');
+
+    final response = await http.post(
+      uri,
+      headers: {
+        HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+        HttpHeaders.authorizationHeader: authToken.toString(),
+      },
+      body: jsonEncode(readingGoal.toJson()),
+    );
+
+    if (response.statusCode != 201) {
+      throw Exception('Erro ao criar reading goal');
+    }
+
+    return ReadingGoal.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+  }
 
   Future<Paginator<ReadingGoal>> findReadingGoalsByClubId(
     String clubId,

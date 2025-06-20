@@ -2,21 +2,48 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:booklub/domain/meetings/entities/meeting.dart';
+import 'package:booklub/domain/meetings/entities/meeting_creation_dto.dart';
 import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:booklub/utils/pagination/page.dart';
 import 'package:booklub/utils/pagination/paginator.dart';
 import 'package:http/http.dart' as http;
 
 class MeetingsRepository {
-
   final AuthRepository _authRepository;
 
   final String _apiUrl;
 
   MeetingsRepository({
     required AuthRepository authRepository,
-    required String apiUrl
-  }): _authRepository = authRepository, _apiUrl = apiUrl;
+    required String apiUrl,
+  }) : _authRepository = authRepository,
+       _apiUrl = apiUrl;
+
+  Future<Meeting> createMeeting(
+    MeetingCreationDto dto,
+    String readingGoalId,
+  ) async {
+    final authToken = (await _authRepository.getAuthData())!.token;
+
+    final uri = Uri.parse('$_apiUrl/api/v1/meetings');
+
+    final response = await http.post(
+      uri,
+      body: jsonEncode(dto.toJson()),
+      headers: {
+        HttpHeaders.contentTypeHeader: ContentType.json.toString(),
+        HttpHeaders.authorizationHeader: authToken.toString(),
+      },
+    );
+
+    if (response.statusCode != 201) {
+      print('🔴 Erro ao criar meeting: ${response.statusCode}');
+      print('🔴 Corpo da resposta: ${response.body}');
+      throw Exception('Erro ao criar meeting');
+    }
+
+    return Meeting.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+  }
 
   Future<Paginator<Meeting>> findMeetingsByClubId(
     String clubId,
@@ -25,13 +52,8 @@ class MeetingsRepository {
     final authToken = (await _authRepository.getAuthData())!.token;
 
     return Paginator.create(pageSize, (page, pageSize) async {
-      final uri = Uri.parse(
-          '$_apiUrl/api/v1/clubs/$clubId/meetings'
-      ).replace(
-        queryParameters: {
-          'page': page.toString(),
-          'size': pageSize.toString(),
-        },
+      final uri = Uri.parse('$_apiUrl/api/v1/clubs/$clubId/meetings').replace(
+        queryParameters: {'page': page.toString(), 'size': pageSize.toString()},
       );
 
       final response = await http.get(
@@ -48,7 +70,7 @@ class MeetingsRepository {
 
       return Page<Meeting>.fromJson(
         jsonDecode(response.body),
-            (json) => Meeting.fromJson(json as Map<String, dynamic>),
+        (json) => Meeting.fromJson(json as Map<String, dynamic>),
       );
     });
   }
@@ -67,18 +89,20 @@ class MeetingsRepository {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Erro ao buscar o próximo meeting do clube com ID $clubId');
+      throw Exception(
+        'Erro ao buscar o próximo meeting do clube com ID $clubId',
+      );
     }
 
-    return Meeting.fromJson(
-      jsonDecode(response.body) as Map<String, dynamic>,
-    );
+    return Meeting.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
   Future<Meeting> findMeetingByReadingGoalId(String readingGoalId) async {
     final authToken = (await _authRepository.getAuthData())!.token;
 
-    final uri = Uri.parse('$_apiUrl/api/v1/reading-goals/$readingGoalId/meeting');
+    final uri = Uri.parse(
+      '$_apiUrl/api/v1/reading-goals/$readingGoalId/meeting',
+    );
 
     final response = await http.get(
       uri,
@@ -89,12 +113,12 @@ class MeetingsRepository {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Erro ao buscar meeting do reading goal com ID $readingGoalId');
+      throw Exception(
+        'Erro ao buscar meeting do reading goal com ID $readingGoalId',
+      );
     }
 
-    return Meeting.fromJson(
-      jsonDecode(response.body) as Map<String, dynamic>,
-    );
+    return Meeting.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
   Future<Meeting> findMeetingById(String meetingId) async {
@@ -114,11 +138,6 @@ class MeetingsRepository {
       throw Exception('Erro ao buscar meeting com ID $meetingId');
     }
 
-    return Meeting.fromJson(
-      jsonDecode(response.body) as Map<String, dynamic>,
-    );
+    return Meeting.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
-
-
-
 }
