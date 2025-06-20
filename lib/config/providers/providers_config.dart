@@ -33,8 +33,12 @@ abstract final class ProvidersConfig {
       create: (context) => AuthViewModel(authRepository: context.read()),
     ),
     Provider<InputValidators>(create: (context) => InputValidators()),
-    ChangeNotifierProvider<ThemeContext>.value(
-      value: ThemeConfig.themeContext,
+    ChangeNotifierProvider<ThemeContext>(
+      create: (context) => ThemeContext(
+        darkTheme: ThemeConfig.darkTheme,
+        lightTheme: ThemeConfig.lightTheme,
+      ),
+      lazy: true,
     ),
     Provider<GoRouter>(
       create: (context) => RoutingConfig.createRouter(context.read()),
@@ -84,7 +88,6 @@ abstract final class ProvidersConfig {
       clubRepository: context.read(),
       bookApiRepository: context.read(),
     )),
-
   ];
 
 

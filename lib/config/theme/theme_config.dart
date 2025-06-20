@@ -80,7 +80,7 @@ abstract final class ThemeConfig {
         onSecondary: CustomColors.darkWhite,
         error: CustomColors.red,
         onError: CustomColors.white,
-        surface: CustomColors.lightBlack,
+        surface: CustomColors.black,
         onSurface: CustomColors.white,
       ),
       textTheme: _textTheme,
@@ -106,11 +106,6 @@ abstract final class ThemeConfig {
         shadowColor: CustomColors.black
       ),
     ),
-  );
-
-  static ThemeContext get themeContext => ThemeContext(
-    lightTheme: lightTheme,
-    darkTheme: darkTheme,
   );
 
 }
