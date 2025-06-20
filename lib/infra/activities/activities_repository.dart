@@ -89,7 +89,7 @@ class ActivitiesRepository {
     });
   }
 
-Future<Paginator<Activity>> findActivitiesForUser(
+  Future<Paginator<Activity>> findActivitiesForUser(
     String userId,
     int pageSize,
   ) async {
