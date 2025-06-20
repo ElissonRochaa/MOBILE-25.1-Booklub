@@ -75,28 +75,29 @@ class IndividualBookPage extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
 
-    return ScrollBaseLayout(
-      sliver: MultiSliver(
-        children: [
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildCoverAndTitleSection(textTheme, colorScheme, book),
-                  const SizedBox(height: 16),
-                  _buildClubStatsSection(colorScheme),
-                  const SizedBox(height: 16),
-                  _buildRatingSection(),
-                  const SizedBox(height: 24),
-                  _buildReviewSection(context, textTheme),
-                ],
-              ),
+    return MultiSliver(
+      children: [
+        SliverPadding(
+          padding: const EdgeInsets.all(16),
+          sliver: SliverToBoxAdapter(
+            child: Column(
+              spacing: 16,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildCoverAndTitleSection(textTheme, colorScheme, book),
+                _buildClubStatsSection(colorScheme),
+                Column(
+                  spacing: 24,
+                  children: [
+                    _buildRatingSection(),
+                    _buildReviewSection(context, textTheme),
+                  ],
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
