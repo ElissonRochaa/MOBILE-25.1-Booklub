@@ -91,7 +91,7 @@ class _NamedTextFieldWidgetState extends State<NamedTextFieldWidget> {
         labelStyle: TextStyle(color: colorScheme.superLightBlack),
         floatingLabelStyle: TextStyle(color: colorScheme.onSurface),
         filled: true,
-        fillColor: colorScheme.surface,
+        fillColor: colorScheme.surfaceContainerHigh,
         enabledBorder: enabledBorder,
         focusedBorder: focusedBorder,
         errorBorder: errorBorder,

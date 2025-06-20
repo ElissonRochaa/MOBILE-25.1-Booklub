@@ -24,6 +24,10 @@ abstract final class CustomColors {
 
   static const Color superDarkWhite = Color.fromARGB(255, 175, 175, 175);
 
+  static const Color superDarkBlack = Color.fromARGB(255, 25, 25, 25);
+
+  static const Color darkBlack = Color.fromARGB(255, 40, 40, 40);
+
   static const Color black = Color.fromARGB(255, 73, 73, 73);
 
   static const Color lightBlack = Color.fromARGB(255, 116, 116, 116);

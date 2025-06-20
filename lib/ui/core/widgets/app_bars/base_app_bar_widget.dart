@@ -11,18 +11,22 @@ class BaseAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   final String label;
 
+  final bool hideShadow;
+
   final bool sliver;
 
   const BaseAppBarWidget({
     super.key,
     this.height = kToolbarHeight,
     this.label = 'Booklub',
+    this.hideShadow = false,
   }): sliver=false;
 
   const BaseAppBarWidget.sliver({
     super.key,
     this.height = kToolbarHeight,
     this.label = 'Booklub',
+    this.hideShadow = false,
   }): sliver=true;
 
   @override
@@ -35,6 +39,7 @@ class BaseAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     child: AppBar(
       title: Text(label),
       actions: _getActions(context),
+      shadowColor: hideShadow ? Colors.transparent : null,
     ),
   );
 
@@ -42,6 +47,8 @@ class BaseAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     floating: true,
     title: Text(label),
     actions: _getActions(context),
+    forceElevated: true,
+    shadowColor: hideShadow ? Colors.transparent : null,
   );
 
   List<Widget> _getActions(BuildContext context) => [

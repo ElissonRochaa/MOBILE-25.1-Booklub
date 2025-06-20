@@ -65,7 +65,7 @@ class _ExplorePageState extends State<ExplorePage> {
     return SliverToBoxAdapter(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(color: colorScheme.white),
+        decoration: BoxDecoration(color: colorScheme.surfaceContainerHighest),
         child: SectionSelectorWidget(sections: sections),
       ),
     );

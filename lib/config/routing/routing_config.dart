@@ -80,6 +80,7 @@ abstract final class RoutingConfig {
                   ),
               child: ScrollBaseLayout(
                 label: 'Clubes',
+                hideShadow: true,
                 sliver: ClubsPage(title: 'Clubes')
               ),
             ),
@@ -108,6 +109,7 @@ abstract final class RoutingConfig {
               ),
             child: ScrollBaseLayout(
               label: 'Clube',
+              hideShadow: true,
               sliver: ClubProfilePage(),
               onCreateButtonClicked: onCreateButtonClicked,
             ),

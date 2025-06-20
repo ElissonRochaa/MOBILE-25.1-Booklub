@@ -58,7 +58,7 @@ class _ClubsPageState extends State<ClubsPage> {
     return SliverToBoxAdapter(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(color: colorScheme.surfaceContainer),
+        decoration: BoxDecoration(color: colorScheme.surfaceContainerHighest),
         child: SectionSelectorWidget(sections: sections)
       )
     );

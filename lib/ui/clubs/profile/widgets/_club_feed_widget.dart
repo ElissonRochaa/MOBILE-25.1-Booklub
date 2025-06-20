@@ -71,7 +71,7 @@ class _ClubFeedWidgetState extends State<ClubFeedWidget> {
     return SliverToBoxAdapter(
       child: Container(
         decoration: BoxDecoration(
-          color: colorScheme.white,
+          color: colorScheme.surfaceContainerHighest,
           boxShadow: [BoxShadow(
             color: Colors.black26,
             offset: Offset(0, 4),

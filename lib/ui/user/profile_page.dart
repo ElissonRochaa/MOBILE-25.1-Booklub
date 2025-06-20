@@ -28,6 +28,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final userProfileViewModel = context.read<UserProfileViewModel>();
     final userFuture = userProfileViewModel.getUserData(widget.userId);
     final clubsFuture = userProfileViewModel.getUserClubs(4, widget.userId);
@@ -67,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       right: 24,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF2F5F7).withAlpha(210),
+                      color: colorScheme.surfaceContainerHigh,
                       borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(32),
                       ),

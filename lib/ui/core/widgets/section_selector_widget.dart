@@ -39,11 +39,11 @@ class SectionSelectorWidget extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: (section.isSelected
           ? colorScheme.primary
-          : colorScheme.darkWhite
+          : colorScheme.surfaceContainer
         ),
         foregroundColor: (section.isSelected
           ? colorScheme.onPrimary
-          : colorScheme.black
+          : colorScheme.onSurface
         ),
         textStyle: textTheme.labelMedium,
         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8)

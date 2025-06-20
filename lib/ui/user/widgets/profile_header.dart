@@ -76,7 +76,7 @@ class ProfileHeader extends StatelessWidget {
             TextButton(
               onPressed: () {},
               style: TextButton.styleFrom(
-                backgroundColor: colorScheme.onPrimary,
+                backgroundColor: colorScheme.surfaceContainer,
                 minimumSize: Size(80, 60),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -95,7 +95,7 @@ class ProfileHeader extends StatelessWidget {
                   Text(
                     'bookfriends',
                     style: textTheme.bodySmall!.copyWith(
-                      color: colorScheme.onSurface,
+                      color: colorScheme.primary,
                     ),
                   ),
                 ],
@@ -122,7 +122,7 @@ class ProfileHeader extends StatelessWidget {
               child: Text(
                 isMyOwnUserProfile ? "Editar" : "Seguir",
                 style: textTheme.headlineSmall!.copyWith(
-                  color: colorScheme.white,
+                  color: colorScheme.onPrimary,
                   fontFamily: "Navicula",
                 ),
               ),

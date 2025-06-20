@@ -45,7 +45,7 @@ class _ExploreLayoutState extends State<ExploreLayout> {
       elevation: 0,
       title: Container(
         decoration: BoxDecoration(
-          color: colorScheme.darkWhite,
+          color: colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(20),
         ),
         child: TextField(
