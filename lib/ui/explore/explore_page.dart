@@ -1,4 +1,3 @@
-import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/books/book_item.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/domain/entities/users/user.dart';

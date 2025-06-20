@@ -1,5 +1,4 @@
 import 'package:booklub/config/routing/routes.dart';
-import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/ui/core/widgets/circle_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

@@ -3,9 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum ThemeMode {
-  light,
-  dark,
-  system;
+  light('light'),
+  dark('dark'),
+  system('system');
+
+  final String label;
+
+  const ThemeMode(
+    this.label
+  );
 
   static ThemeMode fromString(String value) {
     switch (value) {
@@ -75,7 +81,7 @@ class ThemeContext extends ChangeNotifier with WidgetsBindingObserver {
     activeThemeType = Brightness.dark;
     if (save) {
       final prefs = await SharedPreferences.getInstance();
-      prefs.setString(_themeModeKey, ThemeMode.dark.toString());
+      prefs.setString(_themeModeKey, ThemeMode.dark.label);
     }
     notifyListeners();
   }
@@ -85,7 +91,7 @@ class ThemeContext extends ChangeNotifier with WidgetsBindingObserver {
     activeThemeType = Brightness.light;
     if (save) {
       final prefs = await SharedPreferences.getInstance();
-      prefs.setString(_themeModeKey, ThemeMode.light.toString());
+      prefs.setString(_themeModeKey, ThemeMode.light.label);
     }
     notifyListeners();
   }
@@ -104,7 +110,7 @@ class ThemeContext extends ChangeNotifier with WidgetsBindingObserver {
 
     if (save) {
       final prefs = await SharedPreferences.getInstance();
-      prefs.setString(_themeModeKey, ThemeMode.system.toString());
+      prefs.setString(_themeModeKey, ThemeMode.system.label);
     }
     notifyListeners();
   }
