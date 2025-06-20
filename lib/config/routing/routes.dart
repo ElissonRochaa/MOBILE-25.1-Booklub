@@ -27,4 +27,7 @@ abstract final class Routes {
   static const String notifications = '/notifications';
   
   static const String createClub = '/create-club';
+
+  static String createClubContent({String? clubId = ':id'}) => '/clubs/$clubId/create-content';
+
 }

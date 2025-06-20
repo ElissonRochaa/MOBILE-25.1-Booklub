@@ -14,12 +14,15 @@ class ScrollBaseLayout extends StatefulWidget {
 
   final String label;
 
+  final VoidCallback? onCreateButtonClicked;
+
   const ScrollBaseLayout({
     super.key,
     required this.sliver,
     this.label = 'Booklub',
     this.appBarVisible = true,
     this.bottomBarVisible = true,
+    this.onCreateButtonClicked
   });
 
   @override
@@ -85,7 +88,9 @@ class _ScrollBaseLayoutState extends State<ScrollBaseLayout> {
       : null;
 
     final floatingActionButton = widget.bottomBarVisible
-      ? BaseFloatingActionButtonWidget()
+      ? BaseFloatingActionButtonWidget(
+          onPressed: widget.onCreateButtonClicked,
+        )
       : null;
 
     return Scaffold(

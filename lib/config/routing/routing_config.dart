@@ -4,6 +4,7 @@ import 'package:booklub/domain/entities/users/auth_data.dart';
 import 'package:booklub/ui/book/view_models/book_profile_view_model.dart';
 import 'package:booklub/ui/check-your-email-recover/check_your_email_recover_page.dart';
 import 'package:booklub/ui/clubs/clubs_page.dart';
+import 'package:booklub/ui/clubs/create_content/club_create_content_page.dart';
 import 'package:booklub/ui/clubs/profile/club_profile_page.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
 import 'package:booklub/ui/clubs/view_models/clubs_view_model.dart';
@@ -28,12 +29,15 @@ import 'package:booklub/ui/register/view_models/register_view_model.dart';
 import 'package:booklub/ui/user/edit/edit_profile_page.dart';
 import 'package:booklub/ui/user/profile_page.dart';
 import 'package:booklub/ui/user/view_models/user_profile_view_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 abstract final class RoutingConfig {
+
+  static final Logger logger = Logger(printer: SimplePrinter());
+
   static GoRouter createRouter(AuthViewModel authViewModel) => GoRouter(
     initialLocation: Routes.home,
     refreshListenable: authViewModel,
@@ -74,7 +78,10 @@ abstract final class RoutingConfig {
                     clubRepository: context.read(),
                     authViewModel: context.read(),
                   ),
-              child: ScrollBaseLayout(sliver: ClubsPage(title: 'Clubes')),
+              child: ScrollBaseLayout(
+                label: 'Clubes',
+                sliver: ClubsPage(title: 'Clubes')
+              ),
             ),
       ),
       GoRoute(
@@ -82,17 +89,28 @@ abstract final class RoutingConfig {
         path: Routes.clubProfile(),
         builder: (context, state) {
           final clubId = state.pathParameters['id'];
+
+          void onCreateButtonClicked() {
+            context.push(
+                Routes.createClubContent(clubId: clubId),
+            );
+          }
+
           return ChangeNotifierProvider(
             create:
-                (context) => ClubProfileViewModel(
-                  clubRepository: context.read(),
-                  readingGoalsRepository: context.read(),
-                  meetingsRepository: context.read(),
-                  activityRepository: context.read(),
-                  authViewModel: context.read(),
-                  clubId: clubId!,
-                ),
-            child: ScrollBaseLayout(sliver: ClubProfilePage()),
+              (context) => ClubProfileViewModel(
+                clubRepository: context.read(),
+                readingGoalsRepository: context.read(),
+                meetingsRepository: context.read(),
+                activityRepository: context.read(),
+                authViewModel: context.read(),
+                clubId: clubId!,
+              ),
+            child: ScrollBaseLayout(
+              label: 'Clube',
+              sliver: ClubProfilePage(),
+              onCreateButtonClicked: onCreateButtonClicked,
+            ),
           );
         },
       ),
@@ -231,12 +249,11 @@ abstract final class RoutingConfig {
         path: Routes.individualBook(),
         builder: (context, state) {
           final bookId = state.pathParameters['id'];
-          print('Book ID from route: $bookId');
           return ChangeNotifierProvider(
             create:
                 (context) => BookProfileViewModel(
                   bookRepository: context.read(),
-                  volumeId: bookId!,
+                  volumeId: bookId,
                 ),
             child: ScrollBaseLayout(
               appBarVisible: true,
@@ -265,6 +282,19 @@ abstract final class RoutingConfig {
               child: ExploreLayout(sliver: ExplorePage()),
             ),
       ),
+      GoRoute(
+        name: 'Create Club Content',
+        path: Routes.createClubContent(),
+        builder: (context, state) {
+          final clubId = state.pathParameters['id'];
+
+          return ScrollBaseLayout(
+            sliver: ClubCreateContentPage(
+              clubId: clubId!,
+            )
+          );
+        }
+      )
     ],
   );
 }

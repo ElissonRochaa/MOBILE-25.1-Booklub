@@ -4,12 +4,17 @@ import 'package:go_router/go_router.dart';
 
 class BaseFloatingActionButtonWidget extends StatelessWidget {
 
-  const BaseFloatingActionButtonWidget({super.key});
+  final VoidCallback? onPressed;
+
+  const BaseFloatingActionButtonWidget({
+    super.key,
+    this.onPressed
+  });
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: () => context.push(Routes.createClub),
+      onPressed: onPressed ?? () => context.push(Routes.createClub),
       shape: CircleBorder(),
       child: const Icon(Icons.add),
     );
