@@ -28,6 +28,7 @@ import 'package:booklub/ui/register/register_page.dart';
 import 'package:booklub/ui/register/view_models/register_view_model.dart';
 import 'package:booklub/ui/user/edit/edit_profile_page.dart';
 import 'package:booklub/ui/user/profile_page.dart';
+import 'package:booklub/ui/user/view_models/edit_user_profile_view_model.dart';
 import 'package:booklub/ui/user/view_models/user_profile_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -162,9 +163,19 @@ abstract final class RoutingConfig {
         name: 'Edit Profile',
         path: Routes.edit(),
         builder:
-            (context, state) => ScrollBaseLayout(
-              sliver: EditProfilePage(),
-              bottomBarVisible: false,
+            (context, state) => ChangeNotifierProvider(
+              create:
+                  (context) => EditUserProfileViewModel(
+                    authRepository: context.read(),
+                    userRepository  : context.read(),
+                    inputValidators: context.read(),
+                    ioRepository: context.read(),
+                  ),
+              child: ScrollBaseLayout(
+                appBarVisible: true,
+                bottomBarVisible: false,
+                sliver: EditProfilePage(),
+              ),
             ),
       ),
       GoRoute(

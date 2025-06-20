@@ -31,4 +31,11 @@ class InputValidators {
     return null;
   }
 
+  String? validateEditableField(String originalValue, String newValue) {
+    if (originalValue == newValue) {
+      return 'Esse campo não foi atualizado!';
+    }
+    return null;
+  }
+
 }

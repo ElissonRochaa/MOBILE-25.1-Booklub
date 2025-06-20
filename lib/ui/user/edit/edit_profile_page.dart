@@ -1,71 +1,118 @@
+import 'package:booklub/config/routing/routes.dart';
+import 'package:booklub/ui/core/widgets/buttons/purple_rounded_button.dart';
+import 'package:booklub/ui/core/widgets/input_fields/image_field_widget.dart';
+import 'package:booklub/ui/core/widgets/input_fields/named_date_field_widget.dart';
+import 'package:booklub/ui/core/widgets/input_fields/named_text_field_widget.dart';
+import 'package:booklub/ui/user/edit/widgets/editable_date_field.dart';
 import 'package:booklub/ui/user/edit/widgets/editable_field.dart';
-import 'package:booklub/ui/user/edit/widgets/photo_picker.dart';
-import 'package:booklub/ui/user/widgets/section_title.dart';
+import 'package:booklub/ui/user/view_models/edit_user_profile_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key});
+class EditProfilePage extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>();
+  late final EditUserProfileViewModel editUserProfileViewModel;
 
-  @override
-  State<EditProfilePage> createState() => _EditProfilePageState();
-}
+  EditProfilePage({super.key});
 
-//TODO: Widget modificar o icon p passar como parametro, pesquisa de campo para data e alterar o layout da tela
-
-class _EditProfilePageState extends State<EditProfilePage> {
-  final TextEditingController controller_email = TextEditingController();
-  final TextEditingController controller_senha = TextEditingController();
-  final TextEditingController controller_nome = TextEditingController();
-  final TextEditingController controller_username = TextEditingController();
-  final TextEditingController controller_sobrenome = TextEditingController();
-  final TextEditingController controller_data = TextEditingController();
-  final TextEditingController controller_foto = TextEditingController();
-  //
   @override
   Widget build(BuildContext context) {
-    return MultiSliver(
-      children: [
-        SliverToBoxAdapter(
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 24, right: 24),
-                child: Column(
-                  spacing: 16,
-                  children: [
-                    SectionTitle(
-                      title: 'Informações da Conta',
-                      icon: Icons.info_outline_rounded,
-                    ),
-                    EditableField(label: 'Email', controller: controller_email),
-                    EditableField(
-                      label: 'Senha',
-                      controller: controller_senha,
-                      obscureText: true,
-                    ),
-                    EditableField(label: 'Nome', controller: controller_nome),
-                    EditableField(
-                      label: 'Sobrenome',
-                      controller: controller_sobrenome,
-                    ),
-                    EditableField(
-                      label: 'Username',
-                      controller: controller_username,
-                    ),
-                    EditableField(
-                      label: 'Data de Nascimento',
-                      controller: controller_data,
-                    ),
-                    PhotoPickerBox(),
-                  ],
-                ),
-              ),
-            ],
-          ),
+    editUserProfileViewModel = context.read<EditUserProfileViewModel>();
+
+    return SliverPadding(
+      padding: const EdgeInsets.all(24),
+      sliver: SliverFillRemaining(
+        hasScrollBody: false,
+        child: Column(
+          spacing: 24,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Builder(builder: _buildForm),
+            Builder(builder: _buildButtons),
+          ],
         ),
+      ),
+    );
+  }
+
+
+  Widget _buildButtons(BuildContext context) {
+    return Column(
+      children: [
+        PurpleRoundedButton("Atualizar", () => _onSubmit(context)),
       ],
+    );
+  }
+
+  void _onSubmit(BuildContext context) async {
+    if (_formKey.currentState?.validate() ?? false) {
+      final succeeded = await editUserProfileViewModel.update();
+      if (context.mounted && succeeded) context.go(Routes.home);
+    }
+  }
+
+  Widget _buildForm(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildProfilePictureField(context),
+          const SizedBox(height: 24),
+          _buildFirstNameField(context),
+          const SizedBox(height: 24),
+          _buildLastNameField(context),
+          const SizedBox(height: 24),
+          _buildBirthDateField(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfilePictureField(BuildContext context) {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+
+    return ValueListenableBuilder(
+      valueListenable: editUserProfileViewModel.profilePicture,
+      builder: (context, value, child) {
+        final image =
+            (value != null
+                ? DecorationImage(image: FileImage(value), fit: BoxFit.cover)
+                : null);
+
+        return ImageFieldWidget(
+          constraints: const BoxConstraints(maxHeight: 172, maxWidth: 172),
+          height: screenWidth * 0.4,
+          width: screenWidth * 0.4,
+          shape: BoxShape.circle,
+          imagePicker: () => editUserProfileViewModel.pickProfilePicture(),
+          image: image,
+        );
+      },
+    );
+  }
+
+  Widget _buildFirstNameField(BuildContext context) {
+    return EditableField(
+      label: "Nome",
+      controller: editUserProfileViewModel.firstNameInput,
+    );
+  }
+
+  Widget _buildLastNameField(BuildContext context) {
+    return EditableField(
+      label: "Sobrenome",
+      controller: editUserProfileViewModel.lastNameInput,
+    );
+
+  }
+  Widget _buildBirthDateField(BuildContext context) {
+    return EditableDateField(
+      label: 'Nascimento',
+      controller: editUserProfileViewModel.birthDateInput,
     );
   }
 }
