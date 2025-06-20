@@ -93,7 +93,11 @@ class _ExplorePageState extends State<ExplorePage> {
               item is User
                   ? UserHorizontalCardWidget(user: item)
                   : item is Club
-                  ? HorizontalClubCardWidget(club: item) //isso aqui tá feio pra krl mas por enquanto ta funcionando
+                  ? HorizontalClubCardWidget(club: item)
+                  : item is BookItem
+                  ? HorizontalBookCardWidget(
+                    book: item,
+                  ) //isso aqui tá feio pra krl mas por enquanto ta funcionando
                   : SizedBox.shrink(),
         );
 
@@ -104,10 +108,10 @@ class _ExplorePageState extends State<ExplorePage> {
         itemsList = _handleFutureEntityList(
           futurePaginator,
           scrollController,
-          (book) => BookHorizontalCardWidget(book: book),
+          (book) => HorizontalBookCardWidget(book: book),
         );
         break;
-        
+
       case ExploreSection.clubs:
         Future<Paginator<Club>> futurePaginator = exploreViewModel
             .searchClubByName(query, 8);
@@ -163,7 +167,10 @@ class _ExplorePageState extends State<ExplorePage> {
             childrenDelegateProvider: childrenDelegateProvider,
           ),
       onLoading: () => Builder(builder: _buildLoadingPage),
-      onError: (_, __) => Builder(builder: _buildErrorPage),
+      onError: (e, trace) {
+        print('Error: $e \n Trace: $trace');
+        return Builder(builder: _buildErrorPage);
+      },
     );
   }
 

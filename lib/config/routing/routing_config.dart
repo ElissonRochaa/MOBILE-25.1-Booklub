@@ -1,6 +1,7 @@
 import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/ui/book/individual_book_page.dart';
 import 'package:booklub/domain/entities/users/auth_data.dart';
+import 'package:booklub/ui/book/view_models/book_profile_view_model.dart';
 import 'package:booklub/ui/check-your-email-recover/check_your_email_recover_page.dart';
 import 'package:booklub/ui/clubs/clubs_page.dart';
 import 'package:booklub/ui/clubs/profile/club_profile_page.dart';
@@ -55,14 +56,15 @@ abstract final class RoutingConfig {
         name: 'Home',
         path: Routes.home,
         builder:
-            (context, state) => ChangeNotifierProvider(
-              create:
-                  (_) => HomeViewModel(
-                    clubRepository: context.read(),
-                    authRepository: context.read(),
-                  ),
-              child: BaseLayout(child: const HomePage()),
-            ),
+          (context, state) => ChangeNotifierProvider(
+            create:
+              (_) => HomeViewModel(
+                clubRepository: context.read(),
+                authRepository: context.read(),
+                activitiesRepository: context.read(),
+              ),
+            child: BaseLayout(child: const HomePage()),
+          ),
       ),
       GoRoute(
         name: 'Clubs',
@@ -241,7 +243,19 @@ abstract final class RoutingConfig {
         path: Routes.individualBook(),
         builder: (context, state) {
           final bookId = state.pathParameters['id'];
-          return IndividualBookPage(bookId: bookId!);
+          print('Book ID from route: $bookId');
+          return ChangeNotifierProvider(
+            create:
+                (context) => BookProfileViewModel(
+                  bookRepository: context.read(),
+                  volumeId: bookId!,
+                ),
+            child: ScrollBaseLayout(
+              appBarVisible: true,
+              bottomBarVisible: true,
+              sliver: IndividualBookPage(bookId: bookId!),
+            ),
+          );
         },
       ),
       GoRoute(

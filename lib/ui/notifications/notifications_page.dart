@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:booklub/config/routing/routes.dart';
 import 'package:booklub/ui/notifications/widgets/notification_card_widget.dart';
+import 'package:booklub/ui/notifications/welcome_notification.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -9,51 +12,34 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  final List<Map<String, dynamic>> _allNotifications = [
-    {
-      "title": "Nova avaliação em 'clube das lindas'",
-      "message": "Ana avaliou 'Duna'. Veja!",
-      "time": "2h atrás",
-      "icon": Icons.bookmark,
-      "isRead": false,
-    },
-    {
-      "title": "Lembre-se do encontro!",
-      "message": "‘clube do romance’ tem encontro amanhã às 19h.",
-      "time": "1d atrás",
-      "icon": Icons.calendar_today,
-      "isRead": true,
-    },
-    {
-      "title": "Novo membro no clube!",
-      "message": "Michael entrou no 'clube dos aventureiros'. Diga 'olá'!",
-      "time": "3h atrás",
-      "icon": Icons.person,
-      "isRead": false,
-    },
-  ];
-
   String? _filter;
 
   void _toggleFilter(String type) {
     setState(() {
-      if (_filter == type) {
-        _filter = null;
-      } else {
-        _filter = type;
-      }
+      _filter = (_filter == type) ? null : type;
+    });
+  }
+
+  Future<void> _handleNotificationTap(int index) async {
+    await GoRouter.of(context).push(Routes.explore);
+    setState(() {
+      WelcomeNotificationStore.markAsRead(index);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final allNotifications = WelcomeNotificationStore.notifications;
 
     final filteredNotifications =
         _filter == null
-            ? _allNotifications
-            : _allNotifications
-                .where((n) => _filter == 'unread' ? !n['isRead'] : n['isRead'])
+            ? allNotifications
+            : allNotifications
+                .where(
+                  (n) =>
+                      _filter == 'unread' ? !n['isRead'] : n['isRead'] as bool,
+                )
                 .toList();
 
     return SliverToBoxAdapter(
@@ -119,21 +105,35 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  ...filteredNotifications.map(
-                    (notif) => Padding(
+                  ...allNotifications.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final notif = entry.value;
+
+                    if (_filter == 'unread' && notif['isRead'] == true) {
+                      return const SizedBox.shrink();
+                    }
+                    if (_filter == 'read' && notif['isRead'] == false) {
+                      return const SizedBox.shrink();
+                    }
+
+                    return Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 8,
                       ),
-                      child: NotificationCard(
-                        title: notif['title'] as String,
-                        message: notif['message'] as String,
-                        time: notif['time'] as String,
-                        icon: notif['icon'] as IconData,
-                        isRead: notif['isRead'] as bool,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () => _handleNotificationTap(index),
+                        child: NotificationCard(
+                          title: notif['title'] as String,
+                          message: notif['message'] as String,
+                          time: notif['time'] as String,
+                          icon: notif['icon'] as IconData,
+                          isRead: notif['isRead'] as bool,
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }),
                 ],
               ),
             );
