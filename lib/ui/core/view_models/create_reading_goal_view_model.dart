@@ -1,6 +1,7 @@
 import 'package:booklub/domain/entities/books/book_item.dart';
 import 'package:booklub/domain/entities/users/auth_data.dart';
 import 'package:booklub/domain/reading_goals/entities/reading_goal.dart';
+import 'package:booklub/domain/reading_goals/entities/reading_goal_creation_dto.dart';
 import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:booklub/infra/books/book_api_repository.dart';
 import 'package:booklub/infra/reading_goals/reading_goals_repository.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
 
 class CreateReadingGoalViewModel extends AsyncChangeNotifier<void> {
-
   final Logger log = Logger(printer: SimplePrinter());
   final AuthRepository authRepository;
   final ReadingGoalsRepository readingGoalsRepository;
@@ -26,7 +26,12 @@ class CreateReadingGoalViewModel extends AsyncChangeNotifier<void> {
   bool created = false;
   BookItem? selectedBookItem;
 
-  CreateReadingGoalViewModel({required this.authRepository, required this.readingGoalsRepository, required this.bookApiRepository, required this.clubId}){
+  CreateReadingGoalViewModel({
+    required this.authRepository,
+    required this.readingGoalsRepository,
+    required this.bookApiRepository,
+    required this.clubId,
+  }) {
     bookTitleInput = InputWrapper(
       controller: TextEditingController(),
       validator: inputValidators.validateBasicTextField,
@@ -55,17 +60,17 @@ class CreateReadingGoalViewModel extends AsyncChangeNotifier<void> {
 
   bool get isValid {
     return bookTitleInput.isValid &&
-           selectedBookItem != null &&
-           startDateInput.value != null &&
-           endDateInput.value != null &&
-           startDateInput.value!.isBefore(endDateInput.value!);
+        selectedBookItem != null &&
+        startDateInput.value != null &&
+        endDateInput.value != null &&
+        startDateInput.value!.isBefore(endDateInput.value!);
   }
 
   Future<void> searchBookByTitle() async {
-    final title =  bookTitleInput.text.trim();
+    final title = bookTitleInput.text.trim();
     if (title.isEmpty) return;
 
-    try{
+    try {
       final paginator = await bookApiRepository.searchBooks(intitle: title);
       final page = await paginator[0];
 
@@ -73,10 +78,14 @@ class CreateReadingGoalViewModel extends AsyncChangeNotifier<void> {
         selectedBookItem = page.content.first;
         bookTitleInput.text = selectedBookItem!.title;
       } else {
-        selectedBookItem = null;      
+        selectedBookItem = null;
       }
-    }catch (e, stackTrace) {
-      log.e('Erro ao buscar livro por título', error: e, stackTrace: stackTrace);
+    } catch (e, stackTrace) {
+      log.e(
+        'Erro ao buscar livro por título',
+        error: e,
+        stackTrace: stackTrace,
+      );
       selectedBookItem = null;
     } finally {
       notifyListeners();
@@ -92,17 +101,14 @@ class CreateReadingGoalViewModel extends AsyncChangeNotifier<void> {
 
     final bool completed;
 
-    if (isValid){
-      final readingGoal = ReadingGoal(
-        id: '',
-        bookId: selectedBookItem!.id ?? (throw Exception('Livro selecionado sem ID')),
-        clubId: clubId,
-        startDate: startDateInput.value!,
-        endDate: endDateInput.value!,
-        createdAt: DateTime.now(),
+    if (isValid) {
+      final dto = CreateReadingGoalDto(
+        bookId: selectedBookItem!.id ?? (throw Exception('Livro sem ID')),
+        startDate: startDateInput.value!.toIso8601String().substring(0, 10),
+        endDate: endDateInput.value!.toIso8601String().substring(0, 10),
       );
 
-      await readingGoalsRepository.createReadingGoal(readingGoal, clubId);
+      await readingGoalsRepository.createReadingGoal(dto, clubId);
       completed = true;
     } else {
       log.d('dados invalidos para criar reading goal');
@@ -114,10 +120,4 @@ class CreateReadingGoalViewModel extends AsyncChangeNotifier<void> {
     notifyListeners();
     return completed;
   }
-
-  
-
-  
-
-
 }

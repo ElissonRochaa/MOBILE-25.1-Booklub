@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:booklub/domain/reading_goals/entities/reading_goal.dart';
+import 'package:booklub/domain/reading_goals/entities/reading_goal_creation_dto.dart';
 import 'package:booklub/infra/auth/auth_repository.dart';
 import 'package:booklub/utils/pagination/page.dart';
 import 'package:booklub/utils/pagination/paginator.dart';
@@ -18,7 +19,7 @@ class ReadingGoalsRepository {
     required String apiUrl
   }): _authRepository = authRepository, _apiUrl = apiUrl;
 
-  Future<ReadingGoal> createReadingGoal(ReadingGoal readingGoal, String clubId) async {
+  Future<ReadingGoal> createReadingGoal(CreateReadingGoalDto readingGoal, String clubId) async {
     final authToken = (await _authRepository.getAuthData())!.token;
 
     final uri = Uri.parse('$_apiUrl/api/v1/clubs/$clubId/reading-goals');
