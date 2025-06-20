@@ -1,4 +1,3 @@
-import 'package:booklub/config/theme/theme_config.dart';
 import 'package:flutter/material.dart';
 
 class ClubProfileInfoListItem {
@@ -53,7 +52,7 @@ class ClubProfileInfoListWidget extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 6),
-        color: colorScheme.white,
+        color: colorScheme.surfaceContainerHighest,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: ConstrainedBox(
@@ -93,14 +92,14 @@ class _ProfileInfoCardWidget extends StatelessWidget {
     final cardNumber = Text(
       number.toString(),
       style: textTheme.labelLarge!.copyWith(
-        color: selected ? colorScheme.onSecondary : colorScheme.primary,
+        color: selected ? colorScheme.onPrimary : colorScheme.onSurface,
       ),
     );
 
     final cardLabel = Text(
       label,
       style: textTheme.labelSmall!.copyWith(
-        color: selected ? colorScheme.onSecondary : colorScheme.primary,
+        color: selected ? colorScheme.onPrimary : colorScheme.onSurface,
       )
     );
 
@@ -115,7 +114,7 @@ class _ProfileInfoCardWidget extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
       child: Card(
-        color: selected ? colorScheme.secondary : colorScheme.darkWhite,
+        color: selected ? colorScheme.primary : colorScheme.surfaceContainer,
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),

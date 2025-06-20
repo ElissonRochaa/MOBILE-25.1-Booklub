@@ -82,7 +82,7 @@ class BaseBottomBarWidget extends StatelessWidget {
     return BottomAppBar(
       shape: CircularNotchedRectangle(),
       height: height,
-      color: colorScheme.surface,
+      color: colorScheme.surfaceContainerHighest,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: navigationIcons,

@@ -1,4 +1,3 @@
-import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/books/book_item.dart';
 import 'package:booklub/domain/entities/clubs/activities/club_activity.dart';
 import 'package:booklub/ui/clubs/profile/view_models/club_profile_view_model.dart';
@@ -71,7 +70,7 @@ class _ClubFeedWidgetState extends State<ClubFeedWidget> {
     return SliverToBoxAdapter(
       child: Container(
         decoration: BoxDecoration(
-          color: colorScheme.white,
+          color: colorScheme.surfaceContainerHighest,
           boxShadow: [BoxShadow(
             color: Colors.black26,
             offset: Offset(0, 4),

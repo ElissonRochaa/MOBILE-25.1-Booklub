@@ -14,6 +14,8 @@ class ScrollBaseLayout extends StatefulWidget {
 
   final String label;
 
+  final bool hideShadow;
+
   final VoidCallback? onCreateButtonClicked;
 
   const ScrollBaseLayout({
@@ -22,7 +24,8 @@ class ScrollBaseLayout extends StatefulWidget {
     this.label = 'Booklub',
     this.appBarVisible = true,
     this.bottomBarVisible = true,
-    this.onCreateButtonClicked
+    this.onCreateButtonClicked,
+    this.hideShadow = false,
   });
 
   @override
@@ -70,6 +73,7 @@ class _ScrollBaseLayoutState extends State<ScrollBaseLayout> {
           slivers: [
             if (widget.appBarVisible) BaseAppBarWidget.sliver(
               label: widget.label,
+              hideShadow: widget.hideShadow,
               height: appBarHeight
             ),
             SliverPadding(

@@ -88,7 +88,7 @@ class ClubProfilePage extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 6, horizontal: 24),
-        color: colorScheme.white,
+        color: colorScheme.surfaceContainerHighest,
         child: CircleImageWidget(
           constraint: CircleConstraint(
             minRadius: minRadius,
@@ -134,7 +134,7 @@ class ClubProfilePage extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-        color: colorScheme.white,
+        color: colorScheme.surfaceContainerHighest,
         child: labels
       ),
     );

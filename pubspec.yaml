@@ -24,6 +24,7 @@ dependencies:
   mime: ^2.0.0
   http_parser: ^4.1.2
   lottie: ^2.7.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:

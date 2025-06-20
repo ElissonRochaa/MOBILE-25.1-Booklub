@@ -1,4 +1,3 @@
-import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/domain/entities/clubs/club.dart';
 import 'package:booklub/ui/clubs/view_models/clubs_view_model.dart';
 import 'package:booklub/ui/core/widgets/cards/clubs/horizontal_club_card_widget.dart';
@@ -58,7 +57,7 @@ class _ClubsPageState extends State<ClubsPage> {
     return SliverToBoxAdapter(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(color: colorScheme.white),
+        decoration: BoxDecoration(color: colorScheme.surfaceContainerHighest),
         child: SectionSelectorWidget(sections: sections)
       )
     );

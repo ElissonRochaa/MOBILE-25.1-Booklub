@@ -1,5 +1,4 @@
 import 'package:booklub/config/routing/routes.dart';
-import 'package:booklub/config/theme/theme_config.dart';
 import 'package:booklub/ui/core/widgets/circle_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -76,7 +75,7 @@ class ProfileHeader extends StatelessWidget {
             TextButton(
               onPressed: () {},
               style: TextButton.styleFrom(
-                backgroundColor: colorScheme.onPrimary,
+                backgroundColor: colorScheme.surfaceContainer,
                 minimumSize: Size(80, 60),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -95,7 +94,7 @@ class ProfileHeader extends StatelessWidget {
                   Text(
                     'bookfriends',
                     style: textTheme.bodySmall!.copyWith(
-                      color: colorScheme.onSurface,
+                      color: colorScheme.primary,
                     ),
                   ),
                 ],
@@ -122,7 +121,7 @@ class ProfileHeader extends StatelessWidget {
               child: Text(
                 isMyOwnUserProfile ? "Editar" : "Seguir",
                 style: textTheme.headlineSmall!.copyWith(
-                  color: colorScheme.white,
+                  color: colorScheme.onPrimary,
                   fontFamily: "Navicula",
                 ),
               ),

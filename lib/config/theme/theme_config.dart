@@ -1,5 +1,4 @@
 import 'package:booklub/config/theme/app_theme.dart';
-import 'package:booklub/config/theme/theme_context.dart';
 import 'package:booklub/utils/theme/custom_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -42,8 +41,12 @@ abstract final class ThemeConfig {
         onSecondary: CustomColors.white,
         error: CustomColors.red,
         onError: CustomColors.white,
-        surface: CustomColors.white,
+        surface: CustomColors.darkWhite,
         onSurface: CustomColors.black,
+        surfaceContainerHighest: CustomColors.white,
+        surfaceContainerHigh: CustomColors.white,
+        surfaceContainerLow: CustomColors.white,
+        surfaceContainerLowest: CustomColors.white,
       ),
       textTheme: _textTheme,
       appBarTheme: AppBarTheme(
@@ -74,43 +77,35 @@ abstract final class ThemeConfig {
     themeData: ThemeData(
       colorScheme: ColorScheme(
         brightness: Brightness.dark,
-        primary: CustomColors.violet,
+        primary: CustomColors.darkVioletBlue,
         onPrimary: CustomColors.white,
         secondary: CustomColors.violetBlue,
         onSecondary: CustomColors.darkWhite,
         error: CustomColors.red,
         onError: CustomColors.white,
-        surface: CustomColors.lightBlack,
+        surface: CustomColors.black,
         onSurface: CustomColors.white,
+        surfaceContainerHighest: CustomColors.superDarkBlack,
+        surfaceContainerHigh: CustomColors.darkBlack,
+        surfaceContainerLow: CustomColors.lightBlack,
+        surfaceContainerLowest: CustomColors.superLightBlack,
       ),
       textTheme: _textTheme,
       appBarTheme: AppBarTheme(
-        backgroundColor: CustomColors.black,
+        backgroundColor: CustomColors.superDarkBlack,
         elevation: 2,
         titleTextStyle: TextStyle(
           fontFamily: 'Navicula',
-          color: CustomColors.lightVioletBlue,
+          color: CustomColors.darkVioletBlue,
           fontSize: 32,
-          fontWeight: FontWeight.w400,
-          shadows: [
-            Shadow(
-                color: CustomColors.black,
-                blurRadius: 4,
-                offset: Offset(-1, 1)
-            ),
-          ],
+          fontWeight: FontWeight.w700,
         ),
         iconTheme: IconThemeData(
-          color: CustomColors.violet,
+          color: CustomColors.darkVioletBlue,
         ),
-        shadowColor: CustomColors.black
+        shadowColor: CustomColors.superLightBlack
       ),
     ),
-  );
-
-  static ThemeContext get themeContext => ThemeContext(
-    lightTheme: lightTheme,
-    darkTheme: darkTheme,
   );
 
 }
