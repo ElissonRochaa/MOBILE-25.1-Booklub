@@ -14,7 +14,6 @@ import 'package:provider/provider.dart';
 typedef _Dependencies = ({Club club, Meeting meeting, BookItem book});
 
 class MeetingDefinedActivityCardWidget extends StatelessWidget {
-
   final MeetingDefinedActivity activity;
 
   final bool showClubHeader;
@@ -29,11 +28,10 @@ class MeetingDefinedActivityCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AsyncBuilder(
       future: _getDependencies(context),
-      onRetrieved: (data) => Builder(
-        builder: (context) => _buildCard(context, data)
-      ),
+      onRetrieved:
+          (data) => Builder(builder: (context) => _buildCard(context, data)),
       onLoading: () => const Card(),
-      onError: (_, _) => const Card()
+      onError: (_, _) => const Card(),
     );
   }
 
@@ -45,14 +43,12 @@ class MeetingDefinedActivityCardWidget extends StatelessWidget {
 
     final club = await clubViewModel.getClub(activity.clubId);
     final meeting = await meetingViewModel.getMeeting(activity.meetingId);
-    final readingGoal = await readingGoalViewModel.findById(meeting!.readingGoalId);
+    final readingGoal = await readingGoalViewModel.findById(
+      meeting!.readingGoalId,
+    );
     final book = await bookViewModel.getBook(readingGoal!.bookId);
 
-    return (
-    club: club!,
-    meeting: meeting,
-    book: book!,
-    );
+    return (club: club!, meeting: meeting, book: book!);
   }
 
   Widget _buildCard(BuildContext context, _Dependencies dependencies) {
@@ -64,21 +60,13 @@ class MeetingDefinedActivityCardWidget extends StatelessWidget {
       spacing: 8,
       children: [
         Icon(Icons.location_on_rounded),
-        Expanded(
-          child: Text(
-            meeting.address,
-            overflow: TextOverflow.clip
-          )
-        ),
+        Expanded(child: Text(meeting.address, overflow: TextOverflow.clip)),
       ],
     );
 
     final readingGoalBook = Row(
       spacing: 8,
-      children: [
-        Icon(Icons.menu_book_rounded),
-        Text(book.title),
-      ],
+      children: [Icon(Icons.menu_book_rounded), Text(book.title)],
     );
 
     return ClubActivityCardWidget(
@@ -86,11 +74,8 @@ class MeetingDefinedActivityCardWidget extends StatelessWidget {
       club: club,
       activity: activity,
       bookItem: book,
-      children: [
-        address,
-        readingGoalBook,
-      ]
+      showClubHeader: showClubHeader,
+      children: [address, readingGoalBook],
     );
   }
-
 }
